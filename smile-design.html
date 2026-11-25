@@ -80,6 +80,7 @@ table{border-collapse:collapse;width:100%}td{padding:10px 2px;border-bottom:1px 
 .pg figcaption{padding:8px 10px;font-size:.84rem;line-height:1.4}.pg figure:first-child{grid-column:1/-1}.pg figure:first-child svg{max-width:340px;margin:0 auto;display:block}
 .camb{border:0;cursor:pointer;font:inherit;width:100%;margin-top:14px;padding:14px}
 .cam{position:fixed;inset:0;background:#000;z-index:300;display:flex;flex-direction:column;color:#fff;overflow:auto}
+.cam[hidden],.cam [hidden],.cam.pv .cambar{display:none!important}
 .camtop{display:flex;justify-content:flex-end;padding:8px 12px}.camtop button,#camflip{background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer;padding:6px 10px}
 .camstage{position:relative;margin:0 auto;width:min(100%,calc(58vh * var(--ar,0.75)));aspect-ratio:var(--ar,0.75);background:#111;overflow:hidden}
 .camstage video,.camstage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -165,9 +166,9 @@ function camOpen(){
   document.body.appendChild(d);
   el('camx').onclick=camClose;el('camshot').onclick=function(){camCapture(false)};
   el('camflip').onclick=function(){CAM.facing=CAM.facing=='user'?'environment':'user';camStart()};
-  el('camretake').onclick=function(){el('camprev').hidden=true;el('camstage').hidden=false;camStart()};
+  el('camretake').onclick=function(){el('camprev').hidden=true;el('cam').classList.remove('pv');el('camstage').hidden=false;camStart()};
   el('camuse').onclick=camUse}
- el('cam').hidden=false;el('camprev').hidden=true;el('camstage').hidden=false;document.body.style.overflow='hidden';
+ el('cam').hidden=false;el('camprev').hidden=true;el('cam').classList.remove('pv');el('camstage').hidden=false;document.body.style.overflow='hidden';
  el('camchips').innerHTML=CHECKS.map(function(c){return'<span id="ck_'+c[0]+'">'+c[1]+'</span>'}).join('');
  camStart();camLoadModel()}
 function camClose(){camStop();el('cam').hidden=true;document.body.style.overflow=''}
@@ -240,12 +241,12 @@ function camCapture(auto){var v=el('camv');if(!v||!v.videoWidth)return;var W=v.v
  var crop=null,fm=null,r=CAM.res;
  if(r&&r.faceLandmarks&&r.faceLandmarks.length){var L=r.faceLandmarks[0];function P(i){return[L[i].x*W,L[i].y*H]}
   var ml=P(61),mr=P(291),mw=Math.hypot(mr[0]-ml[0],mr[1]-ml[1]),cx=(ml[0]+mr[0])/2,cy=(ml[1]+mr[1])/2;
-  var cw=Math.min(W,mw*1.9),chh=Math.min(H,cw*0.75),sx=clamp(cx-cw/2,0,W-cw),sy=clamp(cy-chh*0.5,0,H-chh);crop=[sx,sy,cw,chh];
+  var cw=Math.min(W,mw*1.6),chh=Math.min(H,cw*0.62),sx=clamp(cx-cw/2,0,W-cw),sy=clamp(cy-chh*0.5,0,H-chh);crop=[sx,sy,cw,chh];
   var mx=(P(168)[0]+P(1)[0]+P(152)[0])/3;fm=Math.round((mx-sx)/cw*1000);if(fm<0||fm>1000)fm=null}
  camStop();CAM.captured={canvas:c,crop:crop,fm:fm};
  el('camimg').src=crop?toURL(c,crop[0],crop[1],crop[2],crop[3],900,0.88):c.toDataURL('image/jpeg',0.85);
- el('camstage').hidden=true;el('camprev').hidden=false;el('camh').textContent=auto?'Photo taken automatically':'Photo taken';el('camp').textContent='Check that your teeth are sharp and clearly visible.'}
-function camUse(){camClose();var c=CAM.captured;if(!c)return;prev.innerHTML='<img src="'+(c.crop?toURL(c.canvas,c.crop[0],c.crop[1],c.crop[2],c.crop[3],600,0.85):c.canvas.toDataURL('image/jpeg',0.7))+'" alt="Your smile photo">';
+ el('camstage').hidden=true;el('camprev').hidden=false;el('cam').classList.add('pv');el('camh').textContent=auto?'Photo taken automatically':'Photo taken';el('camp').textContent='Check that your teeth are sharp and clearly visible.'}
+function camUse(){camClose();setTimeout(function(){var b=el('dsb');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})},50);var c=CAM.captured;if(!c)return;prev.innerHTML='<img src="'+(c.crop?toURL(c.canvas,c.crop[0],c.crop[1],c.crop[2],c.crop[3],600,0.85):c.canvas.toDataURL('image/jpeg',0.7))+'" alt="Your smile photo">';
  if(inp)inp.value='';msg.className='muted';msg.textContent='Photo ready. Tap "Design my smile".'}
 
 var cb=document.getElementById('dscam');if(cb)cb.addEventListener('click',camOpen);
