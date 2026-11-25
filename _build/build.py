@@ -190,7 +190,21 @@ table{border-collapse:collapse;width:100%}td{padding:10px 2px;border-bottom:1px 
 .ba{position:relative;overflow:hidden;border:1px solid var(--line);background:#000}.ba img{width:100%;display:block}.ba .af{position:absolute;inset:0}.ba .af img{width:100%;height:100%;object-fit:cover}
 .ba input{position:absolute;left:0;right:0;bottom:10px;width:90%;margin:0 5%}.ba .tg{position:absolute;top:8px;background:rgba(11,34,54,.8);color:#fff;font-size:.8rem;padding:2px 8px}.ba .l{left:8px}.ba .r{right:8px}
 .pg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.pg figure{margin:0;background:#fff;border:1px solid var(--line)}.pg svg{width:100%;height:auto;display:block}
-.pg figcaption{padding:8px 10px;font-size:.84rem;line-height:1.4}.pg figure:first-child{grid-column:1/-1}.pg figure:first-child svg{max-width:340px;margin:0 auto}
+.pg figcaption{padding:8px 10px;font-size:.84rem;line-height:1.4}.pg figure:first-child{grid-column:1/-1}.pg figure:first-child svg{max-width:340px;margin:0 auto;display:block}
+.camb{border:0;cursor:pointer;font:inherit;width:100%;margin-top:14px;padding:14px}
+.cam{position:fixed;inset:0;background:#000;z-index:300;display:flex;flex-direction:column;color:#fff;overflow:auto}
+.camtop{display:flex;justify-content:flex-end;padding:8px 12px}.camtop button,#camflip{background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer;padding:6px 10px}
+.camstage{position:relative;margin:0 auto;width:min(100%,calc(58vh * var(--ar,0.75)));aspect-ratio:var(--ar,0.75);background:#111;overflow:hidden}
+.camstage video,.camstage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.camstage .pill{position:absolute;left:50%;top:6%;transform:translateX(-50%);background:rgba(0,0,0,.75);padding:6px 14px;border-radius:20px;font-size:.9rem;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis}
+.camstage .count{position:absolute;right:6%;bottom:4%;font-size:3.2rem;font-weight:700;text-shadow:0 2px 6px #000}
+.camtxt{padding:10px 18px 0}.camtxt h3{margin:4px 0;font-size:1.25rem}.camtxt p{margin:4px 0 8px;opacity:.85;font-size:.92rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips span{font-size:.78rem;padding:4px 9px;border-radius:14px;background:#333;color:#bbb}.chips span.on{background:#14532d;color:#bbf7d0}
+.chips span.on:before{content:"✓ "}
+.cambar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 18px}.cambar #camflip{justify-self:end}
+.shot{width:78px;height:78px;border-radius:50%;border:0;background:none;padding:0;cursor:pointer}.shot svg{width:100%;height:100%;transform:rotate(-90deg)}
+.shot .bg{fill:#666;stroke:#ddd;stroke-width:5}.shot .pr{fill:none;stroke:#4ade80;stroke-width:6;stroke-linecap:round;stroke-dasharray:213.6;stroke-dashoffset:213.6}
+.camprev{padding:10px 18px}.camprev img{width:100%;max-width:520px;display:block;margin:0 auto 12px}.camprev .btn{border:0;cursor:pointer;font:inherit}
 .ok{color:#1f7a4d;font-weight:600}
 .seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.seg button{font:inherit;font-size:.88rem;padding:8px 12px;border:1px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}.seg button.on{background:var(--navy);color:#fff}.seg.sm button{font-size:.82rem;padding:6px 10px}
 .bg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.bg figure{margin:0;cursor:pointer;border:1px solid var(--line);background:#fff}.bg img{width:100%;display:block}.bg figcaption{font-size:.82rem;padding:4px 8px;font-weight:600}
@@ -924,8 +938,8 @@ def _face(kind):
 
 
 def photo_guide():
-    cards = [("good", True, "Best: straight, big smile", "Face the camera straight, phone at mouth level, about an arm's length away. Smile wide so the upper teeth show."),
-             ("close", True, "Also fine: close-up", "Nose to chin in the frame, still straight on. Do not zoom; move the phone closer instead."),
+    cards = [("close", True, "Best: close-up smile", "Nose to chin fills the photo, phone 20 to 30 cm away, straight on. Big smile so the upper teeth show. Do not zoom; move closer."),
+             ("good", True, "Also fine: whole face", "Face straight on, phone at mouth level. The AI zooms in on your smile automatically."),
              ("tilt", False, "Avoid: tilted or side angle", "Head turned or tilted makes the teeth look uneven."),
              ("closed", False, "Avoid: teeth hidden", "Lips covering the teeth: the AI cannot see them."),
              ("dark", False, "Avoid: dark, far or blurry", "Too far away, at night or shaky. Stand facing a window in daylight.")]
@@ -962,7 +976,7 @@ return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body
 }).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
 btn.disabled=false;btn.textContent='Check my smile';
 if(!x.ok||!x.j.result){msg.className='muted err';msg.textContent=(x.j&&x.j.error)||'Something went wrong. Please try again.';return}
-msg.textContent='';show(x.j.result)}).catch(function(){btn.disabled=false;btn.textContent='Check my smile';msg.className='muted err';msg.textContent='Could not connect. Please check your internet and try again.'})});
+msg.textContent='';show(x.j.result)}).catch(function(e){btn.disabled=false;btn.textContent='Check my smile';msg.className='muted err';msg.textContent='Could not complete the check ('+((e&&e.message)||e)+'). Please open this page in Chrome and try again, or WhatsApp the clinic.'})});
 function show(r){var h='<div class="res"><h2>Your tentative result</h2>';
 if(!r.photo_usable){h+='<p>'+esc(r.photo_note||'The photos were not clear enough to check.')+'</p><p>Please retake them in good light, with your teeth showing and the camera steady.</p>'}
 else{if(r.urgency==='see_dentist_soon'){h+='<div class="warn"><b>Please see a dentist soon.</b> Something in your photos may need prompt attention.</div>'}
@@ -1025,15 +1039,130 @@ function avg(a){a=a.filter(function(v){return v!=null&&isFinite(v)});return a.le
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
 function shrink(file){return new Promise(function(res,rej){var r=new FileReader();r.onerror=rej;r.onload=function(){var im=new Image();im.onerror=rej;im.onload=function(){var m=1280,w=im.width,h=im.height,k=Math.min(1,m/Math.max(w,h));var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.88))};im.src=r.result};r.readAsDataURL(file)})}
 if(inp)inp.addEventListener('change',function(){prev.innerHTML='';if(inp.files[0]){prev.innerHTML='<img src="'+URL.createObjectURL(inp.files[0])+'" alt="Selected smile photo">'}});
+function loadFile(file){return new Promise(function(res,rej){var u=URL.createObjectURL(file),im=new Image();im.onload=function(){res(im)};im.onerror=rej;im.src=u})}
+function toURL(im,sx,sy,sw,sh,maxW,q){var k=Math.min(maxW/sw,3);var c=document.createElement('canvas');c.width=Math.round(sw*k);c.height=Math.round(sh*k);var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(im,sx,sy,sw,sh,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q||0.88)}
+function post(body){return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})}
+/* ---------- guided camera (MediaPipe face landmarks) ---------- */
+var CAM={stream:null,lm:null,raf:0,hold:0,lastT:0,lastNose:null,facing:'user',captured:null,ok:{},res:null,loading:false};
+var MPV='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
+var HOLD=3000;
+var CHECKS=[['zone','Smile in the zone'],['dist','Distance'],['straight','Head straight'],['smile','Teeth showing'],['light','Good light'],['steady','Hold still']];
+function el(id){return document.getElementById(id)}
+function camOpen(){
+ if(!el('cam')){var d=document.createElement('div');d.id='cam';d.className='cam';
+  d.innerHTML='<div class="camtop"><button type="button" id="camx" aria-label="Close camera">✕</button></div>'+
+  '<div class="camstage" id="camstage"><video id="camv" playsinline muted autoplay></video><canvas id="camo"></canvas><div class="pill" id="campill">Starting camera…</div><div class="count" id="camcount"></div></div>'+
+  '<div class="camtxt"><h3 id="camh">Smile inside the teeth zone</h3><p id="camp">Hold the phone at mouth level, 20 to 30 cm away. Fit your smile into the box with the tooth outlines.</p><div class="chips" id="camchips"></div></div>'+
+  '<div class="cambar"><span></span><button type="button" id="camshot" class="shot" aria-label="Take photo"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" class="bg"/><circle cx="40" cy="40" r="34" class="pr" id="camring"/></svg></button><button type="button" id="camflip" aria-label="Switch camera">⟲</button></div>'+
+  '<div class="camprev" id="camprev" hidden><img id="camimg" alt="Captured smile photo"><div class="cta"><button type="button" class="btn" id="camuse">Use this photo</button><button type="button" class="btn o2" id="camretake">Retake</button></div></div>';
+  document.body.appendChild(d);
+  el('camx').onclick=camClose;el('camshot').onclick=function(){camCapture(false)};
+  el('camflip').onclick=function(){CAM.facing=CAM.facing=='user'?'environment':'user';camStart()};
+  el('camretake').onclick=function(){el('camprev').hidden=true;el('camstage').hidden=false;camStart()};
+  el('camuse').onclick=camUse}
+ el('cam').hidden=false;el('camprev').hidden=true;el('camstage').hidden=false;document.body.style.overflow='hidden';
+ el('camchips').innerHTML=CHECKS.map(function(c){return'<span id="ck_'+c[0]+'">'+c[1]+'</span>'}).join('');
+ camStart();camLoadModel()}
+function camClose(){camStop();el('cam').hidden=true;document.body.style.overflow=''}
+function camStop(){cancelAnimationFrame(CAM.raf);if(CAM.stream){CAM.stream.getTracks().forEach(function(t){t.stop()});CAM.stream=null}}
+function camStart(){camStop();var v=el('camv');el('campill').textContent='Starting camera…';
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){el('campill').textContent='Camera not available. Open this page in Chrome, or upload a photo instead.';return}
+ navigator.mediaDevices.getUserMedia({video:{facingMode:CAM.facing,width:{ideal:1920},height:{ideal:1920}},audio:false}).then(function(s){CAM.stream=s;v.srcObject=s;
+  v.style.transform=CAM.facing=='user'?'scaleX(-1)':'none';
+  v.onloadedmetadata=function(){v.play();var ar=v.videoWidth/v.videoHeight;el('camstage').style.setProperty('--ar',ar);var o=el('camo');o.width=v.videoWidth;o.height=v.videoHeight;CAM.hold=0;CAM.raf=requestAnimationFrame(camLoop)}
+ }).catch(function(e){el('campill').textContent='Camera blocked ('+(e.name||e)+'). Allow camera access, or upload a photo instead.'})}
+function camLoadModel(){if(CAM.lm||CAM.loading)return;CAM.loading=true;
+ import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){
+  function mk(dl){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',delegate:dl},runningMode:'VIDEO',numFaces:1,outputFaceBlendshapes:true})}
+  return mk('GPU').catch(function(){return mk('CPU')})})}).then(function(lm){CAM.lm=lm;CAM.loading=false}).catch(function(){CAM.loading=false;CAM.lm=null;el('campill').textContent='Auto-check unavailable. Line up your smile and tap the button.'})}
+function geom(W,H){var mn=Math.min(W,H),rx=mn*0.34,ry=rx*1.32,cx=W/2,cy=H*0.44;if(cy-ry<H*0.04)cy=ry+H*0.04;
+ var zw=rx*0.95,zh=zw*0.46,zx=cx,zy=cy+ry*0.55;return{cx:cx,cy:cy,rx:rx,ry:ry,zx:zx,zy:zy,zw:zw,zh:zh}}
+function drawGuide(g,W,H,G,allOk,mouth){g.clearRect(0,0,W,H);
+ g.save();g.fillStyle='rgba(0,0,0,.45)';g.fillRect(0,0,W,H);g.globalCompositeOperation='destination-out';g.beginPath();g.ellipse(G.cx,G.cy,G.rx,G.ry,0,0,Math.PI*2);g.fill();g.restore();
+ var col=allOk?'#4ade80':'rgba(255,255,255,.9)',lw=Math.max(3,W/220);
+ g.lineWidth=lw;g.strokeStyle=col;g.beginPath();g.ellipse(G.cx,G.cy,G.rx,G.ry,0,0,Math.PI*2);g.stroke();
+ // teeth zone with ideal 8-tooth template (RED 70%)
+ var x0=G.zx-G.zw/2,y0=G.zy-G.zh/2,r=G.zh*0.35;g.setLineDash([lw*3,lw*2]);g.strokeStyle=allOk?'#4ade80':'#facc15';
+ g.beginPath();g.moveTo(x0+r,y0);g.lineTo(x0+G.zw-r,y0);g.quadraticCurveTo(x0+G.zw,y0,x0+G.zw,y0+r);g.lineTo(x0+G.zw,y0+G.zh-r);g.quadraticCurveTo(x0+G.zw,y0+G.zh,x0+G.zw-r,y0+G.zh);g.lineTo(x0+r,y0+G.zh);g.quadraticCurveTo(x0,y0+G.zh,x0,y0+G.zh-r);g.lineTo(x0,y0+r);g.quadraticCurveTo(x0,y0,x0+r,y0);g.stroke();g.setLineDash([]);
+ var q=0.7,half=G.zw*0.47,wc=half/(1+q+q*q+q*q*q*0.9),ws=[wc,wc*q,wc*q*q,wc*q*q*q*0.9],top=G.zy-G.zh*0.38,hc=wc/0.72;
+ g.strokeStyle='rgba(255,255,255,.75)';g.lineWidth=Math.max(1.5,lw*0.55);
+ [-1,1].forEach(function(s){var x=0;ws.forEach(function(w,i){var a=G.zx+s*x,b=G.zx+s*(x+w),h=hc*[1,0.86,0.94,0.8][i],tp=top+[0,0.06,0,0.1][i]*hc,ar=1-0.06*i*i;var bt=tp+h*ar;
+  g.beginPath();g.moveTo(a,tp+h*0.15);g.quadraticCurveTo((a+b)/2,tp-h*0.04,b,tp+h*0.15);g.lineTo(b,bt-h*0.12);g.quadraticCurveTo(b,bt,(a+b)/2,bt);g.quadraticCurveTo(a,bt,a,bt-h*0.12);g.closePath();g.stroke();x+=w})});
+ g.beginPath();g.moveTo(G.zx,G.cy-G.ry);g.lineTo(G.zx,G.zy+G.zh/2);g.strokeStyle='rgba(255,255,255,.35)';g.setLineDash([lw*2,lw*2]);g.stroke();g.setLineDash([]);
+ if(mouth){g.fillStyle=allOk?'#4ade80':'#f87171';[mouth.l,mouth.r].forEach(function(p){g.beginPath();g.arc(p[0],p[1],lw*1.6,0,Math.PI*2);g.fill()})}}
+function lumaOf(v,box){var c=CAM.tmp||(CAM.tmp=document.createElement('canvas'));c.width=24;c.height=24;var g=c.getContext('2d',{willReadFrequently:true});
+ g.drawImage(v,box[0],box[1],Math.max(1,box[2]),Math.max(1,box[3]),0,0,24,24);var d=g.getImageData(0,0,24,24).data,s=0;for(var i=0;i<d.length;i+=4)s+=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];return s/(d.length/4)}
+function camLoop(t){var v=el('camv'),o=el('camo');if(!v||!CAM.stream)return;var W=o.width,H=o.height,g=o.getContext('2d'),G=geom(W,H),dt=CAM.lastT?t-CAM.lastT:16;CAM.lastT=t;
+ var ok={},msg='',mouth=null,mir=CAM.facing=='user';
+ if(CAM.lm&&v.readyState>=2){var r=null;try{r=CAM.lm.detectForVideo(v,t)}catch(e){}
+  if(r&&r.faceLandmarks&&r.faceLandmarks.length){var L=r.faceLandmarks[0];CAM.res=r;
+   function P(i){var p=L[i];return[(mir?1-p.x:p.x)*W,p.y*H]}
+   var ml=P(61),mr=P(291),mc=[(ml[0]+mr[0])/2,(ml[1]+mr[1])/2],mw=Math.hypot(mr[0]-ml[0],mr[1]-ml[1]);mouth={l:ml,r:mr};
+   var nose=P(1),ck1=P(234),ck2=P(454),e1=P(33),e2=P(263),fh=P(10),ch=P(152),ul=P(13),ll=P(14);
+   var dl=Math.abs(nose[0]-ck1[0]),dr=Math.abs(ck2[0]-nose[0]),yaw=(dl-dr)/(dl+dr+1e-6);
+   var roll=Math.atan2(e2[1]-e1[1],e2[0]-e1[0])*180/Math.PI;if(roll>90)roll-=180;if(roll<-90)roll+=180;
+   var pitch=(nose[1]-fh[1])/(ch[1]-fh[1]+1e-6);
+   var bs={};((r.faceBlendshapes&&r.faceBlendshapes[0]&&r.faceBlendshapes[0].categories)||[]).forEach(function(c){bs[c.categoryName]=c.score});
+   var smile=((bs.mouthSmileLeft||0)+(bs.mouthSmileRight||0))/2,gap=(ll[1]-ul[1])/(mw+1e-6);
+   var ratio=mw/(G.zw*0.86);
+   ok.zone=Math.abs(mc[0]-G.zx)<G.zw*0.18&&Math.abs(mc[1]-G.zy)<G.zh*0.55;
+   ok.dist=ratio>0.82&&ratio<1.2;
+   ok.straight=Math.abs(yaw)<0.12&&Math.abs(roll)<5&&pitch>0.44&&pitch<0.66;
+   ok.smile=smile>0.35&&gap>0.05&&gap<0.45;
+   var bx=Math.min(ck1[0],ck2[0]),by=fh[1],bw=Math.abs(ck2[0]-ck1[0]),bh=ch[1]-fh[1];if(mir)bx=W-bx-bw;
+   var lu=lumaOf(v,[bx,by,bw,bh]);ok.light=lu>70&&lu<215;
+   var mv=CAM.lastNose?Math.hypot(nose[0]-CAM.lastNose[0],nose[1]-CAM.lastNose[1])/W:1;CAM.lastNose=nose;CAM.mv=(CAM.mv==null?mv:CAM.mv*0.7+mv*0.3);ok.steady=CAM.mv<0.004;
+   if(!ok.zone)msg=mc[1]<G.zy-G.zh*0.55?'Move the phone up a little':mc[1]>G.zy+G.zh*0.55?'Move the phone down a little':(mc[0]<G.zx?'Move slightly to your left':'Move slightly to your right');
+   else if(!ok.dist)msg=ratio<0.82?'Move closer':'Move back a little';
+   else if(!ok.straight)msg=Math.abs(yaw)>=0.12?(yaw>0?'Turn your head slightly right':'Turn your head slightly left'):Math.abs(roll)>=5?'Keep your head level':(pitch<=0.44?'Lower your chin slightly':'Raise your chin slightly');
+   else if(!ok.smile)msg=gap>=0.45?'Close your mouth a little, keep smiling':'Big smile, show your upper teeth';
+   else if(!ok.light)msg=lu<=70?'Too dark. Face a window or turn on a light':'Too bright. Move away from direct light';
+   else if(!ok.steady)msg='Hold still…';
+  }else{msg='Bring your face into the oval';CAM.lastNose=null}
+ }else if(!CAM.lm){msg=CAM.loading?'Loading face guide…':'Line up your smile and tap the button'}
+ var all=CHECKS.every(function(c){return ok[c[0]]});
+ CHECKS.forEach(function(c){var s=el('ck_'+c[0]);if(s)s.className=ok[c[0]]?'on':''});
+ CAM.hold=all?CAM.hold+dt:0;var left=Math.ceil((HOLD-CAM.hold)/1000);
+ el('campill').textContent=all?'Perfect – hold still':msg;el('camh').textContent=all?'Perfect – hold still':(msg||'Smile inside the teeth zone');
+ el('camcount').textContent=all&&left>0?left:'';
+ var ring=el('camring');if(ring){var L2=2*Math.PI*34;ring.style.strokeDasharray=L2;ring.style.strokeDashoffset=L2*(1-Math.min(1,CAM.hold/HOLD))}
+ drawGuide(g,W,H,G,all,mouth);
+ if(all&&CAM.hold>=HOLD){camCapture(true);return}
+ CAM.raf=requestAnimationFrame(camLoop)}
+function camCapture(auto){var v=el('camv');if(!v||!v.videoWidth)return;var W=v.videoWidth,H=v.videoHeight,c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(v,0,0,W,H);
+ var crop=null,fm=null,r=CAM.res;
+ if(r&&r.faceLandmarks&&r.faceLandmarks.length){var L=r.faceLandmarks[0];function P(i){return[L[i].x*W,L[i].y*H]}
+  var ml=P(61),mr=P(291),mw=Math.hypot(mr[0]-ml[0],mr[1]-ml[1]),cx=(ml[0]+mr[0])/2,cy=(ml[1]+mr[1])/2;
+  var cw=Math.min(W,mw*1.9),chh=Math.min(H,cw*0.75),sx=clamp(cx-cw/2,0,W-cw),sy=clamp(cy-chh*0.5,0,H-chh);crop=[sx,sy,cw,chh];
+  var mx=(P(168)[0]+P(1)[0]+P(152)[0])/3;fm=Math.round((mx-sx)/cw*1000);if(fm<0||fm>1000)fm=null}
+ camStop();CAM.captured={canvas:c,crop:crop,fm:fm};
+ el('camimg').src=crop?toURL(c,crop[0],crop[1],crop[2],crop[3],900,0.88):c.toDataURL('image/jpeg',0.85);
+ el('camstage').hidden=true;el('camprev').hidden=false;el('camh').textContent=auto?'Photo taken automatically':'Photo taken';el('camp').textContent='Check that your teeth are sharp and clearly visible.'}
+function camUse(){camClose();var c=CAM.captured;if(!c)return;prev.innerHTML='<img src="'+(c.crop?toURL(c.canvas,c.crop[0],c.crop[1],c.crop[2],c.crop[3],600,0.85):c.canvas.toDataURL('image/jpeg',0.7))+'" alt="Your smile photo">';
+ if(inp)inp.value='';msg.className='muted';msg.textContent='Photo ready. Tap "Design my smile".'}
+
+var cb=document.getElementById('dscam');if(cb)cb.addEventListener('click',camOpen);
+if(inp)inp.addEventListener('change',function(){CAM.captured=null});
 if(f)f.addEventListener('submit',function(ev){ev.preventDefault();out.innerHTML='';msg.className='muted';
-if(!inp.files.length){msg.textContent='Please add a smile photo.';return}
-btn.disabled=true;btn.textContent='Analysing your smile...';msg.textContent='This takes about 15 to 40 seconds. Please keep this page open.';
-shrink(inp.files[0]).then(function(img){beforeURL=img;
-return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:f.name.value,phone:f.phone.value,consent:f.consent.checked,website:f.website.value,image:img})})
-}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
+if(!CAM.captured&&!inp.files.length){msg.textContent='Please take a photo with the guided camera or upload one.';return}
+btn.disabled=true;btn.textContent='Finding your smile...';msg.textContent='Step 1 of 2: locating your teeth.';beforeURL=null;
+var fm=null,p0;
+if(CAM.captured){var c=CAM.captured;fm=c.fm;beforeURL=c.crop?toURL(c.canvas,c.crop[0],c.crop[1],c.crop[2],c.crop[3],1200,0.9):toURL(c.canvas,0,0,c.canvas.width,c.canvas.height,1280,0.88);p0=Promise.resolve()}
+else{var full;p0=loadFile(inp.files[0]).then(function(im){full=im;var W=im.naturalWidth,H=im.naturalHeight,k=Math.min(1,1280/Math.max(W,H));
+ return post({mode:'locate',image:toURL(im,0,0,W,H,Math.round(W*k),0.85)})}).then(function(x){
+ var W=full.naturalWidth,H=full.naturalHeight;
+ if(x.j&&x.j.ok&&x.j.mouth_box&&x.j.face_ok!==false){var b=x.j.mouth_box,y0=b[0]*H/1000,x0=b[1]*W/1000,y1=b[2]*H/1000,x1=b[3]*W/1000,mw=x1-x0,mh=y1-y0;
+  if(mw>10&&mh>5){var cw=Math.min(W,mw*1.8),ch=Math.min(H,cw*0.75),cx=(x0+x1)/2,cy=(y0+y1)/2-mh*0.05;var sx=clamp(cx-cw/2,0,W-cw),sy=clamp(cy-ch/2,0,H-ch);
+   if(x.j.facial_midline_x!=null){fm=Math.round(((x.j.facial_midline_x*W/1000)-sx)/cw*1000);if(fm<0||fm>1000)fm=null}
+   beforeURL=toURL(full,sx,sy,cw,ch,1200,0.9)}}
+ if(!beforeURL){var k=Math.min(1,1280/Math.max(W,H));beforeURL=toURL(full,0,0,W,H,Math.round(W*k),0.88)}})}
+p0.then(function(){
+ btn.textContent='Designing your smile...';msg.textContent='Step 2 of 2: measuring your teeth. This takes 15 to 40 seconds.';
+ return post({name:f.name.value,phone:f.phone.value,consent:f.consent.checked,website:f.website.value,image:beforeURL,facial_midline_x:fm})
+}).then(function(x){
 btn.disabled=false;btn.textContent='Design my smile';
 if(!x.ok||!x.j.analysis){msg.className='muted err';msg.textContent=(x.j&&x.j.error)||'Something went wrong. Please try again.';return}
-msg.textContent='';show(x.j.analysis,x.j.after)}).catch(function(){btn.disabled=false;btn.textContent='Design my smile';msg.className='muted err';msg.textContent='Could not connect. Please check your internet and try again.'})});
+msg.textContent='';show(x.j.analysis,x.j.after)}).catch(function(e){btn.disabled=false;btn.textContent='Design my smile';msg.className='muted err';msg.textContent='Could not complete the design ('+((e&&e.message)||e)+'). Please open this page in Chrome and try again, or WhatsApp the clinic.'})});
 
 /* ---------- geometry ---------- */
 function teethPx(){var a=S.a,T={};for(var id in a.teeth){var b=a.teeth[id].box;T[id]={y0:b[0]*S.H/1000,x0:b[1]*S.W/1000,y1:b[2]*S.H/1000,x1:b[3]*S.W/1000}}return T}
@@ -1092,31 +1221,29 @@ function sampleGum(D){var c=document.createElement('canvas');c.width=S.W;c.heigh
  var p=g.getImageData(clamp(x-3,0,S.W-7),clamp(y-2,0,S.H-5),7,5).data,r=0,gg=0,b=0,n=0;for(var i=0;i<p.length;i+=4){r+=p[i];gg+=p[i+1];b+=p[i+2];n++}
  r/=n;gg/=n;b/=n;if(r-gg<25){r=200;gg=110;b=115}return [r,gg,b]}
 function rgb(c,k,a){return 'rgba('+Math.round(clamp(c[0]*k,0,255))+','+Math.round(clamp(c[1]*k,0,255))+','+Math.round(clamp(c[2]*k,0,255))+','+(a==null?1:a)+')'}
-function mockup(c,g,D){var sh=SHADES[S.shade],gum=sampleGum(D),photo=c.cloneNode?null:null;
+function sampleTooth(g,D){var r=0,gg=0,b=0,n=0;['UR1','UL1'].forEach(function(id){var t=D.T[id];if(!t)return;var w=t.x1-t.x0,h=t.y1-t.y0,p=g.getImageData(Math.round(t.x0+w*0.3),Math.round(t.y0+h*0.35),Math.max(1,Math.round(w*0.4)),Math.max(1,Math.round(h*0.3))).data;for(var i=0;i<p.length;i+=4){r+=p[i];gg+=p[i+1];b+=p[i+2];n++}});return n?[r/n,gg/n,b/n]:null}
+function mockup(c,g,D){var sh=SHADES[S.shade],gum=sampleGum(D),st=sampleTooth(g,D),base=sh.c;
+ if(st){var L=(st[0]+st[1]+st[2])/3,lift=clamp(225/Math.max(L,1),1,1.35);base=[0,1,2].map(function(i){return clamp(st[i]*lift*0.45+sh.c[i]*0.55,0,255)})}
  var orig=document.createElement('canvas');orig.width=S.W;orig.height=S.H;orig.getContext('2d').drawImage(c,0,0);
  g.save();mouthPath(g,D);g.clip();
- // gum band behind new teeth
- var top=Math.min.apply(0,D.list.map(function(t){return t.top}).concat(Object.keys(D.T).map(function(k){return D.T[k].y0})))-0.8*D.mm;
+ // gum only where the designed tooth is shorter at the top than the current tooth
+ D.list.forEach(function(t){var x0=Math.min(t.xm,t.xd),x1=Math.max(t.xm,t.xd),old=null;for(var k in D.T){var o=D.T[k];if(o.x1>x0&&o.x0<x1)old=old==null?o.y0:Math.min(old,o.y0)}
+  if(old!=null&&t.top>old+0.2*D.mm){var gr=g.createLinearGradient(0,old,0,t.top);gr.addColorStop(0,rgb(gum,0.9));gr.addColorStop(1,rgb(gum,1.03));g.fillStyle=gr;g.fillRect(x0,old-0.3*D.mm,x1-x0,t.top-old+0.6*D.mm)}});
+ // dark background where current teeth are longer than the design
  var gx0=Math.min.apply(0,D.list.map(function(t){return Math.min(t.xm,t.xd)})),gx1=Math.max.apply(0,D.list.map(function(t){return Math.max(t.xm,t.xd)}));
- var gg=g.createLinearGradient(0,top,0,D.gumC+2*D.mm);gg.addColorStop(0,rgb(gum,0.85));gg.addColorStop(1,rgb(gum,1.02));
- g.fillStyle=gg;g.fillRect(gx0,top,gx1-gx0,D.gumC+2.5*D.mm-top);
- // dark oral background between new incisal edge and old longer teeth
- g.fillStyle='rgba(40,16,18,.92)';g.beginPath();g.moveTo(gx0,D.gumC+2*D.mm);
- for(var x=gx0;x<=gx1;x+=4){g.lineTo(x,D.inc(Math.abs(x-D.mid))+0.6*D.mm)}g.lineTo(gx1,D.gumC+2*D.mm);g.closePath();g.fill();
- // teeth: draw back to front
- var order=D.list.slice().sort(function(p,q){return q.w-p.w}).reverse();
+ var oldBot=Math.max.apply(0,Object.keys(D.T).map(function(k){return D.T[k].y1}));
+ g.fillStyle='rgba(45,18,20,.95)';g.beginPath();g.moveTo(gx0,D.gumC+2*D.mm);for(var x=gx0;x<=gx1;x+=3){g.lineTo(x,D.inc(Math.abs(x-D.mid))-0.3*D.mm)}for(x=gx1;x>=gx0;x-=3){g.lineTo(x,Math.max(oldBot+0.6*D.mm,D.inc(Math.abs(x-D.mid))+0.2*D.mm))}g.closePath();g.fill();
+ var order=D.list.slice().sort(function(p,q){return p.w-q.w});
  order.forEach(function(t){var h=t.bot-t.top,lg=g.createLinearGradient(0,t.top,0,t.bot);
-  lg.addColorStop(0,rgb([sh.c[0]*0.97,sh.c[1]*0.93,sh.c[2]*0.86],t.shade*0.94));lg.addColorStop(0.22,rgb(sh.c,t.shade*0.98));
-  lg.addColorStop(0.7,rgb(sh.c,t.shade));lg.addColorStop(0.9,rgb([sh.c[0]*0.9,sh.c[1]*0.93,sh.c[2]*1.0],t.shade*0.97));lg.addColorStop(1,rgb([190,196,206],t.shade*0.95));
+  lg.addColorStop(0,rgb([base[0]*0.97,base[1]*0.93,base[2]*0.85],t.shade*0.93));lg.addColorStop(0.25,rgb(base,t.shade*0.99));
+  lg.addColorStop(0.7,rgb(base,t.shade));lg.addColorStop(0.9,rgb([base[0]*0.92,base[1]*0.94,base[2]*1.0],t.shade*0.97));lg.addColorStop(1,rgb([base[0]*0.8,base[1]*0.83,base[2]*0.9],t.shade*0.95));
   toothPath(g,t);g.fillStyle=lg;g.fill();
-  // body highlight
-  g.save();toothPath(g,t);g.clip();var cx=t.xm+(t.xd-t.xm)*0.42,rg=g.createRadialGradient(cx,t.top+h*0.45,1,cx,t.top+h*0.45,Math.abs(t.xd-t.xm)*0.6);
-  rg.addColorStop(0,'rgba(255,255,255,'+(t.type=='c'?0.38:0.25)+')');rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;g.fillRect(Math.min(t.xm,t.xd),t.top,Math.abs(t.xd-t.xm),h);
-  // re-use original texture/lighting softly
-  g.globalCompositeOperation='soft-light';g.globalAlpha=0.45;g.drawImage(orig,0,0);g.restore();
-  toothPath(g,t);g.lineWidth=Math.max(1,D.mm*0.18);g.strokeStyle='rgba(120,95,85,.45)';g.stroke()});
- // buccal corridor shading
- var rgB=g.createRadialGradient(D.mid,D.gumC+D.hc/2,D.half*0.55,D.mid,D.gumC+D.hc/2,D.half*1.35);rgB.addColorStop(0,'rgba(0,0,0,0)');rgB.addColorStop(1,'rgba(30,10,10,.28)');
+  g.save();toothPath(g,t);g.clip();
+  g.globalCompositeOperation='soft-light';g.globalAlpha=0.65;g.drawImage(orig,0,0);g.globalCompositeOperation='source-over';g.globalAlpha=1;
+  var cx=t.xm+(t.xd-t.xm)*0.42,rg=g.createRadialGradient(cx,t.top+h*0.42,1,cx,t.top+h*0.42,Math.abs(t.xd-t.xm)*0.55);
+  rg.addColorStop(0,'rgba(255,255,255,'+(t.type=='c'?0.22:0.14)+')');rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;g.fillRect(Math.min(t.xm,t.xd),t.top,Math.abs(t.xd-t.xm),h);g.restore();
+  toothPath(g,t);g.lineWidth=Math.max(1,D.mm*0.14);g.strokeStyle='rgba(110,85,75,.4)';g.stroke()});
+ var rgB=g.createRadialGradient(D.mid,D.gumC+D.hc/2,D.half*0.6,D.mid,D.gumC+D.hc/2,D.half*1.35);rgB.addColorStop(0,'rgba(0,0,0,0)');rgB.addColorStop(1,'rgba(30,10,10,.22)');
  g.fillStyle=rgB;g.fillRect(0,0,S.W,S.H);g.restore()}
 function lines(g,D,opt){var lw=Math.max(1.5,S.W/450);g.lineWidth=lw;g.font='600 '+Math.round(S.W/42)+'px system-ui,sans-serif';g.textAlign='center';
  if(opt.boxes){ORDER.forEach(function(id){var t=D.T[id];if(!t)return;g.strokeStyle='rgba(255,214,0,.95)';g.strokeRect(t.x0,t.y0,t.x1-t.x0,t.y1-t.y0);g.fillStyle='rgba(255,214,0,.95)';g.fillText(id.slice(2),(t.x0+t.x1)/2,t.y0-lw*2)})}
@@ -1241,6 +1368,7 @@ function paint(){var cmp=document.getElementById('cmp');if(!cmp)return;var u=S.v
  if(S.view=='analysis'||S.view=='design'){cmp.innerHTML='<div class="ba"><img src="'+u+'" alt="'+esc(S.view)+' view"></div>';return}
  cmp.innerHTML='<div class="ba"><img src="'+beforeURL+'" alt="Before"><div class="af"><img src="'+u+'" alt="After simulation"></div><span class="tg l">Before</span><span class="tg r">'+(S.view=='braces'?BR[S.brace].n:(S.view=='white'?'Whitened':'Design'))+'</span><input type="range" min="0" max="100" value="50" aria-label="Compare before and after"></div>';
  var ba=cmp.querySelector('.ba'),rg=ba.querySelector('input'),af=ba.querySelector('.af');function up(){af.style.clipPath='inset(0 0 0 '+rg.value+'%)'}rg.addEventListener('input',up);up()}
+window.__camGuide=function(c,ok){var g=c.getContext('2d'),G=geom(c.width,c.height);drawGuide(g,c.width,c.height,G,ok,null)};
 window.__dsdTest=function(a,after,url){beforeURL=url;show(a,after)};
 })();
 """
@@ -1262,7 +1390,9 @@ def dsd_page():
         '<form id="ds" class="scf" autocomplete="on">'
         '<label>Your name<input name="name" required maxlength="80" autocomplete="name"></label>'
         '<label>Mobile number<input name="phone" required inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit number"></label>'
-        '<label>Your smile photo<input id="dsf" type="file" accept="image/*" required></label>'
+        '<button type="button" class="btn camb" id="dscam">📷 Open guided camera (recommended)</button>'
+        '<p class="muted" style="margin:6px 0 0">The camera checks your position, smile and light, then takes the photo automatically.</p>'
+        '<label>Or upload a smile photo<input id="dsf" type="file" accept="image/*"></label>'
         '<div id="dsp" class="prev one"></div>'
         '<p class="muted">For best results: face the camera straight, phone at mouth level, natural full smile showing your upper teeth, good daylight, no filter.</p>'
         '<input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">'
