@@ -64,7 +64,8 @@ def load_images():
 IMAGES = load_images()
 doctor_img = next((i for i in IMAGES if i["base"] == "doctor"), None)
 hero_img = next((i for b in ("front", "reception", "treatment-room") for i in IMAGES if i["base"] == b), None)
-gallery = [i for i in IMAGES if i is not doctor_img and i is not hero_img]
+CLINIC_IMAGES = [i for i in IMAGES if not i["base"].startswith(("guide-", "ortho-"))]
+gallery = [i for i in CLINIC_IMAGES if i is not doctor_img and i is not hero_img]
 
 
 def img_tag(i, lazy=True, cls=""):
@@ -83,6 +84,8 @@ ICONS = {
     "braces": '<rect x="3" y="7" width="5" height="10" rx="1.5"/><rect x="9.5" y="7" width="5" height="10" rx="1.5"/>'
               '<rect x="16" y="7" width="5" height="10" rx="1.5"/><path d="M2 12h20"/>',
     "dental-implants": '<path d="M6 3h12v5H6z"/><path d="M9 8v11l3 2.5 3-2.5V8"/><path d="M9 11.5h6M9 14.5h6M9 17.5h6"/>',
+    "implant-overdenture": '<path d="M3 6c0-2 4-3 9-3s9 1 9 3v3c0 1.5-1 2.5-2 2.5H5c-1 0-2-1-2-2.5z"/><path d="M7 11.5V21M12 11.5V21M17 11.5V21"/>',
+    "all-on-4-implants": '<path d="M3 5c0-1.5 4-2.500 9-2.500s9 1 9 2.500v3H3z"/><path d="M6 8v12M10 8v12M14 8v12M18 8v12"/>',
     "tooth-extraction": f'<path d="{TOOTH}"/><path d="M12 12V6M9.5 8.5 12 6l2.5 2.5"/>',
     "scaling-cleaning": '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15v5M16.5 17.5h5"/>',
     "crowns-bridges": '<path d="M4 18 3 8l5 4 4-7 4 7 5-4-1 10z"/><path d="M4 21h16"/>',
@@ -100,6 +103,7 @@ MENU_ICONS = {
     "photos": '<path d="M3 5h18v14H3z"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="16" cy="9" r="1"/>',
     "clock": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
     "pin": '<path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+    "guide": '<path d="M5 4h11l3 3v13H5z"/><path d="M9 11h6M9 15h6"/>',
     "faq": '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/>',
 }
 
@@ -172,6 +176,13 @@ h3{font-size:1.02rem;line-height:1.4;margin:22px 0 4px}
 .gal figcaption{font-size:.82rem;color:var(--muted);padding-top:6px;line-height:1.35}
 table{border-collapse:collapse;width:100%}td{padding:10px 2px;border-bottom:1px solid var(--line);vertical-align:top}
 .two{display:grid;gap:26px}
+.cards{display:grid;gap:18px}@media(min-width:760px){.cards{grid-template-columns:1fr 1fr}}
+.card{background:#fff;border:1px solid var(--line)}.card .ph svg,.card .ph img{width:100%;height:auto;display:block}.card .cb{padding:16px 18px}.card .cb ul{margin:8px 0}
+.dv summary{cursor:pointer;color:var(--navy2);font-weight:600;padding:6px 0}.dv .vid{margin-top:8px}
+.cmpw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0 8px}.cmp{border-collapse:collapse;min-width:820px;width:100%;font-size:.9rem;line-height:1.45}
+.cmp th,.cmp td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;background:#fff}.cmp th{background:var(--navy);color:#fff;font-weight:400}.cmp td:first-child{font-weight:600;background:var(--cream);position:sticky;left:0}
+.chart{margin:16px 0}.chart img{width:100%;height:auto;border:1px solid var(--line)}.chart figcaption{margin-top:6px}
+.vid{position:relative;aspect-ratio:16/9;background:#000;margin:6px 0 10px}.vid iframe{position:absolute;inset:0;width:100%;height:100%;margin:0}
 iframe{width:100%;height:300px;border:0;background:var(--sand)}
 ul.b,ol.b{padding-left:20px}ul.b li,ol.b li{margin:7px 0}
 .faq h3{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}.faq h3:first-of-type{border:0;margin-top:0;padding-top:0}
@@ -208,6 +219,7 @@ def menu_items(home_page, has_gallery):
              ("list", "Our approach", f"{p}#approach")]
     if has_gallery:
         items.append(("photos", "Gallery", f"{p}#clinic"))
+    items.append(("guide", "Patient guides", f"{p}#guides"))
     items += [("clock", "Timings", f"{p}#timings"), ("pin", "Location", f"{p}#location"),
               ("faq", "FAQ", f"{p}#faq")]
     return items
@@ -247,6 +259,8 @@ SHORT = {
     "clear-aligners": "Nearly invisible, removable trays to straighten teeth.",
     "braces": "Brackets and wires to straighten teeth and correct the bite.",
     "dental-implants": "A titanium post that replaces a missing tooth root.",
+    "implant-overdenture": "A removable denture that snaps onto implants and stays firm.",
+    "all-on-4-implants": "A fixed full arch of teeth on four implants.",
     "tooth-extraction": "Routine and wisdom tooth removal under local anaesthesia.",
     "scaling-cleaning": "Remove tartar, plaque and stains that brushing cannot.",
     "crowns-bridges": "Caps and bridges that protect or replace teeth.",
@@ -314,8 +328,8 @@ def home():
             {"@type": "LocationFeatureSpecification", "name": "Digital RVG X-ray", "value": True}],
         "sameAs": [],
     }
-    if IMAGES:
-        dentist["image"] = [f'{BASE}/{i["url"]}' for i in IMAGES]
+    if CLINIC_IMAGES:
+        dentist["image"] = [f'{BASE}/{i["url"]}' for i in CLINIC_IMAGES]
     faq = {"@context": "https://schema.org", "@type": "FAQPage",
            "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
                           for q, a in HOME_FAQS]}
@@ -374,8 +388,8 @@ def home():
     {dr_block}
     <div>
       <p class="kick">About the clinic</p>
-      <h2>Neighbourhood dentistry, done carefully</h2>
-      <p>{e(CLINIC)} is a neighbourhood dental practice in Jogeshwari East, Mumbai, led by Dr. Tejas Pradhan (Maharashtra State Dental Council Reg. No. A-20222). Families from Kokan Nagar, Poonam Nagar and Andheri East come here for check-ups, root canals, extractions, crowns, dentures, implants and orthodontic treatment.</p>
+      <h2>Careful dental care for the whole family</h2>
+      <p>{e(CLINIC)} is a family dental practice in Jogeshwari East, Mumbai, led by Dr. Tejas Pradhan (Maharashtra State Dental Council Reg. No. A-20222). Families from Kokan Nagar, Poonam Nagar and Andheri East come here for check-ups, root canals, extractions, crowns, dentures, implants and orthodontic treatment.</p>
       <p>The clinic uses digital RVG X-rays and sterilises every instrument before each patient. Treatment plans and costs are explained before any work begins.</p>
     </div>
   </div>
@@ -396,6 +410,11 @@ def home():
 </div></section>
 
 {gal}
+<section class="sec alt" id="guides"><div class="wrap">
+  <p class="kick">Patient guides</p><h2>Guides and aftercare</h2>
+  {guides_list()}
+</div></section>
+
 <section class="sec" id="timings"><div class="wrap narrow">
   <p class="kick">Timings</p><h2>Clinic timings</h2>
   <table>
@@ -433,6 +452,37 @@ def home():
 </body>
 </html>
 """
+
+
+# ---------------------------------------------------------------- educational videos (YouTube, checked embeddable)
+VIDEOS = {
+    "root-canal": ("vW1q2IT-FJA", "Root canal treatment step by step (animation)", "LA Endodontics, Dr Gabreal Shamtoub DDS"),
+    "clear-aligners": ("3zC43XlEplw", "What are clear aligners?", "Healthy Habit Dental Care"),
+    "braces": ("PWSqEdyizl8", "How do braces work?", "Peekaboo Kidz (The Dr. Binocs Show)"),
+    "dental-implants": ("YdIlM0j0dpE", "Dental implants: step-by-step procedure (animation)", "Dr Jignesh Mehta"),
+    "tooth-extraction": ("xe-ZVqSGvSE", "Wisdom tooth removal explained: causes, procedure, recovery", "Doctor O'Donovan"),
+    "scaling-cleaning": ("r1-od_bc6z8", "What is dental scaling or teeth cleaning?", "Brace Dental Clinic"),
+    "crowns-bridges": ("R7XvHJnoxdY", "Tooth crowns: step by step (animation)", "amatterofteeth"),
+    "dentures": ("8srCshjp0ww", "How dentures are made", "Insider Science"),
+    "teeth-whitening": ("5VVtzd0guas", "How tooth whitening works", "American Dental Association (ADA)"),
+    "fillings": ("ie4GQzqyW98", "Cavity filling animation", "DentalVision3D Animation"),
+    "implant-overdenture": ("uC01wG-Vvno", "What is an overdenture? What is a snap-in denture?", "Very Nice Smile Dental"),
+    "all-on-4-implants": ("IW4VFtb7OHU", "All-on-4 procedure animation", "Shor Dental"),
+    "childrens-dentistry": ("9HxUqnYWTk8", "What to expect at your child's first dental visit", "DeltaDentalAZ"),
+}
+
+
+def video_section(slug):
+    v = VIDEOS.get(slug)
+    if not v:
+        return ""
+    vid, title, who = v
+    return (f'<h2 style="margin-top:36px">Watch: how it works</h2>'
+            f'<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/{vid}" title="{e(title)}" loading="lazy" '
+            f'allow="accelerometer; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" '
+            f'allowfullscreen></iframe></div>'
+            f'<p class="muted">{e(title)}, by {e(who)}. <a href="https://www.youtube.com/watch?v={vid}" rel="noopener">Watch on YouTube</a>. '
+            f'This is a general educational video and was not made by this clinic. Your own treatment may differ.</p>')
 
 
 # ---------------------------------------------------------------- treatment pages
@@ -479,6 +529,8 @@ def page(p):
 <h2>About {e(p["name"].lower())}</h2><p>{e(p["intro"])}</p>
 <h2 style="margin-top:36px">{e(p["signs_title"])}</h2><ul class="b">{signs}</ul>
 <h2 style="margin-top:36px">What to expect</h2><ol class="b">{steps}</ol>
+{video_section(p["slug"])}
+{related_block(p["slug"])}
 </div></section>
 <section class="sec alt"><div class="wrap narrow faq">
 <h2>{e(p["name"])}: questions</h2>{faqs}
@@ -499,12 +551,373 @@ def page(p):
 """
 
 
+# ---------------------------------------------------------------- patient guides (extra pages)
+def vid_block(v, heading=None, open_=True):
+    vid, title, who = v
+    h = f'<h2 style="margin-top:36px">{e(heading)}</h2>' if heading else ""
+    return (f'{h}<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/{vid}" title="{e(title)}" loading="lazy" '
+            f'allow="accelerometer; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" '
+            f'allowfullscreen></iframe></div>'
+            f'<p class="muted">{e(title)}, by {e(who)}. <a href="https://www.youtube.com/watch?v={vid}" rel="noopener">Watch on YouTube</a>. '
+            f'General educational video by a third party, not made by this clinic. Your own treatment may differ.</p>')
+
+
+def guide_page(slug, title, h1, kick, desc, body, faqs=None):
+    url = f"{BASE}/{slug}.html"
+    ld = {"@context": "https://schema.org", "@type": "MedicalWebPage", "url": url, "name": title,
+          "inLanguage": "en-IN", "provider": {"@id": f"{BASE}/#clinic"},
+          "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [
+              {"@type": "ListItem", "position": 1, "name": "Home", "item": f"{BASE}/"},
+              {"@type": "ListItem", "position": 2, "name": h1, "item": url}]}}
+    ld_html = f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>'
+    faq_html = ""
+    if faqs:
+        fld = {"@context": "https://schema.org", "@type": "FAQPage",
+               "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faqs]}
+        ld_html += f'<script type="application/ld+json">{json.dumps(fld, ensure_ascii=False)}</script>'
+        qa = "".join(f"<h3>{e(q)}</h3><p>{e(a)}</p>" for q, a in faqs)
+        faq_html = f'<section class="sec alt"><div class="wrap narrow faq"><h2>Questions</h2>{qa}</div></section>'
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+{HEAD_COMMON}<title>{e(title)} | {e(CLINIC)}</title>
+<meta name="description" content="{e(desc)}">
+<link rel="canonical" href="{url}">
+{ld_html}
+<style>{CSS}</style>
+</head>
+<body>
+{topbar(False)}
+<section class="hero plain sm">
+  {WATERMARK}
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Home</a> › {e(h1)}</div>
+    <p class="kick" style="color:#d9c8b8">{e(kick)}</p>
+    <h1>{e(title)}</h1>
+    <p>{e(CLINIC)}, Kokan Nagar Road, Jogeshwari East</p>
+    <div class="cta"><a class="btn" href="{WA}">Book an appointment</a><a class="btn o" href="tel:+918369187806">Call {PHONE}</a></div>
+  </div>
+</section>
+<section class="sec"><div class="wrap narrow">
+{body}
+</div></section>
+{faq_html}
+<section class="sec"><div class="wrap narrow">
+<h2>Visit the clinic</h2>
+<p>{e(ADDR)}</p>
+<p>Monday to Saturday, 11 am – 2:30 pm and 5:30 pm – 9 pm. Closed Sunday. Call or WhatsApp {PHONE} or {PHONE2}.</p>
+<p class="muted">General information only. Follow the instructions your own dentist gives you, and treatment is decided after an examination.</p>
+</div></section>
+<section class="sec alt"><div class="wrap"><p class="kick">More</p><h2>Treatments</h2>{tlist()}</div></section>
+{footer()}
+{bottom_bar()}
+{SCRIPT}
+</body>
+</html>
+"""
+
+
+def ul(items):
+    return '<ul class="b">' + "".join(f"<li>{e(i)}</li>" for i in items) + "</ul>"
+
+
+def ol(items):
+    return '<ol class="b">' + "".join(f"<li>{e(i)}</li>" for i in items) + "</ol>"
+
+
+def chart_img(stem, alt):
+    i = next((x for x in IMAGES if x["stem"] == stem), None)
+    if not i:
+        return ""
+    return f'<figure class="chart"><a href="{i["url"]}"><img src="{i["url"]}" alt="{e(alt)}" loading="lazy" decoding="async"></a><figcaption class="muted">Tap the chart to open it full size. You can save it or share it on WhatsApp.</figcaption></figure>'
+
+
+# ---- post-extraction care
+EXTRACTION_FAQS = [
+    ("How long should I bite on the gauze after tooth extraction?", "Bite firmly on the gauze for 30 to 45 minutes. If bleeding continues, place a fresh folded gauze and bite again for another 30 minutes."),
+    ("When can I eat after a tooth extraction?", "Wait until the numbness wears off, then eat soft, cool or lukewarm food for 24 to 48 hours. Avoid hard, hot and spicy food."),
+    ("What is a dry socket?", "A dry socket happens when the blood clot is lost from the socket, usually 2 to 4 days after extraction. It causes severe pain that medicines do not relieve. Contact your dentist if this happens."),
+    ("When can I brush my teeth after extraction?", "Brush the rest of your teeth as usual from the same evening, but keep the brush away from the extraction site for the first day. Rinse gently with warm salt water from the next day."),
+]
+
+
+def extraction_page():
+    body = (
+        '<h2>Post-extraction instructions</h2>'
+        '<p>Follow these steps for a smooth and speedy recovery after a tooth extraction or wisdom tooth removal. '
+        'The chart below is in English and Marathi.</p>'
+        + chart_img("guide-post-extraction", "Post extraction instructions chart in English and Marathi: bite on gauze, avoid rinsing, avoid hot food, avoid smoking and alcohol, take medicines, rest")
+        + '<h2 style="margin-top:36px">What to do</h2>'
+        + ol(["Bite firmly on the gauze for 30 to 45 minutes to stop bleeding.",
+              "Do not spit, rinse your mouth or use a straw for 24 hours. This can dislodge the clot and restart bleeding.",
+              "Eat soft, cool or lukewarm food for 24 to 48 hours. Avoid hard, spicy and hot food.",
+              "Do not smoke or drink alcohol for at least 48 to 72 hours. It delays healing and can cause complications.",
+              "Take your medicines on time as your dentist advised. Do not stop or skip them.",
+              "Rest, avoid heavy physical activity for 24 to 48 hours, and keep your head slightly raised when sleeping.",
+              "For swelling, hold a cold pack on the outside of the cheek, 10 minutes on and 10 minutes off, during the first 24 hours.",
+              "From the next day, rinse gently with warm salt water after meals."])
+        + '<h2 style="margin-top:36px">Normal healing</h2>'
+        + ul(["Mild pain and swelling for 2 to 3 days", "Slight oozing of blood in the first 24 hours", "Bruising of the cheek or jaw may occur"])
+        + '<h2 style="margin-top:36px">Contact your dentist if you have</h2>'
+        + ul(["Heavy or continuous bleeding", "Severe pain that medicines do not relieve", "Swelling that increases after 2 to 3 days", "Fever, pus, a bad taste or any other unusual symptom"])
+        + f'<p>Call or WhatsApp <b>{PHONE}</b> or {PHONE2}.</p>'
+        + vid_block(("4mEEl2r-BHg", "Post-operative care after tooth extraction and dental implant surgery", "Vraj Group Of Dental Clinics"), "Watch: aftercare explained")
+        + '<p>Related: <a href="tooth-extraction.html">Tooth extraction and wisdom teeth</a> · <a href="post-implant-care.html">Post-implant surgery care</a></p>')
+    return guide_page("post-extraction-care", "Post-Extraction Care: Instructions and Chart", "Post-extraction care", "Patient guide",
+                      "What to do after a tooth extraction: bite on gauze, avoid rinsing and straws for 24 hours, soft cool food, no smoking, medicines, normal healing and when to call the dentist.",
+                      body, EXTRACTION_FAQS)
+
+
+# ---- post-implant care
+IMPLANT_FAQS = [
+    ("What can I eat after dental implant surgery?", "Soft, cool or lukewarm food such as curd rice, dal, khichdi, banana and smoothies without a straw. Chew on the other side and avoid hard, hot or spicy food for the first 1 to 2 weeks, or as your dentist advises."),
+    ("Is swelling normal after implant surgery?", "Yes. Mild swelling and soreness usually peak around day 2 or 3 and then settle. Cold packs in the first 24 to 48 hours help. Swelling that keeps increasing after day 3 needs a dentist's review."),
+    ("When can I smoke after implant surgery?", "Smoking delays healing and raises the risk of implant failure. Avoid it completely during healing, and ideally stop for good."),
+    ("When will the stitches be removed?", "Usually after about 7 to 10 days, at a follow-up visit. Your dentist will tell you the exact day."),
+]
+
+
+def implant_page():
+    body = (
+        '<h2>Post-implant surgery instructions</h2>'
+        '<p>The first days after implant surgery decide how smoothly the implant heals. The chart below is in English and Marathi.</p>'
+        + chart_img("guide-post-implant", "Post implant surgery care chart in English and Marathi")
+        + '<h2 style="margin-top:36px">What to do</h2>'
+        + ol(["Bite firmly on the gauze for 30 to 45 minutes. A little oozing of blood on day 1 is normal.",
+              "Use a cold pack on the cheek, 10 minutes on and 10 minutes off, for the first 24 to 48 hours.",
+              "Do not spit, rinse or use a straw for the first 24 hours.",
+              "Eat soft, cool food and chew on the other side. Avoid hard, hot and spicy food for 1 to 2 weeks, or as advised.",
+              "Do not smoke or drink alcohol. Smoking delays healing and can make the implant fail.",
+              "Take antibiotics and painkillers exactly as prescribed, and finish the course.",
+              "From day 2, rinse gently with warm salt water or the mouthwash prescribed, after meals. Brush your other teeth as usual and keep the surgical area gentle.",
+              "Rest for 2 to 3 days, avoid heavy exercise for about a week, and sleep with your head raised.",
+              "Do not pull your lip or cheek to look at the site, and do not press on it with your tongue or finger.",
+              "Come for your follow-up visit and stitch removal as advised, usually after 7 to 10 days."])
+        + '<h2 style="margin-top:36px">Normal healing</h2>'
+        + ul(["Mild pain and swelling for 2 to 3 days", "Slight bleeding or oozing in the first 24 hours", "Bruising of the face or neck in some patients"])
+        + '<h2 style="margin-top:36px">Contact your dentist if you have</h2>'
+        + ul(["Bleeding that does not stop with firm pressure", "Severe pain not relieved by medicines", "Swelling that increases after day 3", "Fever, pus or a bad taste", "An implant or cover screw that feels loose", "Numbness that does not go away"])
+        + f'<p>Call or WhatsApp <b>{PHONE}</b> or {PHONE2}.</p>'
+        + vid_block(("7ZxzBWV2bt8", "Dental implants: aftercare advice", "Bupa Dental Care"), "Watch: implant aftercare")
+        + '<p>Related: <a href="dental-implants.html">Dental implants</a> · <a href="implant-overdenture.html">Implant overdenture</a> · <a href="all-on-4-implants.html">All-on-4 implants</a></p>')
+    return guide_page("post-implant-care", "Post-Implant Surgery Care: Instructions, Chart and Video", "Post-implant care", "Patient guide",
+                      "Aftercare for dental implant surgery: gauze, cold pack, soft food, no smoking, medicines, cleaning, normal healing and when to call your dentist. Chart in English and Marathi.",
+                      body, IMPLANT_FAQS)
+
+
+# ---- braces comparison
+def braces_svg(kind):
+    teeth = ""
+    op = ".55" if kind == "lingual" else "1"
+    for k in range(6):
+        x = 10 + k * 47
+        teeth += f'<rect x="{x}" y="30" width="40" height="62" rx="15" fill="#fbf8f3" stroke="#cfc4b6" stroke-width="1.5" opacity="{op}"/>'
+    br = ""
+    for k in range(6):
+        cx = 30 + k * 47
+        if kind == "metal":
+            br += (f'<circle cx="{cx}" cy="61" r="9" fill="none" stroke="#3b6ea5" stroke-width="2.5"/>'
+                   f'<rect x="{cx-7}" y="54" width="14" height="14" rx="2" fill="#aab2ba" stroke="#6b7580"/>')
+        elif kind == "ceramic":
+            br += f'<rect x="{cx-7}" y="54" width="14" height="14" rx="2" fill="#f1eadc" stroke="#cdbfa8"/>'
+        elif kind == "self-ligating":
+            br += (f'<rect x="{cx-8}" y="53" width="16" height="16" rx="2" fill="#aab2ba" stroke="#6b7580"/>'
+                   f'<rect x="{cx-4}" y="58" width="8" height="6" rx="1" fill="#e9edf0"/>')
+        elif kind == "lingual":
+            br += f'<rect x="{cx-7}" y="54" width="14" height="14" rx="2" fill="none" stroke="#6b7580" stroke-dasharray="3 2"/>'
+    wire = ""
+    if kind in ("metal", "self-ligating"):
+        wire = '<path d="M12 61H288" stroke="#6b7580" stroke-width="2"/>'
+    elif kind == "ceramic":
+        wire = '<path d="M12 61H288" stroke="#d6cfc2" stroke-width="2"/>'
+    elif kind == "lingual":
+        wire = '<path d="M12 61H288" stroke="#6b7580" stroke-width="1.5" stroke-dasharray="3 2"/>'
+    over = ""
+    if kind == "aligner":
+        over = '<rect x="4" y="24" width="292" height="74" rx="30" fill="#7fa8d1" fill-opacity=".18" stroke="#7fa8d1" stroke-width="2"/>'
+    lab = {"lingual": "braces sit behind the teeth", "aligner": "clear removable tray"}.get(kind, "")
+    t = f'<text x="150" y="112" text-anchor="middle" font-size="10" fill="#6b645c" font-family="system-ui,sans-serif">{lab}</text>' if lab else ""
+    return (f'<svg viewBox="0 0 300 120" role="img" aria-label="Illustration of {kind.replace("-", " ")}" xmlns="http://www.w3.org/2000/svg">'
+            f'<rect width="300" height="120" fill="#f1ece4"/>{teeth}{wire}{br}{over}{t}</svg>')
+
+
+BRACE_TYPES = [
+    ("metal", "Metal braces",
+     ["Stainless-steel brackets joined by a wire, held with small coloured or clear elastic ties.",
+      "Look: most visible, though coloured ties make them fun for children.",
+      "Handles almost every case, including complex bites.",
+      "Usually the lowest cost of the options."],
+     ("PWSqEdyizl8", "How do braces work?", "Peekaboo Kidz (The Dr. Binocs Show)")),
+    ("ceramic", "Ceramic (clear) braces",
+     ["Tooth-coloured or clear brackets with a tooth-coloured wire.",
+      "Look: much less noticeable than metal, up close they are still visible.",
+      "Brackets are a little larger and more brittle, and elastic ties can stain if oral hygiene is poor.",
+      "Costs more than metal braces."],
+     ("8Wo3bqgWgSM", "Clear braces vs. metal braces: what type works best?", "Premier Orthodontics")),
+    ("self-ligating", "Self-ligating braces",
+     ["Brackets with a built-in clip or door, so no elastic ties are needed.",
+      "Can be metal or ceramic. Easier to keep clean, and appointments are often shorter.",
+      "Research has not shown a clear difference in treatment time compared with conventional braces.",
+      "Costs more than conventional braces."],
+     ("tUe3y-mG6O4", "Damon braces vs. regular braces: what's the difference?", "Dr. Jamilian Orthodontic Clinic")),
+    ("lingual", "Lingual braces",
+     ["Brackets fixed to the back (tongue side) of the teeth, so they are hidden from view.",
+      "Can feel bulky at first, affect speech briefly and irritate the tongue.",
+      "Harder to clean, appointments take longer and fewer orthodontists offer them.",
+      "Usually the highest cost."],
+     ("e-UNMUY8z40", "Lingual braces: pros, cons, process and cost", "Bhatia Dentopulse (Dr. Srishti Bhatia)")),
+    ("aligner", "Clear aligners",
+     ["A series of clear, removable plastic trays, changed every 1 to 2 weeks.",
+      "Worn about 20 to 22 hours a day. Remove them to eat, drink and brush, so there are no food restrictions.",
+      "Best for mild to moderate crowding and gaps. Some complex movements need braces instead.",
+      "Cost is usually higher than metal braces and depends on the case."],
+     ("3zC43XlEplw", "What are clear aligners?", "Healthy Habit Dental Care")),
+]
+BRACE_ROWS = [
+    ("How visible", ["Most visible", "Less visible", "Visible (metal) or less (ceramic)", "Hidden behind teeth", "Almost invisible"]),
+    ("Comfort", ["Cheek irritation at first, wax helps", "Similar to metal, brackets slightly larger", "Often a little gentler on adjustment", "Tongue irritation and speech change at first", "Pressure after each new tray"]),
+    ("Cleaning", ["Brush and floss around brackets", "Same, and avoid staining foods", "Easier, no elastic ties to trap plaque", "Hardest to clean", "Easiest: trays come out"]),
+    ("Food rules", ["Avoid sticky and hard foods", "Avoid sticky, hard and staining foods", "Avoid sticky and hard foods", "Avoid sticky and hard foods", "None while trays are out; brush before refitting"]),
+    ("Complex cases", ["Suitable", "Suitable", "Suitable", "Suitable in expert hands", "Mild to moderate cases"]),
+    ("Relative cost", ["Lowest", "Higher", "Higher", "Highest", "Higher, varies by case"]),
+    ("Works best when", ["You want a dependable, economical option", "You want a discreet look and will keep teeth very clean", "You want shorter visits and easier cleaning", "Appearance matters most and you accept the extra effort", "You will wear the trays all day, every day"]),
+]
+BRACES_FAQS = [
+    ("Which type of braces is best?", "There is no single best type. The right choice depends on your bite, age, how visible you want the braces to be, how well you can clean your teeth and your budget. The dentist advises after an examination."),
+    ("Are self-ligating braces faster?", "Self-ligating braces are often marketed as faster, but studies have not shown a clear difference in treatment time. Their advantages are easier cleaning and shorter appointments."),
+    ("Do lingual braces hurt your tongue?", "They can irritate the tongue and affect speech for the first few weeks. Most people adapt."),
+    ("Can clear aligners fix every problem?", "No. Aligners work well for mild to moderate crowding, spacing and some bite problems. Complex cases may need braces."),
+    ("How much do braces cost in Mumbai?", "The cost depends on the type of braces and the case. You get an estimate after the examination and X-rays, before treatment starts."),
+]
+
+
+def braces_page():
+    cards, rows_head = "", "".join(f"<th>{e(n)}</th>" for _, n, _, _ in BRACE_TYPES)
+    for kind, name, pts, vid in BRACE_TYPES:
+        ph = next((i for i in IMAGES if i["base"] == f"ortho-{kind}"), None)
+        visual = img_tag(ph) if ph else braces_svg(kind)
+        note = "Example case" if ph else "Illustration"
+        cards += (f'<div class="card"><div class="ph">{visual}</div><div class="cb"><p class="kick">{note}</p>'
+                  f'<h3 class="sf" style="margin-top:4px">{e(name)}</h3>{ul(pts)}'
+                  f'<details class="dv"><summary>Watch a video</summary>{vid_block(vid)}</details></div></div>')
+    rows = ""
+    for label, vals in BRACE_ROWS:
+        rows += f"<tr><td>{e(label)}</td>" + "".join(f"<td>{e(v)}</td>" for v in vals) + "</tr>"
+    body = (
+        '<h2>Braces and aligners compared</h2>'
+        '<p>Metal, ceramic, self-ligating and lingual braces, and clear aligners all straighten teeth, but they differ in how they look, feel and are cared for. '
+        'Here they are side by side. Your dentist will recommend one after examining your teeth and bite.</p>'
+        '</div><div class="wrap"><div class="cards">' + cards + '</div></div><div class="wrap narrow">'
+        '<h2 style="margin-top:36px">Comparison table</h2><p class="muted">Swipe sideways to see all columns. Cost is shown only as relative; exact cost is given after examination.</p>'
+        f'<div class="cmpw"><table class="cmp"><thead><tr><th></th>{rows_head}</tr></thead><tbody>{rows}</tbody></table></div>'
+        + vid_block(("iGuP5ZWOHdI", "Braces or Invisalign? Which is better (metal, ceramic, lingual and aligners compared)", "Teeth Talk Girl"), "Watch: all the options compared")
+        + '<p>Related: <a href="braces.html">Braces</a> · <a href="clear-aligners.html">Clear aligners</a> · <a href="brushing-technique.html">Brushing with braces</a></p>')
+    return guide_page("braces-comparison", "Types of Braces Compared: Metal, Ceramic, Self-Ligating, Lingual and Aligners",
+                      "Braces compared", "Orthodontics",
+                      "Compare metal, ceramic, self-ligating and lingual braces and clear aligners: looks, comfort, cleaning, food rules, suitability and relative cost, with videos.",
+                      body, BRACES_FAQS)
+
+
+# ---- brushing
+BRUSH_FAQS = [
+    ("How long should I brush my teeth?", "Brush for two minutes, twice a day, with a fluoride toothpaste. Spend about 30 seconds on each quarter of the mouth."),
+    ("Should I rinse after brushing?", "Spit out the extra toothpaste but do not rinse with water, so the fluoride keeps working on your teeth."),
+    ("Is a hard toothbrush better?", "No. Use a soft brush. Hard bristles and heavy pressure can wear the enamel and make gums recede."),
+    ("How often should I change my toothbrush?", "Every 3 months, or sooner if the bristles are splayed."),
+    ("How do I brush with braces?", "Brush after every meal, angle the brush above and below the brackets, and use an interdental brush for the spaces under the wire."),
+]
+
+
+def brushing_svg():
+    return ('<svg viewBox="0 0 300 150" role="img" aria-label="Toothbrush held at 45 degrees to the gum line" xmlns="http://www.w3.org/2000/svg">'
+            '<rect width="300" height="150" fill="#f1ece4"/>'
+            '<path d="M40 120V55c0-22 16-38 36-38s36 16 36 38v65z" fill="#fbf8f3" stroke="#cfc4b6" stroke-width="2"/>'
+            '<path d="M20 118c40-14 100-14 140 0v30H20z" fill="#e6a9a0"/>'
+            '<g transform="rotate(-45 150 100)"><rect x="150" y="96" width="120" height="9" rx="4" fill="#143550"/>'
+            '<rect x="108" y="88" width="46" height="9" rx="2" fill="#7fa8d1"/></g>'
+            '<path d="M70 105l-14 22" stroke="#6b645c" stroke-width="1.5" stroke-dasharray="3 2"/>'
+            '<text x="200" y="40" font-size="11" fill="#1d1a17" font-family="system-ui,sans-serif">Bristles at 45°</text>'
+            '<text x="200" y="56" font-size="11" fill="#1d1a17" font-family="system-ui,sans-serif">towards the gum line</text></svg>')
+
+
+def brushing_page():
+    body = (
+        '<h2>Brushing technique</h2>'
+        '<p>Most people brush for long enough but miss the area where teeth meet the gums. The Modified Bass technique is the method dentists most often recommend because it cleans just under the gum edge, where plaque causes gum disease.</p>'
+        f'<div class="card" style="margin:18px 0"><div class="ph">{brushing_svg()}</div></div>'
+        '<h2 style="margin-top:36px">Step by step</h2>'
+        + ol(["Use a soft toothbrush and a pea-sized amount of fluoride toothpaste.",
+              "Place the bristles at a 45-degree angle, pointing towards the gum line.",
+              "Move the brush in very small, gentle back-and-forth vibrations, covering 2 to 3 teeth at a time, about 10 strokes each.",
+              "Work around the outside surfaces of all the teeth, top and bottom.",
+              "Repeat on the inside surfaces. For the inner side of the front teeth, tilt the brush upright and use the tip with short up-and-down strokes.",
+              "Brush the chewing surfaces with a light back-and-forth scrub.",
+              "Gently brush the tongue to remove bacteria that cause bad breath.",
+              "Spit out the extra toothpaste and do not rinse with water."])
+        + '<h2 style="margin-top:36px">Good habits</h2>'
+        + ul(["Brush twice a day for two minutes, and always before bed.", "Do not press hard. Light pressure cleans as well and protects the gums.",
+              "Clean between the teeth once a day with floss or interdental brushes, because a brush cannot reach there.",
+              "Change your brush every 3 months.", "Wait about 30 minutes after acidic food or drinks before brushing."])
+        + '<h2 style="margin-top:36px">If you have braces, implants or dentures</h2>'
+        + ul(["Braces: brush after every meal, angle the brush above and below the brackets, and use an interdental brush under the wire.",
+              "Implants and All-on-4 teeth: use a soft brush, and clean under the bridge with interdental brushes or a water flosser.",
+              "Overdentures and dentures: remove them, brush them with a denture brush and soap, and leave them out at night."])
+        + '<h2 style="margin-top:36px">Children</h2>'
+        + '<p>Parents should help children brush until about age 7 or 8. Use a smear of fluoride toothpaste for under 3 years and a pea-sized amount after that.</p>'
+        + vid_block(("VdjmGxq-X7M", "The best way to brush your teeth: Modified Bass technique", "Dentalk!"), "Watch: Modified Bass technique")
+        + '<p>Related: <a href="scaling-cleaning.html">Scaling and cleaning</a> · <a href="braces-comparison.html">Braces compared</a> · <a href="childrens-dentistry.html">Children\'s dentistry</a></p>')
+    return guide_page("brushing-technique", "How to Brush Your Teeth Properly: Modified Bass Technique", "Brushing technique", "Patient guide",
+                      "Step-by-step brushing technique (Modified Bass): 45-degree angle, small gentle strokes, two minutes twice a day, tips for braces, implants and children, with video.",
+                      body, BRUSH_FAQS)
+
+
+GUIDES = [
+    ("braces-comparison", "Braces and aligners compared", "Metal, ceramic, self-ligating, lingual and clear aligners side by side.", braces_page),
+    ("post-extraction-care", "Post-extraction care", "Instructions and chart for after a tooth extraction.", extraction_page),
+    ("post-implant-care", "Post-implant surgery care", "Chart, instructions and video for after implant surgery.", implant_page),
+    ("brushing-technique", "Brushing technique", "How to brush properly, with a video.", brushing_page),
+]
+
+
+def guides_list():
+    ic = '<path d="M5 4h11l3 3v13H5z"/><path d="M9 11h6M9 15h6"/>'
+    return '<div class="tl">' + "".join(
+        f'<a href="{s}.html">{svg(ic)}<div><span class="nm">{e(n)}</span><small>{e(d)}</small></div><span class="ar">→</span></a>'
+        for s, n, d, _ in GUIDES) + "</div>"
+
+
+RELATED = {
+    "tooth-extraction": ["post-extraction-care"],
+    "dental-implants": ["post-implant-care", "implant-overdenture", "all-on-4-implants"],
+    "implant-overdenture": ["post-implant-care", "dental-implants", "dentures"],
+    "all-on-4-implants": ["post-implant-care", "dental-implants"],
+    "dentures": ["implant-overdenture"],
+    "braces": ["braces-comparison", "brushing-technique"],
+    "clear-aligners": ["braces-comparison"],
+    "scaling-cleaning": ["brushing-technique"],
+    "childrens-dentistry": ["brushing-technique"],
+}
+
+
+def related_block(slug):
+    names = {s: n for s, n, _, _ in GUIDES}
+    names.update({p["slug"]: p["name"] for p in PAGES})
+    r = RELATED.get(slug)
+    if not r:
+        return ""
+    return ('<h2 style="margin-top:36px">Related</h2><ul class="b">'
+            + "".join(f'<li><a href="{s}.html">{e(names[s])}</a></li>' for s in r) + "</ul>")
+
+
 # ---------------------------------------------------------------- write everything
 (OUT / "index.html").write_text(home(), encoding="utf-8")
 for p in PAGES:
     (OUT / f'{p["slug"]}.html').write_text(page(p), encoding="utf-8")
 
-urls = [f"{BASE}/"] + [f'{BASE}/{p["slug"]}.html' for p in PAGES]
+for slug, _n, _d, fn in GUIDES:
+    (OUT / f"{slug}.html").write_text(fn(), encoding="utf-8")
+
+urls = [f"{BASE}/"] + [f'{BASE}/{p["slug"]}.html' for p in PAGES] + [f'{BASE}/{g[0]}.html' for g in GUIDES]
 (OUT / "sitemap.xml").write_text(
     '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     + "".join(f"  <url><loc>{u}</loc></url>\n" for u in urls) + "</urlset>\n", encoding="utf-8")
@@ -514,6 +927,7 @@ llms = [f"# {CLINIC}", "",
         f"Mon–Sat 11:00–14:30 and 17:30–21:00, closed Sunday. Phone/WhatsApp {PHONE} or {PHONE2}.", "",
         "## Treatments", ""]
 llms += [f'- [{p["name"]}]({BASE}/{p["slug"]}.html): {one_liner(p)}' for p in PAGES]
+llms += ["", "## Patient guides", ""] + [f"- [{n}]({BASE}/{sl}.html): {d}" for sl, n, d, _ in GUIDES]
 (OUT / "llms.txt").write_text("\n".join(llms) + "\n", encoding="utf-8")
 
 print(f"{len(PAGES) + 1} pages, {sum(len(p['faqs']) for p in PAGES) + len(HOME_FAQS)} FAQs, {len(IMAGES)} photos")

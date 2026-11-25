@@ -194,3 +194,41 @@ PAGES = [
   ("When should my child be checked for braces?", "An orthodontic check around age 7 helps spot problems early, even if braces start later."),
  ]},
 ]
+
+
+NEW = [
+{
+ "slug": "implant-overdenture", "name": "Implant-supported overdenture",
+ "title": "Implant-Supported Overdenture (Snap-On Denture) in Jogeshwari East, Mumbai",
+ "intro": "An implant-supported overdenture is a removable denture that clips onto two or more dental implants placed in the jaw. It stays far more firmly in place than a conventional denture, which can slip when you eat or speak. Dr Tejas Pradhan's Dental Clinic in Jogeshwari East starts with an examination and X-rays to check whether this option suits you.",
+ "signs_title": "An overdenture may suit you if",
+ "signs": ["Your complete denture is loose or moves while you eat", "You have lost all or most teeth in the upper or lower jaw", "Your gums become sore from denture rubbing", "You want better chewing than a normal denture gives", "You prefer a removable option that is easier to clean than a fixed bridge"],
+ "steps": ["Examination, X-rays and a 3D scan to check the bone", "Planning the number and position of implants (commonly 2 in the lower jaw, 4 or more in the upper)", "Implant placement under local anaesthesia", "A healing period, usually a few months, while your existing denture is adjusted", "Attachments fitted and the denture made or modified to snap onto them", "Regular reviews; the small inserts inside the denture are replaced when they wear"],
+ "faqs": [
+  ("What is the difference between an overdenture and a normal denture?", "A normal denture rests only on the gums. An overdenture also clips onto implants, so it moves much less and chews better."),
+  ("How many implants does an overdenture need?", "Usually 2 implants for a lower denture and 4 or more for an upper one. The dentist decides after checking your bone on X-rays or a 3D scan."),
+  ("Can I take the overdenture out?", "Yes. You remove it to clean it and usually leave it out at night, so your gums can rest."),
+  ("Is an overdenture the same as All-on-4?", "No. An overdenture is removable. All-on-4 is a fixed set of teeth that stays in the mouth and is removed only by the dentist."),
+  ("How long does the treatment take?", "Often a few months, because the implants need time to join the bone. The exact time depends on your bone and the plan."),
+  ("Does an overdenture need maintenance?", "Yes. Clean the implants and denture daily and attend check-ups. The small rubber or nylon inserts wear with use and are replaced from time to time."),
+  ("What does an implant overdenture cost?", "The cost depends on the number of implants and the denture. You get an estimate after the examination and scan, before treatment begins."),
+ ]},
+{
+ "slug": "all-on-4-implants", "name": "All-on-4 full-arch implants",
+ "title": "All-on-4 Dental Implants (Fixed Full-Arch Teeth) in Jogeshwari East, Mumbai",
+ "intro": "All-on-4 replaces a full arch of teeth with a fixed bridge supported by four implants, two at the front and two angled at the back to make use of the available bone. It is meant for people who have lost most or all teeth in one jaw and want fixed teeth instead of a removable denture. Suitability is decided after an examination, X-rays and a 3D scan.",
+ "signs_title": "All-on-4 may be considered if",
+ "signs": ["Most or all teeth in one jaw are missing or failing", "Dentures keep slipping or are uncomfortable", "Teeth are loose, badly decayed or lost to gum disease", "You want fixed teeth that do not come out", "A scan shows enough bone, or the bone can be built up"],
+ "steps": ["Consultation, X-rays and a 3D scan", "A treatment plan, including removal of teeth that cannot be saved", "Four implants placed, the back two tilted", "Temporary fixed teeth, sometimes the same day where the bone allows", "A few months of healing while the implants join the bone", "Final fixed bridge fitted", "Careful daily cleaning and regular check-ups"],
+ "faqs": [
+  ("What is All-on-4?", "It is a method of supporting a full arch of fixed teeth on four implants instead of one implant per tooth."),
+  ("Can I get teeth on the same day?", "In suitable cases, a temporary fixed set can be fitted soon after the implants are placed. This depends on how firmly the implants sit in the bone."),
+  ("Who is not suitable for All-on-4?", "People with very little bone, uncontrolled diabetes, heavy smoking or poor oral hygiene may need a different plan or extra treatment first. The dentist advises after examination."),
+  ("Is All-on-4 better than an overdenture?", "They suit different needs. All-on-4 is fixed and feels closer to natural teeth. An overdenture is removable, easier to clean and often costs less."),
+  ("Is the procedure painful?", "It is done under local anaesthesia, sometimes with sedation. Swelling and soreness for a few days are common and are managed with medicines."),
+  ("How do I care for All-on-4 teeth?", "Clean under and around the bridge every day with interdental brushes or a water flosser, and attend regular cleanings. See our post-implant care guide."),
+  ("What does All-on-4 cost?", "It is a larger treatment and the cost depends on the materials, the number of implants and any extra work. You get an estimate after the scan, before treatment begins."),
+ ]},
+]
+_i = [p["slug"] for p in PAGES].index("dental-implants") + 1
+PAGES[_i:_i] = NEW
