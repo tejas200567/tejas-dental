@@ -75,7 +75,7 @@ table{border-collapse:collapse;width:100%}td{padding:10px 2px;border-bottom:1px 
 .res{margin-top:28px;border-top:2px solid var(--navy);padding-top:8px}.warn{background:#fdecec;border:1px solid #e59a9a;padding:12px 14px;margin:12px 0}.err{color:#b3261e}
 .prev.one img{width:100%;max-width:420px;aspect-ratio:auto}
 .ba{position:relative;overflow:hidden;border:1px solid var(--line);background:#000}.ba img{width:100%;display:block}.ba .af{position:absolute;inset:0}.ba .af img{width:100%;height:100%;object-fit:cover}
-.ba input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;z-index:3}.ba .hd{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 4px rgba(0,0,0,.6);z-index:2;pointer-events:none}.ba .hd:after{content:'C0 a0B6';position:absolute;top:50%;left:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border:3px solid #fff;border-radius:50%;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.2);box-shadow:0 0 6px rgba(0,0,0,.5)}.ba .tg{position:absolute;top:8px;background:rgba(11,34,54,.8);color:#fff;font-size:.8rem;padding:2px 8px}.ba .l{left:8px}.ba .r{right:8px}
+.ba input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;z-index:3}.ba .hd{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 4px rgba(0,0,0,.6);z-index:2;pointer-events:none}.ba .hd:after{content:'◀ ▶';position:absolute;top:50%;left:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border:3px solid #fff;border-radius:50%;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.2);box-shadow:0 0 6px rgba(0,0,0,.5)}.ba .tg{position:absolute;top:8px;background:rgba(11,34,54,.8);color:#fff;font-size:.8rem;padding:2px 8px}.ba .l{left:8px}.ba .r{right:8px}
 .pg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.pg figure{margin:0;background:#fff;border:1px solid var(--line)}.pg svg{width:100%;height:auto;display:block}
 .pg figcaption{padding:8px 10px;font-size:.84rem;line-height:1.4}.pg figure:first-child{grid-column:1/-1}.pg figure:first-child svg{max-width:340px;margin:0 auto;display:block}
 .camb{border:0;cursor:pointer;font:inherit;width:100%;margin-top:14px;padding:14px}
@@ -145,7 +145,7 @@ var FORMS={oval:{n:'Oval (soft, rounded)',c:[0.16,0.32,0.035],l:[0.28,0.5,0.05],
  rectangular:{n:'Rectangular (strong, long)',c:[0.05,0.12,0],l:[0.1,0.24,0.01],neck:0.03,tip:0.04,dr:0},
  square:{n:'Square (calm, broad)',c:[0.05,0.1,0],l:[0.08,0.18,0],neck:0.01,tip:0.1,dr:0.06}};
 var SHADES={a2:{c:[236,222,198],yr:0.15,lift:0.03},a1:{c:[241,233,216],yr:0.45,lift:0.07},b1:{c:[246,242,232],yr:0.7,lift:0.11},bl:{c:[251,250,246],yr:0.95,lift:0.17}};
-var S={eyes:'bar',clin:false,face:true,form:'oval',wh:0.78,a:null,after:null,img:null,W:0,H:0,ratio:'red70',shade:'a1',view:'mockup',outline:true,brace:'metal',cache:{}};
+var S={eyes:'off',clin:false,face:true,form:'oval',wh:0.78,a:null,after:null,img:null,W:0,H:0,ratio:'red70',shade:'a1',view:'mockup',outline:true,brace:'metal',cache:{}};
 var beforeURL=null;
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function avg(a){a=a.filter(function(v){return v!=null&&isFinite(v)});return a.length?a.reduce(function(p,q){return p+q},0)/a.length:null}
@@ -258,10 +258,9 @@ function camCapture(auto){var v=el('camv');if(!v||!v.videoWidth)return;var W=v.v
  if(r&&r.faceLandmarks&&r.faceLandmarks.length){var L=r.faceLandmarks[0];function P(i){return[L[i].x*W,L[i].y*H]}
   var cr=cropFromL(L,W,H);crop=cr.crop;var lips=cr.lips,eyes=cr.eyes;fm=cr.fm;}
  camStop();CAM.captured={canvas:c,crop:crop,fm:fm,lips:lips,eyes:eyes};
- var pc2=document.createElement('canvas'),pk2=Math.min(1,900/Math.max(W,H));pc2.width=Math.round(W*pk2);pc2.height=Math.round(H*pk2);pc2.getContext('2d').drawImage(c,0,0,pc2.width,pc2.height);maskOn(pc2,pk2,eyes,S.eyes);el('camimg').src=pc2.toDataURL('image/jpeg',0.88);
+ el('camimg').src=toURL(c,0,0,W,H,900,0.88);
  el('camstage').hidden=true;el('camprev').hidden=false;el('cam').classList.add('pv');el('camh').textContent=auto?'Photo taken automatically':'Photo taken';el('camp').textContent='Check that your teeth are sharp and clearly visible.'}
-function camUse(){camClose();setTimeout(function(){var b=el('dsb');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})},50);var c=CAM.captured;if(!c)return;var pc=document.createElement('canvas'),pk=Math.min(1,700/Math.max(c.canvas.width,c.canvas.height));pc.width=Math.round(c.canvas.width*pk);pc.height=Math.round(c.canvas.height*pk);pc.getContext('2d').drawImage(c.canvas,0,0,pc.width,pc.height);maskOn(pc,pk,c.eyes,S.eyes);
- prev.innerHTML='<img src="'+pc.toDataURL('image/jpeg',0.85)+'" alt="Your photo"><p class="muted">'+(c.eyes&&S.eyes!='off'?'Eyes are covered for privacy. You can change this after the design.':'')+'</p>';
+function camUse(){camClose();setTimeout(function(){var b=el('dsb');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})},50);var c=CAM.captured;if(!c)return;prev.innerHTML='<img src="'+toURL(c.canvas,0,0,c.canvas.width,c.canvas.height,700,0.85)+'" alt="Your photo">';
  if(inp)inp.value='';msg.className='muted';msg.textContent='Photo ready. Tap "Design my smile".'}
 
 var cb=document.getElementById('dscam');if(cb)cb.addEventListener('click',camOpen);
@@ -501,10 +500,9 @@ function render(view){var k=view+'|'+S.ratio+'|'+S.shade+'|'+S.outline+'|'+S.bra
  var u=(S.clin?clinical(c,D):faceWrap(c)).toDataURL('image/jpeg',0.9);S.cache[k]=u;return u}
 function faceWrap(c){if(!S.face||!FULL||!FULL.crop)return c;var I=FULL.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height,k=Math.min(1,1400/Math.max(W,H)),cr=FULL.crop;
  var o=document.createElement('canvas');o.width=Math.round(W*k);o.height=Math.round(H*k);var og=o.getContext('2d');og.imageSmoothingQuality='high';og.drawImage(I,0,0,o.width,o.height);og.drawImage(c,0,0,c.width,c.height,cr[0]*k,cr[1]*k,cr[2]*k,cr[3]*k);maskEyes(o,k);return o}
-function maskEyes(o,k){maskOn(o,k,FULL&&FULL.eyes,S.eyes)}
-function maskOn(o,k,e,mode){if(mode=='off'||!e)return;var g=o.getContext('2d'),x1=e[0]*k,y1=e[1]*k,x2=e[2]*k,y2=e[3]*k,d=Math.hypot(x2-x1,y2-y1),a=Math.atan2(y2-y1,x2-x1),cx=(x1+x2)/2,cy=(y1+y2)/2,w=d*1.55,h=d*0.42;
+function maskEyes(o,k){var e=FULL&&FULL.eyes;if(S.eyes=='off'||!e)return;var g=o.getContext('2d'),x1=e[0]*k,y1=e[1]*k,x2=e[2]*k,y2=e[3]*k,d=Math.hypot(x2-x1,y2-y1),a=Math.atan2(y2-y1,x2-x1),cx=(x1+x2)/2,cy=(y1+y2)/2,w=d*1.55,h=d*0.42;
  g.save();g.translate(cx,cy);g.rotate(a);g.beginPath();rrect(g,-w/2,-h*0.55,w,h,h*0.18);
- if(mode=='bar'){g.fillStyle='#111';g.fill()}
+ if(S.eyes=='bar'){g.fillStyle='#111';g.fill()}
  else{g.clip();g.rotate(-a);g.translate(-cx,-cy);var t=document.createElement('canvas');t.width=o.width;t.height=o.height;t.getContext('2d').drawImage(o,0,0);g.filter='blur('+Math.max(8,d*0.12)+'px)';g.drawImage(t,0,0);g.filter='none';g.drawImage(t,0,0,0,0);var t2=g.globalAlpha;g.globalAlpha=0.5;g.filter='blur('+Math.max(12,d*0.2)+'px)';g.drawImage(t,0,0);g.filter='none';g.globalAlpha=t2}
  g.restore()}
 function beforeShown(){if(S.clin){var D0=design();if(D0){if(!S.cache.cb)S.cache.cb=clinical(baseCanvas()[0],D0).toDataURL('image/jpeg',0.9);return S.cache.cb}}if(!S.face||!FULL)return beforeURL;if(!FACEB||FACEB.k!=S.eyes)FACEB={k:S.eyes,u:faceWrap(baseCanvas()[0]).toDataURL('image/jpeg',0.9)};return FACEB.u}
@@ -652,7 +650,7 @@ function build(){var a=S.a,D=design();
  h+='<label>Tooth shape<select id="fm">'+Object.keys(FORMS).map(function(k){return'<option value="'+k+'">'+FORMS[k].n+'</option>'}).join('')+'</select></label>';
  h+='<label>Central width : length<select id="wh"><option value="0.75">75% (longer)</option><option value="0.78">78% (classic)</option><option value="0.8">80%</option><option value="0.85">85% (shorter)</option></select></label>';
  h+='<label>Shade<select id="sh"><option value="a2">Natural (A2)</option><option value="a1">Bright natural (A1)</option><option value="b1">White (B1)</option><option value="bl">Extra white (bleach)</option></select></label>';
- h+='<label>Hide eyes (privacy)<select id="ey"><option value="bar">Black bar</option><option value="blur">Blur</option><option value="off">Show eyes</option></select></label>';
+ h+='<label>Hide eyes (privacy)<select id="ey"><option value="off">Show</option><option value="bar">Black bar</option><option value="blur">Blur</option></select></label>';
  h+='<label class="ck2"><input type="checkbox" id="cl"> Clinical photo style (black background)</label><label class="ck2"><input type="checkbox" id="fc"'+(S.face?' checked':'')+'> Show full face</label><label class="ck2"><input type="checkbox" id="ol"'+(S.outline?' checked':'')+'> Show midline</label><button type="button" class="btn o2" id="dl">Download image</button></div>';
  h+='<p class="muted"><b>Simulation only.</b> These pictures are drawn by the computer from your photo to explain ideal proportions. They are not a promise of results. Your plan depends on your teeth, gums and bite, and is decided after an examination.</p>';
  h+='<div id="reel" class="note" style="background:#fff"></div>';
@@ -673,7 +671,7 @@ function build(){var a=S.a,D=design();
  document.getElementById('ol').addEventListener('change',function(){S.outline=this.checked;paint()});
  document.getElementById('fc').addEventListener('change',function(){S.face=this.checked;paint()});
  document.getElementById('cl').addEventListener('change',function(){S.clin=this.checked;paint()});
- document.getElementById('ey').value=S.eyes;document.getElementById('ey').addEventListener('change',function(){S.eyes=this.value;paint()});if(!FULL||!FULL.eyes){var eyl=document.getElementById('ey');eyl.disabled=true;eyl.parentNode.title='Eyes not detected in this photo. Use the guided camera.'}if(!FULL)document.getElementById('fc').parentNode.style.display='none';
+ document.getElementById('ey').value=S.eyes;document.getElementById('ey').addEventListener('change',function(){S.eyes=this.value;paint()});if(!FULL||!FULL.eyes)document.getElementById('ey').parentNode.style.display='none';if(!FULL)document.getElementById('fc').parentNode.style.display='none';
  document.getElementById('dl').addEventListener('click',function(){var a2=document.createElement('a');a2.href=S.view=='ai'?S.after:render(S.view);a2.download='smile-design-'+S.view+'.jpg';document.body.appendChild(a2);a2.click();a2.remove()});
  paint();reelUI();out.scrollIntoView({behavior:'smooth'})}
 var CAP={dsd:'DSD lines: the classic smile-design template on your photo. Blue: face midline. Yellow: horizontal reference parallel to your eyes. Orange dots: gum zeniths. Purple: contact points. Gold: biting-edge curve, which should follow the green lower lip. Percentages: central width ÷ length, and each tooth’s width compared with the tooth in front of it.',mockup:'Smile mock-up: your photo with ideal-proportion teeth drawn in, plus whitening. Drag the slider to compare with your current smile.',design:'Ideal design: the planned tooth outlines drawn on your own photo, with the gum curve and biting-edge curve, the face midline and the biting-edge reference (gold dotted). Drag the slider to compare.',white:'Whitening only: your own teeth at the chosen shade, without changing their shape.',analysis:'Analysis: yellow boxes mark your 8 front teeth (1 central, 2 lateral, 3 canine, 4 premolar). Blue: face midline. Red: teeth midline. Green: lower lip line that the tooth edges should follow.',ai:'AI photo: a realistic AI-generated preview of your smile after treatment.',braces:'Braces preview: how each type of braces or aligners would look on your current teeth (upper teeth shown). Pick a type above and drag the slider.'};
