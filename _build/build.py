@@ -192,7 +192,8 @@ table{border-collapse:collapse;width:100%}td{padding:10px 2px;border-bottom:1px 
 .pg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.pg figure{margin:0;background:#fff;border:1px solid var(--line)}.pg svg{width:100%;height:auto;display:block}
 .pg figcaption{padding:8px 10px;font-size:.84rem;line-height:1.4}.pg figure:first-child{grid-column:1/-1}.pg figure:first-child svg{max-width:340px;margin:0 auto}
 .ok{color:#1f7a4d;font-weight:600}
-.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.seg button{font:inherit;font-size:.88rem;padding:8px 12px;border:1px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}.seg button.on{background:var(--navy);color:#fff}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.seg button{font:inherit;font-size:.88rem;padding:8px 12px;border:1px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}.seg button.on{background:var(--navy);color:#fff}.seg.sm button{font-size:.82rem;padding:6px 10px}
+.bg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.bg figure{margin:0;cursor:pointer;border:1px solid var(--line);background:#fff}.bg img{width:100%;display:block}.bg figcaption{font-size:.82rem;padding:4px 8px;font-weight:600}
 .ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:12px 0}.ctl label{font-size:.88rem;font-weight:600;display:flex;flex-direction:column;gap:4px}.ctl select{font:inherit;padding:8px;border:1px solid var(--line);background:#fff}
 .ctl .ck2{flex-direction:row;align-items:center;font-weight:400}.btn.o2{background:#fff;color:var(--navy);border:1px solid var(--navy);cursor:pointer;font:inherit;padding:9px 14px}.wn{color:#b3261e;font-weight:600}
 .chart{margin:16px 0}.chart img{width:100%;height:auto;border:1px solid var(--line)}.chart figcaption{margin-top:6px}
@@ -1017,7 +1018,7 @@ var f=document.getElementById('ds'),btn=document.getElementById('dsb'),msg=docum
 var ORDER=["UR4","UR3","UR2","UR1","UL1","UL2","UL3","UL4"],NUM={1:"Central incisor",2:"Lateral incisor",3:"Canine",4:"First premolar"};
 var RATIOS={golden:0.618,red70:0.70,red75:0.75,red80:0.80};
 var SHADES={a2:{c:[236,222,198],yr:0.15,lift:0.03},a1:{c:[241,233,216],yr:0.45,lift:0.07},b1:{c:[246,242,232],yr:0.7,lift:0.11},bl:{c:[251,250,246],yr:0.95,lift:0.17}};
-var S={a:null,after:null,img:null,W:0,H:0,ratio:'red70',shade:'a1',view:'mockup',outline:true,cache:{}};
+var S={a:null,after:null,img:null,W:0,H:0,ratio:'red70',shade:'a1',view:'mockup',outline:true,brace:'metal',cache:{}};
 var beforeURL=null;
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function avg(a){a=a.filter(function(v){return v!=null&&isFinite(v)});return a.length?a.reduce(function(p,q){return p+q},0)/a.length:null}
@@ -1128,14 +1129,53 @@ function lines(g,D,opt){var lw=Math.max(1.5,S.W/450);g.lineWidth=lw;g.font='600 
   g.beginPath();g.moveTo(D.mid-D.half,D.gumC);g.lineTo(D.mid+D.half,D.gumC);g.stroke();g.setLineDash([]);
   g.fillStyle='#fff';g.strokeStyle='rgba(0,0,0,.6)';g.lineWidth=lw*1.5;g.font='600 '+Math.round(Math.max(10,D.mm*1.6))+'px system-ui,sans-serif';
   D.list.forEach(function(t){if(t.type=='p')return;var x=(t.xm+t.xd)/2,y=t.bot+2.6*D.mm,s=(8.5*t.w/D.cwNow).toFixed(1);g.strokeText(s,x,y);g.fillText(s,x,y)})}}
-function render(view){var k=view+'|'+S.ratio+'|'+S.shade+'|'+S.outline;if(S.cache[k])return S.cache[k];
+function render(view){var k=view+'|'+S.ratio+'|'+S.shade+'|'+S.outline+'|'+S.brace;if(S.cache[k])return S.cache[k];
  var D=design(),cg=baseCanvas(),c=cg[0],g=cg[1];
  if(!D)return beforeURL;
  if(view=='analysis')lines(g,D,{boxes:1,mid:1,lip:1});
  else if(view=='white')whiten(c,g,D);
  else if(view=='design'){lines(g,D,{mid:1,lip:1,design:1})}
  else if(view=='mockup'){whiten(c,g,D);mockup(c,g,D);if(S.outline)lines(g,D,{mid:1})}
+ else if(view=='braces'){braces(c,g,D,S.brace)}
  var u=c.toDataURL('image/jpeg',0.9);S.cache[k]=u;return u}
+
+/* ---------- braces preview ---------- */
+var BR={metal:{n:'Metal',t:'Most visible. Strong and reliable for every case. Lowest cost.'},
+ ceramic:{n:'Ceramic',t:'Tooth-coloured brackets, much less noticeable. Costs more; ties can stain.'},
+ self:{n:'Self-ligating',t:'Built-in clip instead of elastic ties. Easier cleaning, shorter visits. Costs more.'},
+ lingual:{n:'Lingual',t:'Fixed behind the teeth, so nothing shows from the front. Harder to clean, highest cost.'},
+ aligner:{n:'Aligners',t:'Clear removable trays, almost invisible. Wear 20–22 hours a day. Best for mild to moderate cases.'}};
+function toothColour(g,t){var x=Math.round((t.x0+t.x1)/2),y=Math.round(t.y0+(t.y1-t.y0)*0.55);var p=g.getImageData(clamp(x-2,0,S.W-5),clamp(y-2,0,S.H-5),5,5).data,r=0,gg=0,b=0,n=0;for(var i=0;i<p.length;i+=4){r+=p[i];gg+=p[i+1];b+=p[i+2];n++}return[r/n,gg/n,b/n]}
+function rrect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.lineTo(x+w-r,y);g.quadraticCurveTo(x+w,y,x+w,y+r);g.lineTo(x+w,y+h-r);g.quadraticCurveTo(x+w,y+h,x+w-r,y+h);g.lineTo(x+r,y+h);g.quadraticCurveTo(x,y+h,x,y+h-r);g.lineTo(x,y+r);g.quadraticCurveTo(x,y,x+r,y);g.closePath()}
+function braces(c,g,D,kind){var T=D.T,mm=D.mm,ids=ORDER.filter(function(id){return T[id]});if(ids.length<3)return;
+ g.save();mouthPath(g,D);g.clip();
+ if(kind=='lingual'){g.restore();return}
+ if(kind=='aligner'){
+  var pad=0.35*mm;g.save();g.beginPath();ids.forEach(function(id){var t=T[id];rrect(g,t.x0-pad*0.3,t.y0-pad,t.x1-t.x0+pad*0.6,t.y1-t.y0+pad*1.6,Math.min(t.x1-t.x0,t.y1-t.y0)*0.25)});g.clip();
+  var y0=Math.min.apply(0,ids.map(function(id){return T[id].y0})),y1=Math.max.apply(0,ids.map(function(id){return T[id].y1}));
+  var lg=g.createLinearGradient(0,y0,0,y1);lg.addColorStop(0,'rgba(255,255,255,.22)');lg.addColorStop(0.45,'rgba(235,245,255,.10)');lg.addColorStop(1,'rgba(255,255,255,.18)');g.fillStyle=lg;g.fillRect(0,0,S.W,S.H);
+  ids.forEach(function(id){var t=T[id],w=t.x1-t.x0,h=t.y1-t.y0,hl=g.createLinearGradient(t.x0,t.y0,t.x0+w,t.y0);hl.addColorStop(0.15,'rgba(255,255,255,0)');hl.addColorStop(0.3,'rgba(255,255,255,.38)');hl.addColorStop(0.42,'rgba(255,255,255,0)');g.fillStyle=hl;g.fillRect(t.x0,t.y0+h*0.12,w,h*0.7)});
+  g.restore();g.lineWidth=Math.max(1,mm*0.12);g.strokeStyle='rgba(255,255,255,.55)';ids.forEach(function(id){var t=T[id];rrect(g,t.x0-pad*0.3,t.y0-pad,t.x1-t.x0+pad*0.6,t.y1-t.y0+pad*1.6,Math.min(t.x1-t.x0,t.y1-t.y0)*0.25);g.stroke()});
+  ['UR3','UL3','UR4','UL4'].forEach(function(id){var t=T[id];if(!t)return;var col=toothColour(g,t),w=(t.x1-t.x0)*0.4,h=w*0.55,x=(t.x0+t.x1)/2-w/2,y=t.y0+(t.y1-t.y0)*0.5;rrect(g,x,y,w,h,h*0.3);g.fillStyle=rgb(col,1.04,0.95);g.fill();g.strokeStyle='rgba(120,110,100,.35)';g.stroke()});
+  g.restore();return}
+ var pts=ids.map(function(id){var t=T[id],w=t.x1-t.x0,h=t.y1-t.y0,bw=Math.min(w*0.46,3.6*mm),bh=bw*0.82;return{id:id,t:t,cx:(t.x0+t.x1)/2,cy:t.y0+h*0.56,bw:bw,bh:bh}});
+ // wire
+ function wire(color,width,hi){g.beginPath();g.moveTo(pts[0].cx-pts[0].bw,pts[0].cy);for(var i=0;i<pts.length-1;i++){var p=pts[i],q=pts[i+1];g.quadraticCurveTo(p.cx,p.cy,(p.cx+q.cx)/2,(p.cy+q.cy)/2)}var l=pts[pts.length-1];g.quadraticCurveTo(l.cx,l.cy,l.cx+l.bw,l.cy);g.strokeStyle=color;g.lineWidth=width;g.lineCap='round';g.stroke();if(hi){g.strokeStyle=hi;g.lineWidth=width*0.35;g.stroke()}}
+ if(kind=='ceramic')wire('rgba(236,232,224,.95)',Math.max(1.5,0.42*mm),'rgba(255,255,255,.8)');
+ pts.forEach(function(p){var x=p.cx-p.bw/2,y=p.cy-p.bh/2,r=p.bh*0.22;
+  if(kind=='ceramic'){var col=toothColour(g,p.t);rrect(g,x,y,p.bw,p.bh,r);var cg=g.createLinearGradient(0,y,0,y+p.bh);cg.addColorStop(0,rgb(col,1.12,0.95));cg.addColorStop(1,rgb(col,0.98,0.95));g.fillStyle=cg;g.fill();g.lineWidth=Math.max(1,mm*0.1);g.strokeStyle='rgba(170,160,150,.55)';g.stroke();
+   g.fillStyle='rgba(255,255,255,.5)';g.fillRect(x+p.bw*0.15,y+p.bh*0.12,p.bw*0.2,p.bh*0.7)}
+  else{rrect(g,x,y,p.bw,p.bh,r);var mg=g.createLinearGradient(0,y,0,y+p.bh);mg.addColorStop(0,'#f2f5f7');mg.addColorStop(0.45,'#b9c2c9');mg.addColorStop(1,'#7d8790');g.fillStyle=mg;g.fill();g.lineWidth=Math.max(1,mm*0.1);g.strokeStyle='rgba(60,66,72,.7)';g.stroke();
+   g.strokeStyle='rgba(70,76,82,.6)';g.beginPath();g.moveTo(p.cx,y+p.bh*0.1);g.lineTo(p.cx,y+p.bh*0.9);g.stroke()}});
+ if(kind!='ceramic')wire('#9aa3ab',Math.max(1.5,0.42*mm),'rgba(255,255,255,.75)');
+ pts.forEach(function(p){var x=p.cx-p.bw/2,y=p.cy-p.bh/2;
+  if(kind=='metal'){g.beginPath();g.ellipse(p.cx,p.cy,p.bw*0.42,p.bh*0.42,0,0,Math.PI*2);g.lineWidth=Math.max(1.5,p.bh*0.2);g.strokeStyle='rgba(175,180,186,.95)';g.stroke()}
+  else if(kind=='ceramic'){g.beginPath();g.ellipse(p.cx,p.cy,p.bw*0.42,p.bh*0.42,0,0,Math.PI*2);g.lineWidth=Math.max(1,p.bh*0.16);g.strokeStyle='rgba(245,242,235,.75)';g.stroke()}
+  else if(kind=='self'){rrect(g,x+p.bw*0.18,y+p.bh*0.22,p.bw*0.64,p.bh*0.56,p.bh*0.1);var dg=g.createLinearGradient(0,y,0,y+p.bh);dg.addColorStop(0,'#fafcfd');dg.addColorStop(1,'#a9b2ba');g.fillStyle=dg;g.fill();g.strokeStyle='rgba(60,66,72,.6)';g.lineWidth=Math.max(1,mm*0.08);g.stroke()}});
+ g.restore()}
+function mouthBox(D){var xs=[],ys=[];for(var k in D.T){var t=D.T[k];xs.push(t.x0,t.x1);ys.push(t.y0,t.y1)}var x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs),y0=Math.min.apply(0,ys),y1=Math.max.apply(0,ys),w=x1-x0,h=y1-y0;
+ x0=clamp(x0-w*0.18,0,S.W);x1=clamp(x1+w*0.18,0,S.W);y0=clamp(y0-h*0.6,0,S.H);y1=clamp(y1+h*0.9,0,S.H);return[x0,y0,x1-x0,y1-y0]}
+function cropURL(u,D,cb){var im=new Image();im.onload=function(){var b=mouthBox(D),c=document.createElement('canvas');c.width=Math.round(b[2]);c.height=Math.round(b[3]);c.getContext('2d').drawImage(im,b[0],b[1],b[2],b[3],0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.9))};im.src=u}
 
 /* ---------- report ---------- */
 function metrics(D){var T=D.T,mm=D.mm,R=[];
@@ -1168,10 +1208,11 @@ function show(a,after){S.a=a;S.after=after;S.cache={};var h='<div class="res"><h
  if(!a.photo_ok){h+='<p>'+esc(a.photo_note||'The photo was not clear enough.')+'</p><p>Please retake a front-facing photo with a natural full smile, upper teeth clearly visible, in good daylight, phone at mouth level.</p></div>';out.innerHTML=h;return}
  var im=new Image();im.onload=function(){S.img=im;S.W=im.width;S.H=im.height;build()};im.src=beforeURL}
 function build(){var a=S.a,D=design();
- var views=[['mockup','Smile mock-up'],['design','Ideal design'],['white','Whitening only'],['analysis','Analysis']];if(S.after)views.unshift(['ai','AI photo']);
+ var views=[['mockup','Smile mock-up'],['braces','Braces preview'],['design','Ideal design'],['white','Whitening only'],['analysis','Analysis']];if(S.after)views.unshift(['ai','AI photo']);
  if(S.after&&S.view=='mockup')S.view='ai';
  var h='<div class="res"><h2>Your smile design</h2><div class="seg" id="vw">'+views.map(function(v){return'<button type="button" data-v="'+v[0]+'"'+(v[0]==S.view?' class="on"':'')+'>'+v[1]+'</button>'}).join('')+'</div>';
- h+='<div id="cmp"></div><p class="muted" id="cap"></p>';
+ h+='<div class="seg sm" id="bt" style="display:none">'+Object.keys(BR).map(function(k){return'<button type="button" data-b="'+k+'"'+(k==S.brace?' class="on"':'')+'>'+BR[k].n+'</button>'}).join('')+'</div>';
+ h+='<div id="cmp"></div><p class="muted" id="cap"></p><div id="bx"></div>';
  h+='<div class="ctl"><label>Proportion<select id="rt"><option value="red70">Natural (RED 70%)</option><option value="red75">Soft (RED 75%)</option><option value="red80">Wide (RED 80%)</option><option value="golden">Golden proportion (62%)</option></select></label>';
  h+='<label>Shade<select id="sh"><option value="a2">Natural (A2)</option><option value="a1">Bright natural (A1)</option><option value="b1">White (B1)</option><option value="bl">Extra white (bleach)</option></select></label>';
  h+='<label class="ck2"><input type="checkbox" id="ol"'+(S.outline?' checked':'')+'> Show midline</label><button type="button" class="btn o2" id="dl">Download image</button></div>';
@@ -1185,16 +1226,20 @@ function build(){var a=S.a,D=design();
  out.innerHTML=h;
  document.getElementById('rt').value=S.ratio;document.getElementById('sh').value=S.shade;
  document.getElementById('vw').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.view=b.getAttribute('data-v');[].forEach.call(this.children,function(x){x.className=x==b?'on':''});paint()});
+ document.getElementById('bt').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.brace=b.getAttribute('data-b');[].forEach.call(this.children,function(x){x.className=x==b?'on':''});paint()});
  document.getElementById('rt').addEventListener('change',function(){S.ratio=this.value;document.getElementById('tt').innerHTML=toothTable(design());paint()});
  document.getElementById('sh').addEventListener('change',function(){S.shade=this.value;paint()});
  document.getElementById('ol').addEventListener('change',function(){S.outline=this.checked;paint()});
  document.getElementById('dl').addEventListener('click',function(){var a2=document.createElement('a');a2.href=S.view=='ai'?S.after:render(S.view);a2.download='smile-design-'+S.view+'.jpg';document.body.appendChild(a2);a2.click();a2.remove()});
  paint();out.scrollIntoView({behavior:'smooth'})}
-var CAP={mockup:'Smile mock-up: your photo with ideal-proportion teeth drawn in, plus whitening. Drag the slider to compare with your current smile.',design:'Ideal design: white outlines show the ideal tooth sizes (numbers in mm), the orange line is the ideal edge curve and gum level, the blue line is the middle of your face.',white:'Whitening only: your own teeth at the chosen shade, without changing their shape.',analysis:'Analysis: yellow boxes mark your 8 front teeth (1 central, 2 lateral, 3 canine, 4 premolar). Blue: face midline. Red: teeth midline. Green: lower lip line that the tooth edges should follow.',ai:'AI photo: a realistic AI-generated preview of your smile after treatment.'};
+var CAP={mockup:'Smile mock-up: your photo with ideal-proportion teeth drawn in, plus whitening. Drag the slider to compare with your current smile.',design:'Ideal design: white outlines show the ideal tooth sizes (numbers in mm), the orange line is the ideal edge curve and gum level, the blue line is the middle of your face.',white:'Whitening only: your own teeth at the chosen shade, without changing their shape.',analysis:'Analysis: yellow boxes mark your 8 front teeth (1 central, 2 lateral, 3 canine, 4 premolar). Blue: face midline. Red: teeth midline. Green: lower lip line that the tooth edges should follow.',ai:'AI photo: a realistic AI-generated preview of your smile after treatment.',braces:'Braces preview: how each type of braces or aligners would look on your current teeth (upper teeth shown). Pick a type above and drag the slider.'};
 function paint(){var cmp=document.getElementById('cmp');if(!cmp)return;var u=S.view=='ai'?S.after:render(S.view);
- document.getElementById('cap').textContent=CAP[S.view]||'';
+ document.getElementById('cap').textContent=CAP[S.view]||'';document.getElementById('bt').style.display=S.view=='braces'?'flex':'none';
+ var bx=document.getElementById('bx');bx.innerHTML='';
+ if(S.view=='braces'){var D=design(),cur=S.brace;bx.innerHTML='<div class="note"><b>'+BR[cur].n+':</b> '+BR[cur].t+'</div><h3>All options on your smile</h3><div class="bg" id="bg"></div><p><a href="braces-comparison.html">Compare braces and aligners in detail</a></p>';
+  var grid=document.getElementById('bg');Object.keys(BR).forEach(function(k){S.brace=k;var uu=render('braces');var fig=document.createElement('figure');fig.innerHTML='<img alt="'+BR[k].n+' preview"><figcaption>'+BR[k].n+'</figcaption>';grid.appendChild(fig);cropURL(uu,D,function(cu){fig.querySelector('img').src=cu});fig.addEventListener('click',function(){S.brace=k;[].forEach.call(document.getElementById('bt').children,function(x){x.className=x.getAttribute('data-b')==k?'on':''});paint()})});S.brace=cur;u=render('braces')}
  if(S.view=='analysis'||S.view=='design'){cmp.innerHTML='<div class="ba"><img src="'+u+'" alt="'+esc(S.view)+' view"></div>';return}
- cmp.innerHTML='<div class="ba"><img src="'+beforeURL+'" alt="Before"><div class="af"><img src="'+u+'" alt="After simulation"></div><span class="tg l">Before</span><span class="tg r">Design</span><input type="range" min="0" max="100" value="50" aria-label="Compare before and after"></div>';
+ cmp.innerHTML='<div class="ba"><img src="'+beforeURL+'" alt="Before"><div class="af"><img src="'+u+'" alt="After simulation"></div><span class="tg l">Before</span><span class="tg r">'+(S.view=='braces'?BR[S.brace].n:(S.view=='white'?'Whitened':'Design'))+'</span><input type="range" min="0" max="100" value="50" aria-label="Compare before and after"></div>';
  var ba=cmp.querySelector('.ba'),rg=ba.querySelector('input'),af=ba.querySelector('.af');function up(){af.style.clipPath='inset(0 0 0 '+rg.value+'%)'}rg.addEventListener('input',up);up()}
 window.__dsdTest=function(a,after,url){beforeURL=url;show(a,after)};
 })();
