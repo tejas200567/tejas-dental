@@ -189,6 +189,8 @@ table{border-collapse:collapse;width:100%}td{padding:10px 2px;border-bottom:1px 
 .prev.one img{width:100%;max-width:420px;aspect-ratio:auto}
 .ba{position:relative;overflow:hidden;border:1px solid var(--line);background:#000}.ba img{width:100%;display:block}.ba .af{position:absolute;inset:0}.ba .af img{width:100%;height:100%;object-fit:cover}
 .ba input{position:absolute;left:0;right:0;bottom:10px;width:90%;margin:0 5%}.ba .tg{position:absolute;top:8px;background:rgba(11,34,54,.8);color:#fff;font-size:.8rem;padding:2px 8px}.ba .l{left:8px}.ba .r{right:8px}
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.pg figure{margin:0;background:#fff;border:1px solid var(--line)}.pg svg{width:100%;height:auto;display:block}
+.pg figcaption{padding:8px 10px;font-size:.84rem;line-height:1.4}.pg figure:first-child{grid-column:1/-1}.pg figure:first-child svg{max-width:340px;margin:0 auto}
 .ok{color:#1f7a4d;font-weight:600}
 .seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.seg button{font:inherit;font-size:.88rem;padding:8px 12px;border:1px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}.seg button.on{background:var(--navy);color:#fff}
 .ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:12px 0}.ctl label{font-size:.88rem;font-weight:600;display:flex;flex-direction:column;gap:4px}.ctl select{font:inherit;padding:8px;border:1px solid var(--line);background:#fff}
@@ -883,6 +885,64 @@ def brushing_page():
                       body, BRUSH_FAQS)
 
 
+# ---- photo guide illustrations (no real faces)
+def _face(kind):
+    skin, dark = "#e9c3a3", "#3b2a22"
+    teeth = ('<path d="M76 128 Q100 150 124 128 Q100 134 76 128Z" fill="#fff"/>'
+             '<path d="M84 130v5M92 132v6M100 133v6M108 132v6M116 130v5" stroke="#d8d0c4" stroke-width="1"/>')
+    smile = ('<path d="M70 125 Q100 158 130 125 Q100 132 70 125Z" fill="#7a2f34"/>' + teeth +
+             '<path d="M70 125 Q100 120 130 125" stroke="#b8545b" stroke-width="3" fill="none"/>'
+             '<path d="M70 125 Q100 160 130 125" stroke="#b8545b" stroke-width="3" fill="none"/>')
+    closed = '<path d="M76 130 Q100 142 124 130" stroke="#b8545b" stroke-width="4" fill="none" stroke-linecap="round"/>'
+    mouth = closed if kind == "closed" else smile
+    head = (f'<ellipse cx="100" cy="100" rx="52" ry="66" fill="{skin}"/>'
+            f'<path d="M48 88 Q50 30 100 32 Q150 30 152 88 Q140 50 100 52 Q60 50 48 88Z" fill="{dark}"/>'
+            f'<ellipse cx="80" cy="92" rx="6" ry="4" fill="{dark}"/><ellipse cx="120" cy="92" rx="6" ry="4" fill="{dark}"/>'
+            f'<path d="M100 96 L94 114 Q100 118 106 114" stroke="#c49a7c" stroke-width="2" fill="none"/>{mouth}')
+    if kind == "good":
+        g = (head + '<path d="M100 20V190" stroke="#1f7a4d" stroke-width="1.5" stroke-dasharray="4 3"/>'
+             '<path d="M30 130H170" stroke="#1f7a4d" stroke-width="1.5" stroke-dasharray="4 3"/>'
+             '<rect x="6" y="176" width="112" height="16" fill="#fff" opacity=".85"/><text x="10" y="188" font-size="10" fill="#1f7a4d">camera at mouth level</text>'
+             '<rect x="108" y="6" width="88" height="16" fill="#fff" opacity=".85"/><text x="112" y="18" font-size="10" fill="#1f7a4d">face straight on</text>')
+        bg = "#eaf5ee"
+    elif kind == "close":
+        g = f'<g transform="translate(100 100) scale(2.1) translate(-100 -128)">{head}</g>'
+        bg = "#eaf5ee"
+    elif kind == "tilt":
+        g = f'<g transform="rotate(-18 100 100) translate(10 0) scale(.92 1)">{head}</g>'
+        bg = "#fdecec"
+    elif kind == "closed":
+        g = head
+        bg = "#fdecec"
+    else:
+        g = (f'<g transform="translate(100 105) scale(.45) translate(-100 -100)">{head}</g>'
+             '<rect width="200" height="200" fill="#000" opacity=".55"/><rect width="200" height="200" fill="#fff" opacity=".1" filter="url(#bl)"/>')
+        bg = "#fdecec"
+    return (f'<svg viewBox="0 0 200 200" role="img" xmlns="http://www.w3.org/2000/svg"><defs><filter id="bl"><feGaussianBlur stdDeviation="2"/></filter></defs>'
+            f'<rect width="200" height="200" fill="{bg}"/><g{" filter=\"url(#bl)\"" if kind == "dark" else ""}>{g}</g></svg>')
+
+
+def photo_guide():
+    cards = [("good", True, "Best: straight, big smile", "Face the camera straight, phone at mouth level, about an arm's length away. Smile wide so the upper teeth show."),
+             ("close", True, "Also fine: close-up", "Nose to chin in the frame, still straight on. Do not zoom; move the phone closer instead."),
+             ("tilt", False, "Avoid: tilted or side angle", "Head turned or tilted makes the teeth look uneven."),
+             ("closed", False, "Avoid: teeth hidden", "Lips covering the teeth: the AI cannot see them."),
+             ("dark", False, "Avoid: dark, far or blurry", "Too far away, at night or shaky. Stand facing a window in daylight.")]
+    h = '<div class="pg">'
+    for k, ok, t, d in cards:
+        mark = '<span class="ok">✓</span>' if ok else '<span class="wn">✗</span>'
+        h += f'<figure>{_face(k)}<figcaption><b>{mark} {t}</b><br>{d}</figcaption></figure>'
+    h += '</div>'
+    steps = ["Ask someone to take the photo, or use the back camera with a timer. A selfie at arm's length is fine too.",
+             "Stand facing a window in daylight. Turn off flash, beauty mode, portrait mode and filters.",
+             "Hold the phone straight, at the height of your mouth, not above or below.",
+             "Look straight into the camera, relax, then give a big natural smile showing your upper teeth.",
+             "Check the photo is sharp and your teeth are clearly visible before uploading."]
+    return ('<h2 style="margin-top:28px">How to take the photo</h2>'
+            '<p class="muted">Drawings for illustration. A good photo gives a much more accurate result.</p>' + h +
+            '<ol class="b">' + "".join(f"<li>{e(s)}</li>" for s in steps) + '</ol>')
+
+
 # ---- AI smile check
 SMILE_API = "https://arxhbdyciylznmlamvri.supabase.co/functions/v1/smile-check"
 SMILE_JS = r"""
@@ -925,6 +985,7 @@ def smile_page():
         'Dr. Tejas Pradhan can then review your photos, and you can book an exam if you wish.</p>'
         '<div class="note"><b>Please note:</b> this is an AI screening, not a diagnosis. A photo cannot show cavities between teeth, bone loss or infection. '
         'If you have severe pain, swelling or fever, do not wait: call the clinic.</div>'
+        + photo_guide() +
         '<form id="sc" class="scf" autocomplete="on">'
         '<label>Your name<input name="name" required maxlength="80" autocomplete="name"></label>'
         '<label>Mobile number<input name="phone" required inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit number"></label>'
@@ -1152,6 +1213,7 @@ def dsd_page():
         'and draws an ideal-proportion design and smile mock-up on your own photo. You can change the proportion and shade, compare before and after, and download the result.</p>'
         '<div class="note"><b>Please note:</b> the "after" picture is an AI simulation for ideas only. It is not a diagnosis or a guarantee. '
         'The real plan is made after an examination, X-rays and a discussion of options like whitening, bonding, veneers, crowns or aligners.</div>'
+        + photo_guide() +
         '<form id="ds" class="scf" autocomplete="on">'
         '<label>Your name<input name="name" required maxlength="80" autocomplete="name"></label>'
         '<label>Mobile number<input name="phone" required inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit number"></label>'
