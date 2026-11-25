@@ -258,9 +258,9 @@ function camCapture(auto){var v=el('camv');if(!v||!v.videoWidth)return;var W=v.v
  if(r&&r.faceLandmarks&&r.faceLandmarks.length){var L=r.faceLandmarks[0];function P(i){return[L[i].x*W,L[i].y*H]}
   var cr=cropFromL(L,W,H);crop=cr.crop;var lips=cr.lips;fm=cr.fm;}
  camStop();CAM.captured={canvas:c,crop:crop,fm:fm,lips:lips};
- el('camimg').src=crop?toURL(c,crop[0],crop[1],crop[2],crop[3],900,0.88):c.toDataURL('image/jpeg',0.85);
+ el('camimg').src=toURL(c,0,0,W,H,900,0.88);
  el('camstage').hidden=true;el('camprev').hidden=false;el('cam').classList.add('pv');el('camh').textContent=auto?'Photo taken automatically':'Photo taken';el('camp').textContent='Check that your teeth are sharp and clearly visible.'}
-function camUse(){camClose();setTimeout(function(){var b=el('dsb');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})},50);var c=CAM.captured;if(!c)return;prev.innerHTML='<img src="'+(c.crop?toURL(c.canvas,c.crop[0],c.crop[1],c.crop[2],c.crop[3],600,0.85):c.canvas.toDataURL('image/jpeg',0.7))+'" alt="Your smile photo">';
+function camUse(){camClose();setTimeout(function(){var b=el('dsb');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})},50);var c=CAM.captured;if(!c)return;prev.innerHTML='<img src="'+toURL(c.canvas,0,0,c.canvas.width,c.canvas.height,700,0.85)+'" alt="Your photo">';
  if(inp)inp.value='';msg.className='muted';msg.textContent='Photo ready. Tap "Design my smile".'}
 
 var cb=document.getElementById('dscam');if(cb)cb.addEventListener('click',camOpen);
