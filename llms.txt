@@ -20,6 +20,8 @@
 
 ## Patient guides
 
+- [AI digital smile design](https://tejas200567.github.io/tejas-dental/smile-design.html): See a simulated before and after of your smile, with ideal tooth proportions.
+- [Free AI smile check](https://tejas200567.github.io/tejas-dental/smile-check.html): Upload photos of your teeth for a tentative AI overview.
 - [Braces and aligners compared](https://tejas200567.github.io/tejas-dental/braces-comparison.html): Metal, ceramic, self-ligating, lingual and clear aligners side by side.
 - [Post-extraction care](https://tejas200567.github.io/tejas-dental/post-extraction-care.html): Instructions and chart for after a tooth extraction.
 - [Post-implant surgery care](https://tejas200567.github.io/tejas-dental/post-implant-care.html): Chart, instructions and video for after implant surgery.

@@ -181,6 +181,18 @@ table{border-collapse:collapse;width:100%}td{padding:10px 2px;border-bottom:1px 
 .dv summary{cursor:pointer;color:var(--navy2);font-weight:600;padding:6px 0}.dv .vid{margin-top:8px}
 .cmpw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0 8px}.cmp{border-collapse:collapse;min-width:820px;width:100%;font-size:.9rem;line-height:1.45}
 .cmp th,.cmp td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;background:#fff}.cmp th{background:var(--navy);color:#fff;font-weight:400}.cmp td:first-child{font-weight:600;background:var(--cream);position:sticky;left:0}
+.note{background:#fff7e6;border:1px solid #ecd9a8;padding:12px 14px;margin:16px 0;font-size:.95rem}
+.scf label{display:block;margin:14px 0;font-weight:600}.scf input[type=text],.scf input:not([type]),.scf input[name=phone]{display:block;width:100%;font:inherit;padding:12px;border:1px solid var(--line);background:#fff;margin-top:6px}
+.scf input[type=file]{display:block;margin-top:6px;font:inherit;width:100%}.scf .ck{font-weight:400;font-size:.92rem}.scf .ck input{margin-right:8px}.scf button{border:0;cursor:pointer;font:inherit;margin-top:8px}
+.prev{display:flex;gap:8px;flex-wrap:wrap}.prev img{width:30%;max-width:140px;aspect-ratio:1;object-fit:cover;border:1px solid var(--line)}
+.res{margin-top:28px;border-top:2px solid var(--navy);padding-top:8px}.warn{background:#fdecec;border:1px solid #e59a9a;padding:12px 14px;margin:12px 0}.err{color:#b3261e}
+.prev.one img{width:100%;max-width:420px;aspect-ratio:auto}
+.ba{position:relative;overflow:hidden;border:1px solid var(--line);background:#000}.ba img{width:100%;display:block}.ba .af{position:absolute;inset:0}.ba .af img{width:100%;height:100%;object-fit:cover}
+.ba input{position:absolute;left:0;right:0;bottom:10px;width:90%;margin:0 5%}.ba .tg{position:absolute;top:8px;background:rgba(11,34,54,.8);color:#fff;font-size:.8rem;padding:2px 8px}.ba .l{left:8px}.ba .r{right:8px}
+.ok{color:#1f7a4d;font-weight:600}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.seg button{font:inherit;font-size:.88rem;padding:8px 12px;border:1px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}.seg button.on{background:var(--navy);color:#fff}
+.ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:12px 0}.ctl label{font-size:.88rem;font-weight:600;display:flex;flex-direction:column;gap:4px}.ctl select{font:inherit;padding:8px;border:1px solid var(--line);background:#fff}
+.ctl .ck2{flex-direction:row;align-items:center;font-weight:400}.btn.o2{background:#fff;color:var(--navy);border:1px solid var(--navy);cursor:pointer;font:inherit;padding:9px 14px}.wn{color:#b3261e;font-weight:600}
 .chart{margin:16px 0}.chart img{width:100%;height:auto;border:1px solid var(--line)}.chart figcaption{margin-top:6px}
 .vid{position:relative;aspect-ratio:16/9;background:#000;margin:6px 0 10px}.vid iframe{position:absolute;inset:0;width:100%;height:100%;margin:0}
 iframe{width:100%;height:300px;border:0;background:var(--sand)}
@@ -871,7 +883,310 @@ def brushing_page():
                       body, BRUSH_FAQS)
 
 
+# ---- AI smile check
+SMILE_API = "https://arxhbdyciylznmlamvri.supabase.co/functions/v1/smile-check"
+SMILE_JS = r"""
+(function(){
+var API="__API__",NAMES=__NAMES__,WA="__WA__";
+var f=document.getElementById('sc'),btn=document.getElementById('scb'),msg=document.getElementById('scm'),out=document.getElementById('sco'),inp=document.getElementById('scf'),prev=document.getElementById('scp');
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function shrink(file){return new Promise(function(res,rej){var r=new FileReader();r.onerror=rej;r.onload=function(){var im=new Image();im.onerror=rej;im.onload=function(){var m=1024,w=im.width,h=im.height,k=Math.min(1,m/Math.max(w,h));var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.8))};im.src=r.result};r.readAsDataURL(file)})}
+inp.addEventListener('change',function(){prev.innerHTML='';var n=Math.min(inp.files.length,3);for(var i=0;i<n;i++){var u=URL.createObjectURL(inp.files[i]);prev.innerHTML+='<img src="'+u+'" alt="Selected photo '+(i+1)+'">'}if(inp.files.length>3){msg.textContent='Only the first 3 photos will be used.'}else{msg.textContent=''}});
+f.addEventListener('submit',function(ev){ev.preventDefault();out.innerHTML='';msg.className='muted';
+if(!inp.files.length){msg.textContent='Please add at least one photo.';return}
+btn.disabled=true;btn.textContent='Checking, please wait...';msg.textContent='This takes about 10 to 20 seconds.';
+var files=Array.prototype.slice.call(inp.files,0,3);
+Promise.all(files.map(shrink)).then(function(imgs){
+return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:f.name.value,phone:f.phone.value,consent:f.consent.checked,website:f.website.value,images:imgs})})
+}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
+btn.disabled=false;btn.textContent='Check my smile';
+if(!x.ok||!x.j.result){msg.className='muted err';msg.textContent=(x.j&&x.j.error)||'Something went wrong. Please try again.';return}
+msg.textContent='';show(x.j.result)}).catch(function(){btn.disabled=false;btn.textContent='Check my smile';msg.className='muted err';msg.textContent='Could not connect. Please check your internet and try again.'})});
+function show(r){var h='<div class="res"><h2>Your tentative result</h2>';
+if(!r.photo_usable){h+='<p>'+esc(r.photo_note||'The photos were not clear enough to check.')+'</p><p>Please retake them in good light, with your teeth showing and the camera steady.</p>'}
+else{if(r.urgency==='see_dentist_soon'){h+='<div class="warn"><b>Please see a dentist soon.</b> Something in your photos may need prompt attention.</div>'}
+if(r.photo_note){h+='<p class="muted">'+esc(r.photo_note)+'</p>'}
+if(r.observations.length){h+='<h3>What the AI noticed</h3><ul class="b">'+r.observations.map(function(o){return'<li>'+esc(o)+'</li>'}).join('')+'</ul>'}
+if(r.possible_treatments.length){h+='<h3>Treatments you may want to ask about</h3><ul class="b">'+r.possible_treatments.map(function(t){return'<li><a href="'+t.slug+'.html">'+esc(NAMES[t.slug]||t.slug)+'</a>: '+esc(t.why)+'</li>'}).join('')+'</ul>'}
+if(r.questions_to_ask_dentist.length){h+='<h3>Questions to ask the dentist</h3><ul class="b">'+r.questions_to_ask_dentist.map(function(o){return'<li>'+esc(o)+'</li>'}).join('')+'</ul>'}}
+h+='<p class="muted"><b>This is not a diagnosis.</b> A photo cannot show cavities between teeth, bone or infection. Only an examination and X-ray can confirm what you need. Your photos have also been shared with Dr. Tejas Pradhan for review.</p>';
+h+='<div class="cta"><a class="btn" href="'+WA+'">Book an exam on WhatsApp</a></div></div>';out.innerHTML=h;out.scrollIntoView({behavior:'smooth'})}
+})();
+"""
+
+
+def smile_page():
+    names = {p["slug"]: p["name"] for p in PAGES}
+    js = (SMILE_JS.replace("__API__", SMILE_API).replace("__NAMES__", json.dumps(names))
+          .replace("__WA__", "https://wa.me/918369187806?text=" + quote("Hello, I used the AI smile check on your website and would like to book an exam.")))
+    body = (
+        '<h2>Free AI smile check</h2>'
+        '<p>Upload 1 to 3 clear photos of your teeth and get a quick, tentative overview and the treatments you may want to ask about. '
+        'Dr. Tejas Pradhan can then review your photos, and you can book an exam if you wish.</p>'
+        '<div class="note"><b>Please note:</b> this is an AI screening, not a diagnosis. A photo cannot show cavities between teeth, bone loss or infection. '
+        'If you have severe pain, swelling or fever, do not wait: call the clinic.</div>'
+        '<form id="sc" class="scf" autocomplete="on">'
+        '<label>Your name<input name="name" required maxlength="80" autocomplete="name"></label>'
+        '<label>Mobile number<input name="phone" required inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit number"></label>'
+        '<label>Photos of your teeth (1 to 3)<input id="scf" type="file" accept="image/*" multiple required></label>'
+        '<div id="scp" class="prev"></div>'
+        '<p class="muted">Tips: good daylight, smile with teeth showing, one photo from the front, one of the upper teeth and one of the lower teeth if possible.</p>'
+        '<input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">'
+        '<label class="ck"><input type="checkbox" name="consent" required> I agree that my photos and details are processed by an AI service (Google Gemini) and stored securely so that Dr. Tejas Pradhan can review them and contact me. '
+        'I can ask the clinic to delete them at any time.</label>'
+        '<button id="scb" class="btn" type="submit">Check my smile</button>'
+        '<p id="scm" class="muted" role="status"></p></form>'
+        '<div id="sco"></div>'
+        f'<script>{js}</script>')
+    faqs = [("Is the AI smile check free?", "Yes, it is free to use. There are daily limits, so if it is busy please try again tomorrow or WhatsApp the clinic."),
+            ("Is the AI result a diagnosis?", "No. It is a tentative overview from photos. Only an examination and X-ray can confirm what treatment you need."),
+            ("Who sees my photos?", "Your photos are processed by an AI service to produce the result and are stored securely for Dr. Tejas Pradhan to review. They are not shown publicly."),
+            ("Can I get my photos deleted?", "Yes. Call or WhatsApp the clinic and ask for your photos and details to be deleted.")]
+    return guide_page("smile-check", "Free AI Smile Check: Upload Photos of Your Teeth", "AI smile check", "AI tool",
+                      "Upload photos of your teeth and get a tentative AI overview and the treatments to ask about. Not a diagnosis; reviewed by Dr. Tejas Pradhan.",
+                      body, faqs)
+
+
+# ---- AI digital smile design
+DSD_API = "https://arxhbdyciylznmlamvri.supabase.co/functions/v1/smile-design"
+DSD_JS = r"""
+(function(){
+var API="__API__",WA="__WA__";
+var f=document.getElementById('ds'),btn=document.getElementById('dsb'),msg=document.getElementById('dsm'),out=document.getElementById('dso'),inp=document.getElementById('dsf'),prev=document.getElementById('dsp');
+var ORDER=["UR4","UR3","UR2","UR1","UL1","UL2","UL3","UL4"],NUM={1:"Central incisor",2:"Lateral incisor",3:"Canine",4:"First premolar"};
+var RATIOS={golden:0.618,red70:0.70,red75:0.75,red80:0.80};
+var SHADES={a2:{c:[236,222,198],yr:0.15,lift:0.03},a1:{c:[241,233,216],yr:0.45,lift:0.07},b1:{c:[246,242,232],yr:0.7,lift:0.11},bl:{c:[251,250,246],yr:0.95,lift:0.17}};
+var S={a:null,after:null,img:null,W:0,H:0,ratio:'red70',shade:'a1',view:'mockup',outline:true,cache:{}};
+var beforeURL=null;
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function avg(a){a=a.filter(function(v){return v!=null&&isFinite(v)});return a.length?a.reduce(function(p,q){return p+q},0)/a.length:null}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function shrink(file){return new Promise(function(res,rej){var r=new FileReader();r.onerror=rej;r.onload=function(){var im=new Image();im.onerror=rej;im.onload=function(){var m=1280,w=im.width,h=im.height,k=Math.min(1,m/Math.max(w,h));var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.88))};im.src=r.result};r.readAsDataURL(file)})}
+if(inp)inp.addEventListener('change',function(){prev.innerHTML='';if(inp.files[0]){prev.innerHTML='<img src="'+URL.createObjectURL(inp.files[0])+'" alt="Selected smile photo">'}});
+if(f)f.addEventListener('submit',function(ev){ev.preventDefault();out.innerHTML='';msg.className='muted';
+if(!inp.files.length){msg.textContent='Please add a smile photo.';return}
+btn.disabled=true;btn.textContent='Analysing your smile...';msg.textContent='This takes about 15 to 40 seconds. Please keep this page open.';
+shrink(inp.files[0]).then(function(img){beforeURL=img;
+return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:f.name.value,phone:f.phone.value,consent:f.consent.checked,website:f.website.value,image:img})})
+}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
+btn.disabled=false;btn.textContent='Design my smile';
+if(!x.ok||!x.j.analysis){msg.className='muted err';msg.textContent=(x.j&&x.j.error)||'Something went wrong. Please try again.';return}
+msg.textContent='';show(x.j.analysis,x.j.after)}).catch(function(){btn.disabled=false;btn.textContent='Design my smile';msg.className='muted err';msg.textContent='Could not connect. Please check your internet and try again.'})});
+
+/* ---------- geometry ---------- */
+function teethPx(){var a=S.a,T={};for(var id in a.teeth){var b=a.teeth[id].box;T[id]={y0:b[0]*S.H/1000,x0:b[1]*S.W/1000,y1:b[2]*S.H/1000,x1:b[3]*S.W/1000}}return T}
+function design(){
+ var a=S.a,T=teethPx(),r=RATIOS[S.ratio];
+ var cen=[T.UR1,T.UL1].filter(Boolean);if(!cen.length)return null;
+ var cwNow=avg(cen.map(function(t){return t.x1-t.x0})),mm=cwNow/8.5;
+ var mid=a.facial_midline_x!=null?a.facial_midline_x*S.W/1000:(a.dental_midline_x!=null?a.dental_midline_x*S.W/1000:(T.UR1&&T.UL1?(T.UR1.x1+T.UL1.x0)/2:avg(cen.map(function(t){return (t.x0+t.x1)/2}))));
+ function span(side){var k=T[side<0?'UR3':'UL3'],l=T[side<0?'UR2':'UL2'];
+  if(k)return side<0?mid-k.x0:k.x1-mid;
+  if(l)return (side<0?mid-l.x0:l.x1-mid)*(1+r+r*r)/(1+r);
+  return cwNow*(1+r+r*r)}
+ var half=avg([span(-1),span(1)]);
+ var wc=clamp(half/(1+r+r*r),0.88*cwNow,1.15*cwNow),wl=wc*r,wk=wl*r,wp=wk*r*1.05;
+ var incC=avg(cen.map(function(t){return t.y1})),gumNow=avg(cen.map(function(t){return t.y0}));
+ var lipC=a.lower_lip_y_at_center!=null?a.lower_lip_y_at_center*S.H/1000:null,lipK=a.lower_lip_y_at_canines!=null?a.lower_lip_y_at_canines*S.H/1000:null;
+ var rise=(lipC!=null&&lipK!=null)?clamp(lipC-lipK,0.6*mm,2.2*mm):1.2*mm;
+ function inc(dx){var u=dx/half;return incC-rise*u*u}
+ var hcIdeal=wc/0.78,gumC=clamp(inc(wc/2)-hcIdeal,gumNow-1.5*mm,gumNow+1.5*mm);
+ var list=[],widths=[wc,wl,wk,wp],gumOff=[0,0.75*mm,0,0.5*mm],incOff=[0,0.8*mm,0,1.6*mm],types=['c','l','k','p'];
+ [-1,1].forEach(function(s){var x=0;for(var i=0;i<4;i++){var xm=mid+s*x,xd=mid+s*(x+widths[i]),cx=x+widths[i]/2;
+   var id=(s<0?'UR':'UL')+(i+1);list.push({id:id,type:types[i],xm:xm,xd:xd,top:gumC+gumOff[i]+(i==3?0.3*mm:0),bot:inc(cx)-incOff[i],w:widths[i],shade:[1,0.965,0.93,0.86][i]});x+=widths[i]}});
+ return {T:T,list:list,mid:mid,mm:mm,wc:wc,wl:wl,wk:wk,wp:wp,half:half,hc:inc(wc/2)-gumC,gumC:gumC,incC:incC,rise:rise,inc:inc,cwNow:cwNow};
+}
+function mouthPath(g,D){var a=S.a,p=a.mouth_polygon;
+ g.beginPath();
+ if(p&&p.length>=6){p.forEach(function(q,i){var x=q[1]*S.W/1000,y=q[0]*S.H/1000;if(i)g.lineTo(x,y);else g.moveTo(x,y)});g.closePath();return}
+ var xs=[],ys=[];for(var k in D.T){var t=D.T[k];xs.push(t.x0,t.x1);ys.push(t.y0,t.y1)}
+ var x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs),y0=Math.min.apply(0,ys)-2*D.mm,y1=Math.max.apply(0,ys)+3*D.mm,cx=(x0+x1)/2,rx=(x1-x0)/2+D.mm,ry=(y1-y0)/2;
+ g.ellipse(cx,(y0+y1)/2,rx,ry,0,0,Math.PI*2)}
+function toothPath(g,t){var xm=t.xm,xd=t.xd,s=xd>xm?1:-1,w=Math.abs(xd-xm),top=t.top,bot=t.bot,h=bot-top,zen=xm+(xd-xm)*0.58;
+ g.beginPath();g.moveTo(xm,top+0.2*h);
+ g.bezierCurveTo(xm+(zen-xm)*0.25,top+0.02*h,zen-(zen-xm)*0.35,top,zen,top);
+ g.bezierCurveTo(zen+(xd-zen)*0.45,top,xd-(xd-zen)*0.05,top+0.06*h,xd,top+0.24*h);
+ if(t.type=='k'||t.type=='p'){var tip=xm+(xd-xm)*(t.type=='k'?0.45:0.5),ds=t.type=='k'?0.24:0.2;
+  g.lineTo(xd,bot-ds*h);g.quadraticCurveTo(xd-s*0.12*w,bot-0.04*h,tip,bot);g.quadraticCurveTo(xm+s*0.14*w,bot-0.03*h,xm,bot-(ds-0.07)*h)}
+ else{var rd=(t.type=='c'?0.13:0.26)*w,rm=(t.type=='c'?0.06:0.16)*w;
+  g.lineTo(xd,bot-rd);g.quadraticCurveTo(xd,bot,xd-s*rd,bot);g.lineTo(xm+s*rm,bot);g.quadraticCurveTo(xm,bot,xm,bot-rm)}
+ g.closePath()}
+
+/* ---------- pixel work ---------- */
+function baseCanvas(){var c=document.createElement('canvas');c.width=S.W;c.height=S.H;var g=c.getContext('2d');g.drawImage(S.img,0,0);return [c,g]}
+function whiten(c,g,D){var sh=SHADES[S.shade];
+ var m=document.createElement('canvas');m.width=S.W;m.height=S.H;var mg=m.getContext('2d');
+ mg.save();mouthPath(mg,D);mg.clip();mg.fillStyle='#fff';for(var k in D.T){var t=D.T[k];mg.fillRect(t.x0-D.mm,t.y0-D.mm,t.x1-t.x0+2*D.mm,t.y1-t.y0+2*D.mm)}mg.restore();
+ var m2=document.createElement('canvas');m2.width=S.W;m2.height=S.H;var g2=m2.getContext('2d');g2.filter='blur('+Math.max(2,D.mm*0.6)+'px)';g2.drawImage(m,0,0);
+ var md=g2.getImageData(0,0,S.W,S.H).data,im=g.getImageData(0,0,S.W,S.H),d=im.data;
+ for(var i=0;i<d.length;i+=4){var mw=md[i+3]/255;if(mw<0.02)continue;var r=d[i],gg=d[i+1],b=d[i+2];
+  var mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),lum=(0.299*r+0.587*gg+0.114*b)/255,sat=mx?(mx-mn)/mx:0,red=(r-gg)/255;
+  var w=mw*clamp((0.2-red)/0.1,0,1)*clamp((lum-0.28)/0.17,0,1)*clamp((0.62-sat)/0.15,0,1);if(w<=0)continue;
+  var y=(r+gg)/2;b=b+sh.yr*w*(y-b);r=r-sh.yr*w*0.25*(r-gg>0?r-gg:0);
+  d[i]=clamp(r+sh.lift*w*(255-r),0,255);d[i+1]=clamp(gg+sh.lift*w*(255-gg),0,255);d[i+2]=clamp(b+sh.lift*w*(255-b),0,255)}
+ g.putImageData(im,0,0)}
+function sampleGum(D){var c=document.createElement('canvas');c.width=S.W;c.height=S.H;var g=c.getContext('2d');g.drawImage(S.img,0,0);
+ var t=D.T.UR1||D.T.UL1,x=Math.round((t.x0+t.x1)/2),y=Math.round(t.y0-0.8*D.mm);if(y<1)y=1;
+ var p=g.getImageData(clamp(x-3,0,S.W-7),clamp(y-2,0,S.H-5),7,5).data,r=0,gg=0,b=0,n=0;for(var i=0;i<p.length;i+=4){r+=p[i];gg+=p[i+1];b+=p[i+2];n++}
+ r/=n;gg/=n;b/=n;if(r-gg<25){r=200;gg=110;b=115}return [r,gg,b]}
+function rgb(c,k,a){return 'rgba('+Math.round(clamp(c[0]*k,0,255))+','+Math.round(clamp(c[1]*k,0,255))+','+Math.round(clamp(c[2]*k,0,255))+','+(a==null?1:a)+')'}
+function mockup(c,g,D){var sh=SHADES[S.shade],gum=sampleGum(D),photo=c.cloneNode?null:null;
+ var orig=document.createElement('canvas');orig.width=S.W;orig.height=S.H;orig.getContext('2d').drawImage(c,0,0);
+ g.save();mouthPath(g,D);g.clip();
+ // gum band behind new teeth
+ var top=Math.min.apply(0,D.list.map(function(t){return t.top}).concat(Object.keys(D.T).map(function(k){return D.T[k].y0})))-0.8*D.mm;
+ var gx0=Math.min.apply(0,D.list.map(function(t){return Math.min(t.xm,t.xd)})),gx1=Math.max.apply(0,D.list.map(function(t){return Math.max(t.xm,t.xd)}));
+ var gg=g.createLinearGradient(0,top,0,D.gumC+2*D.mm);gg.addColorStop(0,rgb(gum,0.85));gg.addColorStop(1,rgb(gum,1.02));
+ g.fillStyle=gg;g.fillRect(gx0,top,gx1-gx0,D.gumC+2.5*D.mm-top);
+ // dark oral background between new incisal edge and old longer teeth
+ g.fillStyle='rgba(40,16,18,.92)';g.beginPath();g.moveTo(gx0,D.gumC+2*D.mm);
+ for(var x=gx0;x<=gx1;x+=4){g.lineTo(x,D.inc(Math.abs(x-D.mid))+0.6*D.mm)}g.lineTo(gx1,D.gumC+2*D.mm);g.closePath();g.fill();
+ // teeth: draw back to front
+ var order=D.list.slice().sort(function(p,q){return q.w-p.w}).reverse();
+ order.forEach(function(t){var h=t.bot-t.top,lg=g.createLinearGradient(0,t.top,0,t.bot);
+  lg.addColorStop(0,rgb([sh.c[0]*0.97,sh.c[1]*0.93,sh.c[2]*0.86],t.shade*0.94));lg.addColorStop(0.22,rgb(sh.c,t.shade*0.98));
+  lg.addColorStop(0.7,rgb(sh.c,t.shade));lg.addColorStop(0.9,rgb([sh.c[0]*0.9,sh.c[1]*0.93,sh.c[2]*1.0],t.shade*0.97));lg.addColorStop(1,rgb([190,196,206],t.shade*0.95));
+  toothPath(g,t);g.fillStyle=lg;g.fill();
+  // body highlight
+  g.save();toothPath(g,t);g.clip();var cx=t.xm+(t.xd-t.xm)*0.42,rg=g.createRadialGradient(cx,t.top+h*0.45,1,cx,t.top+h*0.45,Math.abs(t.xd-t.xm)*0.6);
+  rg.addColorStop(0,'rgba(255,255,255,'+(t.type=='c'?0.38:0.25)+')');rg.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=rg;g.fillRect(Math.min(t.xm,t.xd),t.top,Math.abs(t.xd-t.xm),h);
+  // re-use original texture/lighting softly
+  g.globalCompositeOperation='soft-light';g.globalAlpha=0.45;g.drawImage(orig,0,0);g.restore();
+  toothPath(g,t);g.lineWidth=Math.max(1,D.mm*0.18);g.strokeStyle='rgba(120,95,85,.45)';g.stroke()});
+ // buccal corridor shading
+ var rgB=g.createRadialGradient(D.mid,D.gumC+D.hc/2,D.half*0.55,D.mid,D.gumC+D.hc/2,D.half*1.35);rgB.addColorStop(0,'rgba(0,0,0,0)');rgB.addColorStop(1,'rgba(30,10,10,.28)');
+ g.fillStyle=rgB;g.fillRect(0,0,S.W,S.H);g.restore()}
+function lines(g,D,opt){var lw=Math.max(1.5,S.W/450);g.lineWidth=lw;g.font='600 '+Math.round(S.W/42)+'px system-ui,sans-serif';g.textAlign='center';
+ if(opt.boxes){ORDER.forEach(function(id){var t=D.T[id];if(!t)return;g.strokeStyle='rgba(255,214,0,.95)';g.strokeRect(t.x0,t.y0,t.x1-t.x0,t.y1-t.y0);g.fillStyle='rgba(255,214,0,.95)';g.fillText(id.slice(2),(t.x0+t.x1)/2,t.y0-lw*2)})}
+ var a=S.a;
+ if(opt.mid){if(a.facial_midline_x!=null){var fx=a.facial_midline_x*S.W/1000;g.strokeStyle='rgba(0,200,255,.95)';g.setLineDash([lw*4,lw*3]);g.beginPath();g.moveTo(fx,0);g.lineTo(fx,S.H);g.stroke();g.setLineDash([])}
+  if(a.dental_midline_x!=null&&opt.boxes){var dx=a.dental_midline_x*S.W/1000;g.strokeStyle='rgba(255,60,60,.95)';g.beginPath();g.moveTo(dx,D.gumC-4*D.mm);g.lineTo(dx,D.incC+4*D.mm);g.stroke()}}
+ if(opt.lip&&a.lower_lip_y_at_center!=null&&a.lower_lip_y_at_canines!=null){var yc=a.lower_lip_y_at_center*S.H/1000,ys=a.lower_lip_y_at_canines*S.H/1000;g.strokeStyle='rgba(120,255,120,.95)';g.beginPath();g.moveTo(D.mid-D.half,ys);g.quadraticCurveTo(D.mid,2*yc-ys,D.mid+D.half,ys);g.stroke()}
+ if(opt.design){g.setLineDash([]);D.list.forEach(function(t){toothPath(g,t);g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=lw*1.1;g.stroke()});
+  g.strokeStyle='rgba(255,170,60,.9)';g.setLineDash([lw*3,lw*2]);g.beginPath();for(var x=D.mid-D.half;x<=D.mid+D.half;x+=3){var y=D.inc(Math.abs(x-D.mid));if(x==D.mid-D.half)g.moveTo(x,y);else g.lineTo(x,y)}g.stroke();
+  g.beginPath();g.moveTo(D.mid-D.half,D.gumC);g.lineTo(D.mid+D.half,D.gumC);g.stroke();g.setLineDash([]);
+  g.fillStyle='#fff';g.strokeStyle='rgba(0,0,0,.6)';g.lineWidth=lw*1.5;g.font='600 '+Math.round(Math.max(10,D.mm*1.6))+'px system-ui,sans-serif';
+  D.list.forEach(function(t){if(t.type=='p')return;var x=(t.xm+t.xd)/2,y=t.bot+2.6*D.mm,s=(8.5*t.w/D.cwNow).toFixed(1);g.strokeText(s,x,y);g.fillText(s,x,y)})}}
+function render(view){var k=view+'|'+S.ratio+'|'+S.shade+'|'+S.outline;if(S.cache[k])return S.cache[k];
+ var D=design(),cg=baseCanvas(),c=cg[0],g=cg[1];
+ if(!D)return beforeURL;
+ if(view=='analysis')lines(g,D,{boxes:1,mid:1,lip:1});
+ else if(view=='white')whiten(c,g,D);
+ else if(view=='design'){lines(g,D,{mid:1,lip:1,design:1})}
+ else if(view=='mockup'){whiten(c,g,D);mockup(c,g,D);if(S.outline)lines(g,D,{mid:1})}
+ var u=c.toDataURL('image/jpeg',0.9);S.cache[k]=u;return u}
+
+/* ---------- report ---------- */
+function metrics(D){var T=D.T,mm=D.mm,R=[];
+ function wmm(t){return t?8.5*(t.x1-t.x0)/D.cwNow:null}function hmm(t){return t?8.5*(t.y1-t.y0)/D.cwNow:null}
+ var cwh=avg([T.UR1&&(T.UR1.x1-T.UR1.x0)/(T.UR1.y1-T.UR1.y0),T.UL1&&(T.UL1.x1-T.UL1.x0)/(T.UL1.y1-T.UL1.y0)]);
+ function rat(a,b){return a&&b?(a.x1-a.x0)/(b.x1-b.x0):null}
+ var lc=avg([rat(T.UR2,T.UR1),rat(T.UL2,T.UL1)]),kl=avg([rat(T.UR3,T.UR2),rat(T.UL3,T.UL2)]);
+ var sym=T.UR1&&T.UL1?Math.min(T.UR1.x1-T.UR1.x0,T.UL1.x1-T.UL1.x0)/Math.max(T.UR1.x1-T.UR1.x0,T.UL1.x1-T.UL1.x0):null;
+ var a=S.a,ms=a.facial_midline_x!=null&&a.dental_midline_x!=null?Math.abs(a.facial_midline_x-a.dental_midline_x)*S.W/1000/mm:null;
+ var tilt=T.UR3&&T.UL3?Math.abs(Math.atan2(T.UL3.y1-T.UR3.y1,((T.UL3.x0+T.UL3.x1)-(T.UR3.x0+T.UR3.x1))/2)*180/Math.PI):null;
+ var arc=T.UR3&&T.UL3&&(T.UR1||T.UL1)?(avg([T.UR1&&T.UR1.y1,T.UL1&&T.UL1.y1])-avg([T.UR3.y1,T.UL3.y1]))/mm:null;
+ var gum=T.UR1&&T.UL1?Math.abs(T.UR1.y0-T.UL1.y0)/mm:null;
+ var lenC=avg([hmm(T.UR1),hmm(T.UL1)]);
+ function p(v){return v==null?null:Math.round(v*100)+'%'}function m(v){return v==null?null:v.toFixed(1)+' mm'}
+ R.push(['Central incisor width ÷ height',p(cwh),'75–80%',cwh!=null&&cwh>=0.72&&cwh<=0.84]);
+ R.push(['Central incisor length (est.)',m(lenC),'10.5–11 mm',lenC!=null&&lenC>=9.8&&lenC<=11.8]);
+ R.push(['Lateral ÷ central (front view)',p(lc),'62–75%',lc!=null&&lc>=0.6&&lc<=0.78]);
+ R.push(['Canine ÷ lateral (front view)',p(kl),'62–80%',kl!=null&&kl>=0.6&&kl<=0.82]);
+ R.push(['Central incisors match',p(sym),'95–100%',sym!=null&&sym>=0.93]);
+ R.push(['Midline shift',m(ms),'under 1.5 mm',ms!=null&&ms<1.5]);
+ R.push(['Tilt of the smile (canine to canine)',tilt==null?null:tilt.toFixed(1)+'°','under 2°',tilt!=null&&tilt<2]);
+ R.push(['Smile arc (centrals lower than canines)',m(arc),'0.5–2 mm',arc!=null&&arc>=0.4&&arc<=2.5]);
+ R.push(['Gum line of the two centrals',m(gum),'level (under 0.5 mm)',gum!=null&&gum<0.6]);
+ return R}
+function toothTable(D){var rows='';[1,2,3].forEach(function(n){var r=D.T['UR'+n],l=D.T['UL'+n],cur=avg([r&&8.5*(r.x1-r.x0)/D.cwNow,l&&8.5*(l.x1-l.x0)/D.cwNow]);
+ var des=8.5*[D.wc,D.wl,D.wk][n-1]/D.cwNow;rows+='<tr><td>'+NUM[n]+'</td><td>'+(cur==null?'–':cur.toFixed(1)+' mm')+'</td><td>'+des.toFixed(1)+' mm</td></tr>'});return rows}
+
+/* ---------- UI ---------- */
+function show(a,after){S.a=a;S.after=after;S.cache={};var h='<div class="res"><h2>Your smile design</h2>';
+ if(!a.photo_ok){h+='<p>'+esc(a.photo_note||'The photo was not clear enough.')+'</p><p>Please retake a front-facing photo with a natural full smile, upper teeth clearly visible, in good daylight, phone at mouth level.</p></div>';out.innerHTML=h;return}
+ var im=new Image();im.onload=function(){S.img=im;S.W=im.width;S.H=im.height;build()};im.src=beforeURL}
+function build(){var a=S.a,D=design();
+ var views=[['mockup','Smile mock-up'],['design','Ideal design'],['white','Whitening only'],['analysis','Analysis']];if(S.after)views.unshift(['ai','AI photo']);
+ if(S.after&&S.view=='mockup')S.view='ai';
+ var h='<div class="res"><h2>Your smile design</h2><div class="seg" id="vw">'+views.map(function(v){return'<button type="button" data-v="'+v[0]+'"'+(v[0]==S.view?' class="on"':'')+'>'+v[1]+'</button>'}).join('')+'</div>';
+ h+='<div id="cmp"></div><p class="muted" id="cap"></p>';
+ h+='<div class="ctl"><label>Proportion<select id="rt"><option value="red70">Natural (RED 70%)</option><option value="red75">Soft (RED 75%)</option><option value="red80">Wide (RED 80%)</option><option value="golden">Golden proportion (62%)</option></select></label>';
+ h+='<label>Shade<select id="sh"><option value="a2">Natural (A2)</option><option value="a1">Bright natural (A1)</option><option value="b1">White (B1)</option><option value="bl">Extra white (bleach)</option></select></label>';
+ h+='<label class="ck2"><input type="checkbox" id="ol"'+(S.outline?' checked':'')+'> Show midline</label><button type="button" class="btn o2" id="dl">Download image</button></div>';
+ h+='<p class="muted"><b>Simulation only.</b> These pictures are drawn by the computer from your photo to explain ideal proportions. They are not a promise of results. Your plan depends on your teeth, gums and bite, and is decided after an examination.</p>';
+ h+='<h3>Your measurements</h3><div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Measure</th><th>Yours</th><th>Ideal</th><th></th></tr></thead><tbody>'+metrics(D).map(function(r){return'<tr><td>'+r[0]+'</td><td>'+(r[1]==null?'–':r[1])+'</td><td>'+r[2]+'</td><td>'+(r[1]==null?'':(r[3]?'<span class="ok">Within range</span>':'<span class="wn">Outside range</span>'))+'</td></tr>'}).join('')+'</tbody></table></div>';
+ h+='<h3>Tooth widths: now and in the design</h3><div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Tooth</th><th>Yours (est.)</th><th>Design</th></tr></thead><tbody id="tt">'+toothTable(D)+'</tbody></table></div>';
+ h+='<p class="muted">Millimetres are estimated from your photo by assuming an average central incisor width of 8.5 mm, so treat them as approximate.</p>';
+ if(a.findings&&a.findings.length){h+='<h3>What the AI noticed</h3><ul class="b">'+a.findings.map(function(o){return'<li>'+esc(o)+'</li>'}).join('')+'</ul>'}
+ h+='<p>Options that can achieve a design like this include <a href="teeth-whitening.html">whitening</a>, <a href="fillings.html">tooth-coloured bonding</a>, veneers, <a href="crowns-bridges.html">crowns</a> and <a href="clear-aligners.html">aligners</a>. Dr. Tejas Pradhan has received your photo and can discuss what suits you.</p>';
+ h+='<div class="cta"><a class="btn" href="'+WA+'">Book a smile design consultation</a></div></div>';
+ out.innerHTML=h;
+ document.getElementById('rt').value=S.ratio;document.getElementById('sh').value=S.shade;
+ document.getElementById('vw').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.view=b.getAttribute('data-v');[].forEach.call(this.children,function(x){x.className=x==b?'on':''});paint()});
+ document.getElementById('rt').addEventListener('change',function(){S.ratio=this.value;document.getElementById('tt').innerHTML=toothTable(design());paint()});
+ document.getElementById('sh').addEventListener('change',function(){S.shade=this.value;paint()});
+ document.getElementById('ol').addEventListener('change',function(){S.outline=this.checked;paint()});
+ document.getElementById('dl').addEventListener('click',function(){var a2=document.createElement('a');a2.href=S.view=='ai'?S.after:render(S.view);a2.download='smile-design-'+S.view+'.jpg';document.body.appendChild(a2);a2.click();a2.remove()});
+ paint();out.scrollIntoView({behavior:'smooth'})}
+var CAP={mockup:'Smile mock-up: your photo with ideal-proportion teeth drawn in, plus whitening. Drag the slider to compare with your current smile.',design:'Ideal design: white outlines show the ideal tooth sizes (numbers in mm), the orange line is the ideal edge curve and gum level, the blue line is the middle of your face.',white:'Whitening only: your own teeth at the chosen shade, without changing their shape.',analysis:'Analysis: yellow boxes mark your 8 front teeth (1 central, 2 lateral, 3 canine, 4 premolar). Blue: face midline. Red: teeth midline. Green: lower lip line that the tooth edges should follow.',ai:'AI photo: a realistic AI-generated preview of your smile after treatment.'};
+function paint(){var cmp=document.getElementById('cmp');if(!cmp)return;var u=S.view=='ai'?S.after:render(S.view);
+ document.getElementById('cap').textContent=CAP[S.view]||'';
+ if(S.view=='analysis'||S.view=='design'){cmp.innerHTML='<div class="ba"><img src="'+u+'" alt="'+esc(S.view)+' view"></div>';return}
+ cmp.innerHTML='<div class="ba"><img src="'+beforeURL+'" alt="Before"><div class="af"><img src="'+u+'" alt="After simulation"></div><span class="tg l">Before</span><span class="tg r">Design</span><input type="range" min="0" max="100" value="50" aria-label="Compare before and after"></div>';
+ var ba=cmp.querySelector('.ba'),rg=ba.querySelector('input'),af=ba.querySelector('.af');function up(){af.style.clipPath='inset(0 0 0 '+rg.value+'%)'}rg.addEventListener('input',up);up()}
+window.__dsdTest=function(a,after,url){beforeURL=url;show(a,after)};
+})();
+"""
+
+
+def dsd_page():
+    js = (DSD_JS.replace("__API__", DSD_API)
+          .replace("__WA__", "https://wa.me/918369187806?text=" + quote("Hello, I tried the AI smile design on your website and would like a smile design consultation.")))
+    ideal = [("Central incisor", "8.5–9 mm", "10.5–11 mm", "75–80%"), ("Lateral incisor", "6.5 mm", "9–9.5 mm", "70–75%"),
+             ("Canine", "7.5 mm", "10 mm", "75–80%"), ("First premolar", "7 mm", "8–8.5 mm", "80–85%")]
+    trs = "".join(f"<tr><td>{a}</td><td>{b}</td><td>{c}</td><td>{d}</td></tr>" for a, b, c, d in ideal)
+    body = (
+        '<h2>AI digital smile design</h2>'
+        '<p>Upload one front-facing smile photo. The AI marks your 8 upper front teeth, compares their proportions with ideal smile dimensions, '
+        'and draws an ideal-proportion design and smile mock-up on your own photo. You can change the proportion and shade, compare before and after, and download the result.</p>'
+        '<div class="note"><b>Please note:</b> the "after" picture is an AI simulation for ideas only. It is not a diagnosis or a guarantee. '
+        'The real plan is made after an examination, X-rays and a discussion of options like whitening, bonding, veneers, crowns or aligners.</div>'
+        '<form id="ds" class="scf" autocomplete="on">'
+        '<label>Your name<input name="name" required maxlength="80" autocomplete="name"></label>'
+        '<label>Mobile number<input name="phone" required inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit number"></label>'
+        '<label>Your smile photo<input id="dsf" type="file" accept="image/*" required></label>'
+        '<div id="dsp" class="prev one"></div>'
+        '<p class="muted">For best results: face the camera straight, phone at mouth level, natural full smile showing your upper teeth, good daylight, no filter.</p>'
+        '<input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">'
+        '<label class="ck"><input type="checkbox" name="consent" required> I agree that my photo and details are processed by an AI service (Google Gemini) and stored securely so that Dr. Tejas Pradhan can review them and contact me. '
+        'I understand the "after" image is a simulation. I can ask the clinic to delete my data at any time.</label>'
+        '<button id="dsb" class="btn" type="submit">Design my smile</button>'
+        '<p id="dsm" class="muted" role="status"></p></form>'
+        '<div id="dso"></div>'
+        '<h2 style="margin-top:40px">Ideal dimensions of the upper front teeth</h2>'
+        '<p>Average crown sizes the design aims for. Every face is different, so the dentist adjusts these to your smile.</p>'
+        f'<div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Tooth</th><th>Width</th><th>Height</th><th>Width ÷ height</th></tr></thead><tbody>{trs}</tbody></table></div>'
+        + ul(["The two central incisors match in size and shape and are the most prominent teeth.",
+              "Seen from the front, each tooth looks narrower than the one before it: laterals about 62–75% of the centrals, canines about 62–80% of the laterals.",
+              "The teeth midline lines up with the middle of the face.",
+              "The edges of the upper teeth follow a gentle curve parallel to the lower lip (the smile arc).",
+              "The gum line is even: centrals and canines level, laterals slightly lower.",
+              "A natural shade, not an artificial bright white."])
+        + '<p>Related: <a href="smile-check.html">Free AI smile check</a> · <a href="teeth-whitening.html">Teeth whitening</a> · <a href="braces-comparison.html">Braces compared</a></p>'
+        f'<script>{js}</script>')
+    faqs = [("What is digital smile design?", "Digital smile design (DSD) uses photos and measurements of your face and teeth to plan a smile makeover, so you can preview the result before treatment."),
+            ("Is the AI after picture what I will actually get?", "No. It is an AI simulation for ideas only. Your real result depends on your teeth, gums, bite and the treatment chosen after an examination."),
+            ("What are the ideal dimensions of front teeth?", "On average, an upper central incisor is about 8.5–9 mm wide and 10.5–11 mm long, a width-to-height ratio of about 75–80%. Laterals are about 6.5 mm wide and canines about 7.5 mm."),
+            ("Which treatments can change my smile?", "Depending on your teeth: whitening, tooth-coloured bonding, veneers, crowns, aligners or braces, and sometimes gum contouring. The dentist advises after examining you.")]
+    return guide_page("smile-design", "AI Digital Smile Design: See Your Smile Before and After", "AI smile design", "AI tool",
+                      "Upload a smile photo: AI marks your 8 front teeth, compares them with ideal dimensions and shows a simulated before and after. Not a guarantee of results.",
+                      body, faqs)
+
+
 GUIDES = [
+    ("smile-design", "AI digital smile design", "See a simulated before and after of your smile, with ideal tooth proportions.", dsd_page),
+    ("smile-check", "Free AI smile check", "Upload photos of your teeth for a tentative AI overview.", smile_page),
     ("braces-comparison", "Braces and aligners compared", "Metal, ceramic, self-ligating, lingual and clear aligners side by side.", braces_page),
     ("post-extraction-care", "Post-extraction care", "Instructions and chart for after a tooth extraction.", extraction_page),
     ("post-implant-care", "Post-implant surgery care", "Chart, instructions and video for after implant surgery.", implant_page),
