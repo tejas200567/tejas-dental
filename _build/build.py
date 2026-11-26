@@ -1792,24 +1792,44 @@ function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
   var xs=[],ys=[],P=null;
   if(LB){P=LB.map(function(q){return[q.x*B.naturalWidth*tb.a+tb.e,q.y*B.naturalHeight*tb.d+tb.f]});P.forEach(function(q){ys.push(q[1])})}
   var top=ys.length?Math.min.apply(0,ys)-30:300,bot=ys.length?Math.max.apply(0,ys)+50:1500,conn=window.__reelConn||(LM&&LM.T)||[];
-  var cv=document.createElement('canvas');cv.width=W;cv.height=H;var g=cv.getContext('2d'),DUR=7600;
+  var cv=document.createElement('canvas');cv.width=W;cv.height=H;var g=cv.getContext('2d'),DUR=7600,ST=$('rst').value,PR=0;
+  function drawI(im,tr){setT(g,tr);g.drawImage(im,0,0);g.setTransform(1,0,0,1,0,0)}
+  function lerp(a,b,x){return a+(b-a)*x}
+  function fx(s,t){var p=ease(clamp((t-900)/4200,0,1));PR=p;
+   if(s=='curtain'){drawI(A,ta);var w=W/2*(1-p);if(w>1){g.save();g.beginPath();g.rect(0,0,w,H);g.rect(W-w,0,w,H);g.clip();drawI(B,tb);g.restore();if(p>0.02&&p<0.98)
+     [[w,1],[W-w,-1]].forEach(function(e){var gr=g.createLinearGradient(e[0],0,e[0]+e[1]*50,0);gr.addColorStop(0,'rgba(0,0,0,.65)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(Math.min(e[0],e[0]+e[1]*50),0,50,H);g.fillStyle='rgba(216,195,165,.9)';g.fillRect(e[0]-2,0,4,H)})}}
+   else if(s=='slider'){var k=[[0,0],[900,0],[2400,0.55],[3200,0.28],[4400,0.8],[5400,1.06],[99999,1.06]],x=0;for(var i=0;i<k.length-1;i++)if(t>=k[i][0]&&t<k[i+1][0]){x=lerp(k[i][1],k[i+1][1],ease((t-k[i][0])/(k[i+1][0]-k[i][0])));break}
+    PR=x;var hx=W*x;drawI(B,tb);if(hx>0){g.save();g.beginPath();g.rect(0,0,hx,H);g.clip();drawI(A,ta);g.restore()}
+    if(x>0&&x<1.02){g.fillStyle='#fff';g.fillRect(hx-3,0,6,H);g.beginPath();g.arc(hx,H/2,44,0,7);g.fillStyle='rgba(255,255,255,.95)';g.fill();g.fillStyle='#222';g.beginPath();g.moveTo(hx-8,H/2-14);g.lineTo(hx-24,H/2);g.lineTo(hx-8,H/2+14);g.fill();g.beginPath();g.moveTo(hx+8,H/2-14);g.lineTo(hx+24,H/2);g.lineTo(hx+8,H/2+14);g.fill()}}
+   else if(s=='scanner'){var sx=W*1.15*p;drawI(B,tb);g.save();g.beginPath();g.rect(0,0,Math.min(sx,W),H);g.clip();drawI(A,ta);g.restore();
+    if(P&&p<1){var band=380;g.beginPath();for(var i=0;i<conn.length;i++){var a=P[conn[i].start],b2=P[conn[i].end],d=sx-(a[0]+b2[0])/2;if(d<-110||d>band)continue;g.moveTo(a[0],a[1]);g.lineTo(b2[0],b2[1])}g.strokeStyle='rgba(90,255,130,.8)';g.lineWidth=1.6;g.shadowColor='#3f3';g.shadowBlur=8;g.stroke();g.shadowBlur=0}
+    if(p>0&&p<1){var gr=g.createLinearGradient(sx-40,0,sx+40,0);gr.addColorStop(0,'rgba(80,255,120,0)');gr.addColorStop(0.5,'rgba(190,255,200,.95)');gr.addColorStop(1,'rgba(80,255,120,0)');g.fillStyle=gr;g.fillRect(sx-40,0,80,H)}}
+   else if(s=='calendar'){drawI(A,ta);var sy=Math.cos(p*Math.PI/2);if(sy>0.01){var sh=g.createLinearGradient(0,H*sy,0,H*sy+120);sh.addColorStop(0,'rgba(0,0,0,.55)');sh.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=sh;g.fillRect(0,H*sy,W,120);
+     g.setTransform(1,0,0,sy,0,0);g.transform(tb.a,tb.b,tb.c,tb.d,tb.e,tb.f);g.drawImage(B,0,0);g.setTransform(1,0,0,1,0,0);g.fillStyle='rgba(0,0,0,'+(p*0.45)+')';g.fillRect(0,0,W,H*sy);g.fillStyle='rgba(255,255,255,.8)';g.fillRect(0,H*sy-3,W,3)}
+    g.fillStyle='#e6e6ea';g.fillRect(0,0,W,34);g.fillStyle='#777';for(var r=0;r<26;r++){g.beginPath();g.ellipse(24+r*41,17,9,13,0,0,7);g.fill()}}
+   else if(s=='peel'){var nx=0.6,ny=0.8,smax=nx*W+ny*H,d=Math.min(320,Math.max(0,p*(smax+320)*0.7))*(1-Math.pow(p,6)),sv=p*(smax+320),tx=-ny,ty=nx,px=nx*sv,py=ny*sv,L=4000;
+    function poly(o1,o2){g.beginPath();g.moveTo(nx*o1+tx*L,ny*o1+ty*L);g.lineTo(nx*o1-tx*L,ny*o1-ty*L);g.lineTo(nx*o2-tx*L,ny*o2-ty*L);g.lineTo(nx*o2+tx*L,ny*o2+ty*L);g.closePath()}
+    drawI(A,ta);g.save();poly(sv,sv+5000);g.clip();drawI(B,tb);g.restore();
+    if(p>0&&d>2){g.save();poly(sv-d-90,sv-d);var sg=g.createLinearGradient(nx*(sv-d),ny*(sv-d),nx*(sv-d-90),ny*(sv-d-90));sg.addColorStop(0,'rgba(0,0,0,.4)');sg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=sg;g.fill();g.restore();
+     g.save();poly(sv-d,sv);g.clip();g.setTransform(1-2*nx*nx,-2*nx*ny,-2*nx*ny,1-2*ny*ny,2*sv*nx,2*sv*ny);g.transform(tb.a,tb.b,tb.c,tb.d,tb.e,tb.f);g.drawImage(B,0,0);g.setTransform(1,0,0,1,0,0);
+     var fg=g.createLinearGradient(nx*sv,ny*sv,nx*(sv-d),ny*(sv-d));fg.addColorStop(0,'rgba(110,100,125,.55)');fg.addColorStop(0.25,'rgba(235,232,242,.82)');fg.addColorStop(1,'rgba(250,250,252,.9)');g.fillStyle=fg;g.fillRect(0,0,W,H);g.restore()}}}
   function txt(t,x,y,sz,col,al,wt){g.setTransform(1,0,0,1,0,0);g.font=(wt||'700')+' '+sz+'px system-ui,sans-serif';g.fillStyle=col;g.textAlign=al||'center';g.shadowColor='rgba(0,0,0,.8)';g.shadowBlur=14;g.fillText(t,x,y);g.shadowBlur=0}
   function frame(t){g.setTransform(1,0,0,1,0,0);g.fillStyle='#000';g.fillRect(0,0,W,H);
-   setT(g,tb);g.drawImage(B,0,0);
+   if(ST!='mesh'){fx(ST,t)}else{setT(g,tb);g.drawImage(B,0,0);
    var u=clamp((t-900)/3600,0,1),u2=clamp((t-4500)/700,0,1),ry=t<900?0:u<1?top+(bot-top)*ease(u):bot+(H-bot)*ease(u2);
    if(t>=900){g.save();g.setTransform(1,0,0,1,0,0);g.beginPath();g.rect(0,0,W,ry);g.clip();setT(g,ta);g.drawImage(A,0,0);g.restore()}
    if(P&&t>=900&&u<1){g.setTransform(1,0,0,1,0,0);var band=170;for(var k=0;k<3;k++){g.beginPath();var lo=k/3,hi=(k+1)/3;
      for(var i=0;i<conn.length;i++){var p=P[conn[i].start],q=P[conn[i].end],d=Math.abs((p[1]+q[1])/2-ry);if(d>=band)continue;var a=1-d/band;if(a<lo||a>=hi+0.001)continue;g.moveTo(p[0],p[1]);g.lineTo(q[0],q[1])}
      g.strokeStyle='rgba(180,225,255,'+(0.25+0.3*(k+1))+')';g.lineWidth=1.3;g.stroke()}}
-   if(t>=900&&u<1){g.setTransform(1,0,0,1,0,0);var gr=g.createLinearGradient(0,ry-40,0,ry+40);gr.addColorStop(0,'rgba(120,200,255,0)');gr.addColorStop(0.5,'rgba(200,235,255,.95)');gr.addColorStop(1,'rgba(120,200,255,0)');g.fillStyle=gr;g.fillRect(0,ry-40,W,80)}
+   if(t>=900&&u<1){g.setTransform(1,0,0,1,0,0);var gr=g.createLinearGradient(0,ry-40,0,ry+40);gr.addColorStop(0,'rgba(120,200,255,0)');gr.addColorStop(0.5,'rgba(200,235,255,.95)');gr.addColorStop(1,'rgba(120,200,255,0)');g.fillStyle=gr;g.fillRect(0,ry-40,W,80)}}
    g.setTransform(1,0,0,1,0,0);
    txt('SMILE DESIGN',W/2,150,64,'#fff');txt(label(),W/2,222,36,'#d8c3a5','center','500');
-   var after=t>=900&&(u>=1||ry>H*0.6);txt(after?'AFTER':'BEFORE',W/2,H-330,66,'#fff');
+   var after=ST!='mesh'?PR>0.5:(t>=900&&(u>=1||ry>H*0.6));txt(after?'AFTER':'BEFORE',W/2,H-330,66,'#fff');
    txt(CL,W/2,H-240,46,'#fff');txt(PH+'  ·  Jogeshwari East, Mumbai',W/2,H-180,34,'#d8c3a5','center','500');
    txt($('kind').value=='real'?'Results vary from person to person.':'Computer simulation for illustration. Results vary.',W/2,H-110,28,'rgba(255,255,255,.7)','center','400')}
   if(window.__reelDebug){window.__reelShots=[0,2000,3000,4300,6500].map(function(t){frame(t);return cv.toDataURL('image/jpeg',0.6)});b.disabled=false;return}
   var st=cv.captureStream(30),rec=new MediaRecorder(st,{mimeType:mt,videoBitsPerSecond:6000000}),ch=[];rec.ondataavailable=function(e){if(e.data&&e.data.size)ch.push(e.data)};
-  rec.onstop=function(){b.disabled=false;msg.textContent='Reel ready.';showVideo(new Blob(ch,{type:mt.split(';')[0]}),'mesh-reel',out,tips()+(LB?'':' (No face found in the before photo, so a plain wipe was used.)'))};
+  rec.onstop=function(){b.disabled=false;msg.textContent='Reel ready.';showVideo(new Blob(ch,{type:mt.split(';')[0]}),'smile-reel-'+ST,out,tips()+(LB?'':' (No face found in the before photo, so a plain wipe was used.)'))};
   msg.textContent='Recording the reel... 0%';frame(0);rec.start(250);var t0=performance.now();
   (function loop(){var t=performance.now()-t0;frame(Math.min(t,DUR));msg.textContent='Recording the reel... '+Math.round(Math.min(1,t/DUR)*100)+'%';if(t<DUR+200)requestAnimationFrame(loop);else rec.stop()})()})}).catch(function(e){b.disabled=false;msg.className='muted err';msg.textContent='Could not make the reel ('+((e&&e.message)||e)+').'})}
 
@@ -1851,9 +1871,10 @@ def reel_page():
         '<label>After photo (real result or AI simulation)<input id="fa" type="file" accept="image/*"></label><div id="pa" class="prev one"></div>'
         '<label>The after photo is<select id="kind"><option value="ai">An AI simulation</option><option value="real">A real treatment result</option></select></label>'
         '<label class="ck"><input type="checkbox" id="cons"> The patient has given written consent to use these photos for a reel, and I will label AI content as AI.</label>'
-        '<h3>1. Mesh-scan reveal reel (free, made on this device)</h3>'
-        '<p class="muted">A 3D face mesh scans down the face and reveals the new smile. 8 seconds, 9:16. Needs both photos, front-facing, similar distance.</p>'
-        '<button type="button" class="btn" id="mb">Make mesh-scan reel</button><p id="mm" class="muted" role="status"></p><div id="mo"></div>'
+        '<h3>1. Reveal reels (free, made on this device)</h3>'
+        '<p class="muted">Pick a style, then make an 8 second 9:16 reel. Needs both photos, front-facing, similar distance.</p>'
+        '<label>Reel style<select id="rst"><option value="mesh">Mesh scan (3D face mesh scans down)</option><option value="peel">Peel-off (paper peels away)</option><option value="curtain">Curtain (opens from the middle)</option><option value="scanner">Scanner (green mesh sweeps across)</option><option value="calendar">Calendar page (page flips up)</option><option value="slider">Slider (before / after handle)</option></select></label>'
+        '<button type="button" class="btn" id="mb">Make reel</button><p id="mm" class="muted" role="status"></p><div id="mo"></div>'
         '<h3>2. AI smiling clip (costs about ₹40 to ₹60 each)</h3>'
         '<p class="muted">Animates the photo (the after photo, or the before photo if that is the only one) into a short video. Clinic staff numbers only. Limited to 10 clips a day.</p>'
         '<label>Staff mobile number<input id="ph" inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit staff number"></label>'
