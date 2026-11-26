@@ -1,0 +1,226 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dentreel - smile reels for dentists</title><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0d2236"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><style>
+*{box-sizing:border-box}body{margin:0;background:#0d2236;color:#f2ece3;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 60px}
+header{display:flex;align-items:center;gap:12px;padding:6px 0 14px}header img{width:44px;height:44px;border-radius:10px}
+header b{font-size:22px;letter-spacing:.3px}header small{display:block;color:#b79d7e;font-size:13px}
+h2{font-size:20px;margin:18px 0 6px}h3{font-size:17px;margin:26px 0 6px;color:#f2ece3;border-top:1px solid #23405a;padding-top:18px}
+p,.muted{color:#c9c2b6;margin:6px 0}.muted{font-size:14px}.err{color:#ff9d8f}
+.card{background:#12304a;border:1px solid #23405a;border-radius:14px;padding:14px;margin:12px 0}
+label{display:block;margin:12px 0 4px;font-weight:600;font-size:15px}label.ck{display:flex;gap:10px;font-weight:400;align-items:flex-start}label.ck input{margin-top:5px;width:auto}
+input,select{width:100%;padding:11px;border-radius:10px;border:1px solid #2f5273;background:#0b1b2b;color:#f2ece3;font-size:16px}input[type=range]{padding:0}
+.btn{display:inline-block;background:#b79d7e;color:#0d2236;border:0;border-radius:10px;padding:12px 18px;font-size:16px;font-weight:700;margin:12px 8px 4px 0;text-decoration:none;cursor:pointer}
+.btn.o2{background:transparent;color:#f2ece3;border:1px solid #b79d7e}.btn:disabled{opacity:.5}
+.prev img{max-width:140px;max-height:180px;border-radius:8px}.note{background:#3a2a10;border:1px solid #7a5a20;border-radius:10px;padding:10px 12px;font-size:14px;margin:12px 0}
+.cta{margin:6px 0}.soon{opacity:.75}video{border-radius:10px}.small{font-size:13px;color:#8aa0b4}
+</style></head><body><div class="wrap"><header><img src="icon-192.png" alt=""><div><b>Dentreel</b><small>Smile reels and photo tools for dentists</small></div></header><div id="setup" class="card"><h2>Set up your clinic</h2><p>These details go on your reels and watermarked photos. They stay on this phone.</p><label>Clinic or doctor name<input id="sn" autocomplete="organization" placeholder="Dr Name's Dental Clinic"></label><label>Phone number<input id="sp" inputmode="tel" autocomplete="tel" placeholder="+91 98XXXXXXXX"></label><label>Area and city (optional)<input id="sc" placeholder="e.g. Andheri East, Mumbai"></label><button type="button" class="btn" id="ss">Save and start</button><p id="se" class="err"></p></div><div id="tools" hidden><div class="card"><b id="pn"></b><div class="small" id="pp"></div><button type="button" class="btn o2" id="pe">Edit clinic details</button> <button type="button" class="btn" id="inst" hidden>Install app</button></div><div class="note"><b>Before posting:</b> use a patient’s face only with their written consent. Label AI-generated content as AI, and never present a simulation as a real treatment result.</div><form onsubmit="return false"><label>Before photo<input id="fb" type="file" accept="image/*"></label><div id="pb" class="prev one"></div><label>After photo (real result or AI simulation)<input id="fa" type="file" accept="image/*"></label><div id="pa" class="prev one"></div><label>The after photo is<select id="kind"><option value="ai">An AI simulation</option><option value="real">A real treatment result</option></select></label><label class="ck"><input type="checkbox" id="cons"> The patient has given written consent to use these photos for a reel, and I will label AI content as AI.</label><h3>1. Reveal reels (free, made on this device)</h3><p class="muted">Pick a style, then make an 8 second 9:16 reel. Needs both photos, front-facing, similar distance.</p><label>Reel style<select id="rst"><option value="side">Side by side (before | after)</option><option value="stack">Smile story (glowing panels: teeth close-up + face)</option><option value="polaroid">Polaroid (photo prints and develops)</option><option value="museum">Museum frame (gold frame on a gallery wall)</option><option value="tv">TV glitch (smile on a TV, glitch to after)</option><option value="dots">Confidence edit (black &amp; white, halftone dots reveal)</option><option value="dsd">Smile lines (digital smile design overlay)</option><option value="mesh">Mesh scan (3D face mesh scans down)</option><option value="peel">Peel-off (paper peels away)</option><option value="curtain">Curtain (opens from the middle)</option><option value="scanner">Scanner (green mesh sweeps across)</option><option value="calendar">Calendar page (page flips up)</option><option value="slider">Slider (before / after handle)</option></select></label><label class="ck"><input type="checkbox" id="bk" checked> Jet-black studio background (cuts out the person, removes the photo background)</label><button type="button" class="btn" id="mb">Make reel</button><p id="mm" class="muted" role="status"></p><div id="mo"></div><h3>2. Photo tools (free): crop, rotate, watermark</h3><p class="muted">Straighten and crop any photo to reel, post or square shape, add the clinic watermark, and download it.</p><label>Photo<input id="qf" type="file" accept="image/*"></label><label>Shape<select id="qa"><option value="0.5625">Reel or story (9:16)</option><option value="0.8">Instagram post (4:5)</option><option value="1">Square (1:1)</option><option value="0">Keep the original shape</option></select></label><label>Zoom<input id="qz" type="range" min="1" max="3" step="0.05" value="1"></label><label>Straighten<input id="qr" type="range" min="-15" max="15" step="0.5" value="0"></label><label>Move left / right<input id="qx" type="range" min="-100" max="100" value="0"></label><label>Move up / down<input id="qy" type="range" min="-100" max="100" value="0"></label><div class="cta"><button type="button" class="btn o2" id="ql">Rotate left</button> <button type="button" class="btn o2" id="qrt">Rotate right</button></div><label class="ck"><input type="checkbox" id="qw" checked> Add the clinic watermark</label><canvas id="qc" width="10" height="10" style="max-width:320px;width:100%;border-radius:8px;display:block;margin:8px 0;background:#111"></canvas><button type="button" class="btn" id="qd">Download photo</button><p id="qm" class="muted" role="status"></p><h3>3. AI smile design and AI clips</h3><p class="muted soon">Coming soon: AI smile design with shade, shape and proportion choices, and AI smiling clips, paid with credits.</p><div hidden><h3>3. AI smiling clip (costs about ₹40 to ₹60 each)</h3><p class="muted">Animates the photo (the after photo, or the before photo if that is the only one) into a short video. Clinic staff numbers only. Limited to 10 clips a day.</p><label>Staff mobile number<input id="ph" inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit staff number"></label><label>Movement<select id="sty"><option value="smile">Natural smile</option><option value="turn">Slow head turn to the side, smiling</option></select></label><input type="hidden" id="fit" value="fit"><button type="button" class="btn o2" id="ab">Make AI clip</button><p id="am" class="muted" role="status"></p><div id="ao"></div></div></form></div><p class="small">Photos are processed on your phone and are not uploaded. AI simulations are illustrations, not guaranteed results.</p></div><script>(function(){var $=function(i){return document.getElementById(i)},P=null;try{P=JSON.parse(localStorage.getItem('ss_profile')||'null')}catch(e){}function show(){if(P&&P.name){$('setup').hidden=true;$('tools').hidden=false;$('pn').textContent=P.name;$('pp').textContent=(P.phone||'')+(P.city?'  ·  '+P.city:'')}else{$('setup').hidden=false;$('tools').hidden=true}}if(P){$('sn').value=P.name||'';$('sp').value=P.phone||'';$('sc').value=P.city||''}show();$('ss').addEventListener('click',function(){var n=$('sn').value.trim(),ph=$('sp').value.trim();if(n.length<3||ph.replace(/\D/g,'').length<8){$('se').textContent='Please enter the clinic name and a phone number.';return}localStorage.setItem('ss_profile',JSON.stringify({name:n,phone:ph,city:$('sc').value.trim()}));location.reload()});$('pe').addEventListener('click',function(){$('setup').hidden=false;$('tools').hidden=true;window.scrollTo(0,0)});var dp=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;$('inst').hidden=false});$('inst').addEventListener('click',function(){if(dp){dp.prompt();dp=null;$('inst').hidden=true}});if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(function(){})})()</script><script>
+(function(){
+var API='https://arxhbdyciylznmlamvri.supabase.co/functions/v1/reel-ai',MPV='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14',MODEL='https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+var PROF=true?(function(){try{return JSON.parse(localStorage.getItem('ss_profile')||'null')}catch(e){return null}})():null;
+var CL=(PROF&&PROF.name)||'Your clinic',PH=(PROF&&PROF.phone)||'',CT=PROF?(PROF.city||''):'';
+function $(i){return document.getElementById(i)}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function loadFile(f){return new Promise(function(res,rej){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){res(im)};im.onerror=function(){rej(new Error('photo not readable. Please choose the photos again'))};im.src=u})}
+var LM=null,SEG=null,BKFAIL=false;
+var SEGMODEL='https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite';
+function segMask(im){if(window.__reelSeg)return Promise.resolve(window.__reelSeg(im));
+ return (SEG?Promise.resolve(SEG):import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.ImageSegmenter.createFromOptions(fs,{baseOptions:{modelAssetPath:SEGMODEL,delegate:'CPU'},runningMode:'IMAGE',outputCategoryMask:false,outputConfidenceMasks:true})})}).then(function(sg){SEG=sg;return sg}))
+ .then(function(sg){var r=sg.segment(im),ms=r.confidenceMasks,m=ms[ms.length-1],o={w:m.width,h:m.height,d:new Float32Array(m.getAsFloat32Array())};try{r.close()}catch(e){}return o}).catch(function(){return null})}
+/* cut the person out and put them on jet black with a little contrast */
+function toBlack(im,Lm){if(!$('bk').checked)return Promise.resolve(im);
+ return segMask(im).then(function(mk){if(!mk){BKFAIL=true;return im}
+  var sc=Math.min(1,1600/Math.max(im.naturalWidth,im.naturalHeight)),w=Math.round(im.naturalWidth*sc),h=Math.round(im.naturalHeight*sc),mw=mk.w,mh=mk.h,d=mk.d,i,j;
+  var ce=0,cn=0,bo=0,bn=0;for(j=0;j<mh;j++)for(i=0;i<mw;i++){var v=d[j*mw+i],inC=i>mw*0.3&&i<mw*0.7&&j>mh*0.25&&j<mh*0.75,inB=i<mw*0.08||i>mw*0.92||j<mh*0.05;if(inC){ce+=v;cn++}if(inB){bo+=v;bn++}}
+  var inv=cn&&bn&&(bo/bn>ce/cn);
+  var mc=document.createElement('canvas');mc.width=mw;mc.height=mh;var mg=mc.getContext('2d'),id=mg.createImageData(mw,mh);
+  var P=new Float32Array(mw*mh),lab=new Int32Array(mw*mh),best=0,bl=0,nl=0,st=[];for(i=0;i<mw*mh;i++)P[i]=inv?1-d[i]:d[i];
+  /* above the chin, nothing wider than the hair line around the face may stay (kills wallpaper patches) */
+  if(Lm&&Lm[234]&&Lm[454]&&Lm[152]){var fcx=(Lm[234].x+Lm[454].x)/2*mw,fwm=Math.abs(Lm[454].x-Lm[234].x)*mw,fcy=Lm[152].y*mh;
+   for(j=0;j<Math.min(mh,Math.round(fcy));j++)for(i=0;i<mw;i++)P[j*mw+i]*=clamp((0.72*fwm-Math.abs(i-fcx))/(0.12*fwm),0,1)}
+  for(i=0;i<mw*mh;i++){if(P[i]<=0.5||lab[i])continue;nl++;var cnt=0;st.length=0;st.push(i);lab[i]=nl;while(st.length){var q=st.pop();cnt++;var qx=q%mw,qy=(q-qx)/mw,nb=[qx>0?q-1:-1,qx<mw-1?q+1:-1,qy>0?q-mw:-1,qy<mh-1?q+mw:-1];for(var z=0;z<4;z++){var n=nb[z];if(n>=0&&P[n]>0.5&&!lab[n]){lab[n]=nl;st.push(n)}}}if(cnt>best){best=cnt;bl=nl}}
+  var kp=new Uint8Array(mw*mh);for(i=0;i<mw*mh;i++)kp[i]=lab[i]==bl?1:0;
+  for(var it=0;it<2;it++){var k2=kp.slice();for(j=1;j<mh-1;j++)for(i=1;i<mw-1;i++){var o=j*mw+i;if(!kp[o]&&(kp[o-1]||kp[o+1]||kp[o-mw]||kp[o+mw]))k2[o]=1}kp=k2}
+  for(i=0;i<mw*mh;i++){var x=kp[i]?clamp((P[i]-0.5)/0.3,0,1):0;x=x*x*(3-2*x);id.data[i*4+3]=Math.round(x*255)}
+  mg.putImageData(id,0,0);
+  var m2=document.createElement('canvas');m2.width=w;m2.height=h;var g2=m2.getContext('2d');g2.imageSmoothingQuality='high';g2.filter='blur('+Math.max(1.5,w/350)+'px)';g2.drawImage(mc,0,0,w,h);g2.filter='none';
+  var c=document.createElement('canvas');c.width=w;c.height=h;var g=c.getContext('2d');g.filter='contrast(1.1) saturate(1.05)';g.drawImage(im,0,0,w,h);g.filter='none';
+  /* crush dark tones so hair and shadows melt into the black */
+  var px=g.getImageData(0,0,w,h),dd=px.data;for(i=0;i<dd.length;i+=4){var lu=0.299*dd[i]+0.587*dd[i+1]+0.114*dd[i+2];if(lu<80){var f=lu/80;dd[i]*=f;dd[i+1]*=f;dd[i+2]*=f}}g.putImageData(px,0,0);
+  g.globalCompositeOperation='destination-in';g.drawImage(m2,0,0);
+  g.globalCompositeOperation='destination-out';var bg=g.createLinearGradient(0,h*0.9,0,h);bg.addColorStop(0,'rgba(0,0,0,0)');bg.addColorStop(1,'rgba(0,0,0,1)');g.fillStyle=bg;g.fillRect(0,h*0.9,w,h*0.1);g.globalCompositeOperation='source-over';
+  var f=document.createElement('canvas');f.width=w;f.height=h;var fg=f.getContext('2d');fg.fillStyle='#000';fg.fillRect(0,0,w,h);fg.drawImage(c,0,0);f.naturalWidth=w;f.naturalHeight=h;return f})}
+function lmInit(){if(LM)return Promise.resolve(LM);return import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'CPU'},runningMode:'IMAGE',numFaces:1})}).then(function(l){LM={l:l,T:m.FaceLandmarker.FACE_LANDMARKS_TESSELATION||[]};return LM})})}
+function detect(im){if(window.__reelLM)return Promise.resolve(window.__reelLM(im));return lmInit().then(function(M){var r=M.l.detect(im);return r&&r.faceLandmarks&&r.faceLandmarks.length?r.faceLandmarks[0]:null}).catch(function(){return null})}
+var W=1080,H=1920;
+/* map image px -> canvas px so the face is centred and ~60% of the width */
+function layBefore(im,L){var iw=im.naturalWidth,ih=im.naturalHeight,s,ox,oy;
+ if(L){var fw=Math.abs(L[454].x-L[234].x)*iw,cx=(L[454].x+L[234].x)/2*iw,cy=(L[10].y+L[152].y)/2*ih;s=clamp(650/fw,0.1,10);ox=W/2-cx*s;oy=860-cy*s}
+ else{s=Math.max(W/iw,H/ih);ox=(W-iw*s)/2;oy=(H-ih*s)/2}
+ return{a:s,b:0,c:0,d:s,e:ox,f:oy}}
+function layAt(im,L,cx,cy,fw){var iw=im.naturalWidth,ih=im.naturalHeight,s,ox,oy;
+ if(L){var f=Math.abs(L[454].x-L[234].x)*iw,mx=(L[454].x+L[234].x)/2*iw,my=(L[10].y+L[152].y)/2*ih;s=clamp(fw/f,0.1,10);ox=cx-mx*s;oy=cy-my*s}
+ else{s=Math.max(W/2/iw,H/ih);ox=cx-iw*s/2;oy=(H-ih*s)/2}
+ return{a:s,b:0,c:0,d:s,e:ox,f:oy}}
+function pt(L,i,im){return[L[i].x*im.naturalWidth,L[i].y*im.naturalHeight]}
+function mid(p,q){return[(p[0]+q[0])/2,(p[1]+q[1])/2]}
+/* similarity transform that puts the after photo's eyes+mouth on the before photo's */
+function layAfter(imA,LA,tb,LB,imB){if(!LA||!LB)return layBefore(imA,LA);
+ function C(L,im,i,j){return mid(pt(L,i,im),pt(L,j,im))}
+ var a1=C(LA,imA,33,263),a2=C(LA,imA,61,291),b1=C(LB,imB,33,263),b2=C(LB,imB,61,291);
+ function T(p){return[tb.a*p[0]+tb.e,tb.d*p[1]+tb.f]}
+ var B1=T(b1),B2=T(b2),da=[a2[0]-a1[0],a2[1]-a1[1]],db=[B2[0]-B1[0],B2[1]-B1[1]],s=Math.hypot(db[0],db[1])/Math.hypot(da[0],da[1]),r=Math.atan2(db[1],db[0])-Math.atan2(da[1],da[0]),co=Math.cos(r)*s,si=Math.sin(r)*s;
+ return{a:co,b:si,c:-si,d:co,e:B1[0]-(co*a1[0]-si*a1[1]),f:B1[1]-(si*a1[0]+co*a1[1])}}
+function setT(g,t){g.setTransform(t.a,t.b,t.c,t.d,t.e,t.f)}
+function mime(){var c=['video/mp4;codecs=avc1.42E01E','video/mp4','video/webm;codecs=vp9','video/webm'];for(var i=0;i<c.length;i++)if(window.MediaRecorder&&MediaRecorder.isTypeSupported(c[i]))return c[i];return ''}
+function ease(x){return x<0.5?2*x*x:1-Math.pow(-2*x+2,2)/2}
+function showVideo(blob,name,box,note){var url=URL.createObjectURL(blob),ext=blob.type.indexOf('mp4')>=0?'mp4':'webm';
+ box.innerHTML='<video src="'+url+'" controls playsinline loop autoplay muted style="width:100%;max-width:320px;display:block;margin:8px 0"></video><div class="cta"><a class="btn" href="'+url+'" download="'+name+'.'+ext+'">Download</a> <button type="button" class="btn o2" id="rsh_'+name+'">Share</button></div><p class="muted">'+note+'</p>';
+ var f=new File([blob],name+'.'+ext,{type:blob.type}),sh=$('rsh_'+name);if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.style.display='none';
+ sh.addEventListener('click',function(){navigator.share({files:[f],title:'Smile reel'}).catch(function(){})})}
+function label(){var k=$('kind').value;return k=='real'?'Real treatment result':'AI smile simulation'}
+function tips(){return $('kind').value=='real'?'Post a patient’s face only with their written consent.':'AI-generated simulation, not a real result. Say so in the caption (#AIgenerated).'}
+
+/* ---------- 1. mesh-scan reveal reel (runs in the browser, free) ---------- */
+function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
+ if(!$('cons').checked){msg.className='muted err';msg.textContent='Please tick the consent box.';return}
+ var fb=FILES.fb,fa=FILES.fa;if(!fb||!fa){msg.className='muted err';msg.textContent='Please choose both the before and the after photo.';return}
+ var mt=mime();if(!mt||!HTMLCanvasElement.prototype.captureStream){msg.className='muted err';msg.textContent='Video recording needs Chrome.';return}
+ b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Reading the photos and finding the face...';
+ Promise.all([loadFile(fb),loadFile(fa)]).then(function(im){var B=im[0],A=im[1];msg.textContent='Finding the face and the background...';return Promise.all([detect(B),detect(A)]).then(function(L){return Promise.all([toBlack(B,L[0]),toBlack(A,L[1])]).then(function(pp){B=pp[0];A=pp[1];
+  var LB=L[0],LA=L[1],tb=layBefore(B,LB),ta=layAfter(A,LA,tb,LB,B);
+  var SB=layAt(B,LB,W*0.27,880,500),SA=layAt(A,LA,W*0.73,880,500);
+  var xs=[],ys=[],P=null;
+  if(LB){P=LB.map(function(q){return[q.x*B.naturalWidth*tb.a+tb.e,q.y*B.naturalHeight*tb.d+tb.f]});P.forEach(function(q){ys.push(q[1])})}
+  var top=ys.length?Math.min.apply(0,ys)-30:300,bot=ys.length?Math.max.apply(0,ys)+50:1500,conn=window.__reelConn||(LM&&LM.T)||[];
+  var cv=document.createElement('canvas');cv.width=W;cv.height=H;var g=cv.getContext('2d'),DUR=7600,ST=$('rst').value,PR=0;
+  function drawI(im,tr){setT(g,tr);g.drawImage(im,0,0);g.setTransform(1,0,0,1,0,0)}
+  function mcrop(im,L,asp,k){var iw=im.naturalWidth,ih=im.naturalHeight,cx,cy,mw;
+   if(L){var a=L[61],b=L[291],u=L[13],d=L[14];cx=(a.x+b.x)/2*iw;cy=(u.y+d.y)/2*ih;mw=Math.abs(b.x-a.x)*iw}else{cx=iw/2;cy=ih*0.62;mw=iw*0.35}
+   var sw=Math.min(iw,mw*k),sh=sw/asp;if(sh>ih){sh=ih;sw=sh*asp}return[clamp(cx-sw/2,0,iw-sw),clamp(cy-sh/2,0,ih-sh),sw,sh]}
+  function fcrop(im,L,asp){var iw=im.naturalWidth,ih=im.naturalHeight,cx,cy,fw;
+   if(L){cx=(L[234].x+L[454].x)/2*iw;cy=(L[10].y+L[152].y)/2*ih;fw=Math.abs(L[454].x-L[234].x)*iw}else{cx=iw/2;cy=ih*0.45;fw=iw*0.45}
+   var sw=Math.min(iw,fw*2.1),sh=sw/asp;if(sh>ih){sh=ih;sw=sh*asp}return[clamp(cx-sw/2,0,iw-sw),clamp(cy-sh/2,0,ih-sh),sw,sh]}
+  function drawM(im,c,x,y,w,h,al){g.save();g.globalAlpha=al==null?1:al;g.drawImage(im,c[0],c[1],c[2],c[3],x,y,w,h);g.restore()}
+  function rrp(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+  var DM=null,DG=null,DT=null,DTG=null;if(ST=='dots'){DM=document.createElement('canvas');DM.width=540;DM.height=960;DG=DM.getContext('2d');DT=document.createElement('canvas');DT.width=W;DT.height=H;DTG=DT.getContext('2d')}
+  function tp(L,i,im,tr){var x=L[i].x*im.naturalWidth,y=L[i].y*im.naturalHeight;return[tr.a*x+tr.c*y+tr.e,tr.b*x+tr.d*y+tr.f]}
+  function lerp(a,b,x){return a+(b-a)*x}
+  function fx(s,t){var p=ease(clamp((t-900)/4200,0,1));PR=p;
+   if(s=='side'){var a1=ease(clamp(t/900,0,1)),a2=ease(clamp((t-1500)/1100,0,1)),sl=(1-a2)*70;PR=a2;
+    g.save();g.beginPath();g.rect(0,0,W/2,H);g.clip();g.globalAlpha=a1;drawI(B,SB);g.restore();
+    g.save();g.beginPath();g.rect(W/2,0,W/2,H);g.clip();g.globalAlpha=a2;g.translate(sl,0);drawI(A,SA);g.restore();g.globalAlpha=1;
+    txt('BEFORE',W*0.27,H-330,56,'rgba(255,255,255,'+a1+')');txt('AFTER',W*0.73,H-330,56,'rgba(255,255,255,'+a2+')')}
+   else if(s=='stack'){var a1=ease(clamp(t/800,0,1)),w=ease(clamp((t-1300)/2600,0,1));PR=w;g.globalAlpha=a1;
+    var px=70,pw=940,ph=540,py1=340,ph2=640,py2=py1+ph+60,cm1=mcrop(B,LB,pw/ph,2.0),cm2=mcrop(A,LA,pw/ph,2.0),cf1=fcrop(B,LB,pw/ph2),cf2=fcrop(A,LA,pw/ph2);
+    [[py1,ph,cm1,cm2],[py2,ph2,cf1,cf2]].forEach(function(e){g.save();rrp(px,e[0],pw,e[1],36);g.clip();g.fillStyle='#120f10';g.fillRect(px,e[0],pw,e[1]);drawM(B,e[2],px,e[0],pw,e[1]);g.save();g.beginPath();g.rect(px,e[0],pw*w,e[1]);g.clip();drawM(A,e[3],px,e[0],pw,e[1]);g.restore();
+     if(w>0&&w<1){g.fillStyle='rgba(255,255,255,.9)';g.fillRect(px+pw*w-2,e[0],4,e[1])}g.restore();
+     g.save();g.shadowColor='rgba(255,255,255,.75)';g.shadowBlur=26;g.lineWidth=3;g.strokeStyle='rgba(255,255,255,.92)';rrp(px,e[0],pw,e[1],36);g.stroke();g.restore()});g.globalAlpha=1}
+   else if(s=='polaroid'){var rise=ease(clamp(t/1500,0,1)),dev=ease(clamp((t-1500)/1800,0,1)),sw2=ease(clamp((t-3900)/900,0,1)),cw=780,ch=960,cx0=(W-cw)/2,cy0=H-(H-330)*rise;PR=sw2;
+    var rg=g.createRadialGradient(W/2,H*0.45,100,W/2,H*0.45,H*0.7);rg.addColorStop(0,'#1a1a1c');rg.addColorStop(1,'#000');g.fillStyle=rg;g.fillRect(0,0,W,H);
+    g.save();g.translate(W/2,cy0+ch/2);g.rotate(-0.035);g.translate(-W/2,-(cy0+ch/2));g.shadowColor='rgba(0,0,0,.7)';g.shadowBlur=40;g.shadowOffsetY=18;g.fillStyle='#f6f3ee';g.fillRect(cx0,cy0,cw,ch);g.shadowBlur=0;g.shadowOffsetY=0;
+    var pxw=cx0+40,pyw=cy0+50,pw2=700,ph2=700;g.fillStyle='#16110f';g.fillRect(pxw,pyw,pw2,ph2);var m1=mcrop(B,LB,1,2.0),m2=mcrop(A,LA,1,2.0);drawM(B,m1,pxw,pyw,pw2,ph2,dev);drawM(A,m2,pxw,pyw,pw2,ph2,sw2);
+    if(t>3800&&t<4400){g.fillStyle='rgba(255,255,255,'+(0.55*(1-(t-3800)/600))+')';g.fillRect(pxw,pyw,pw2,ph2)}
+    g.fillStyle='#2b2623';g.font='italic 700 44px Georgia,serif';g.textAlign='center';g.fillText(sw2>0.5?'My new smile':'Before',W/2,cy0+ch-110);g.font='400 28px system-ui,sans-serif';g.fillStyle='#8a817a';g.fillText(CL,W/2,cy0+ch-58);g.restore()}
+   else if(s=='museum'){var zm=1+0.07*clamp(t/DUR,0,1),d1=ease(clamp((t-2600)/1400,0,1));PR=d1;
+    var wg=g.createLinearGradient(0,0,0,H);wg.addColorStop(0,'#3a0d14');wg.addColorStop(1,'#1a0508');g.fillStyle=wg;g.fillRect(0,0,W,H);
+    g.save();g.translate(W/2,860);g.scale(zm,zm);g.translate(-W/2,-860);
+    var lg=g.createRadialGradient(W/2,360,20,W/2,860,640);lg.addColorStop(0,'rgba(255,214,150,.38)');lg.addColorStop(1,'rgba(255,214,150,0)');g.fillStyle=lg;g.fillRect(0,300,W,1200);
+    var fw2=880,fh2=620,fx=(W-fw2)/2,fy=860-fh2/2,gg=g.createLinearGradient(fx,fy,fx+fw2,fy+fh2);gg.addColorStop(0,'#f0cd7a');gg.addColorStop(0.5,'#a97a22');gg.addColorStop(1,'#e8c068');
+    g.shadowColor='rgba(0,0,0,.7)';g.shadowBlur=40;g.fillStyle=gg;g.fillRect(fx,fy,fw2,fh2);g.shadowBlur=0;g.fillStyle='#6b4a12';g.fillRect(fx+26,fy+26,fw2-52,fh2-52);g.fillStyle=gg;g.fillRect(fx+34,fy+34,fw2-68,fh2-68);g.fillStyle='#111';g.fillRect(fx+58,fy+58,fw2-116,fh2-116);
+    var ix=fx+58,iy=fy+58,iw2=fw2-116,ih2=fh2-116,mm1=mcrop(B,LB,iw2/ih2,2.1),mm2=mcrop(A,LA,iw2/ih2,2.1);drawM(B,mm1,ix,iy,iw2,ih2);drawM(A,mm2,ix,iy,iw2,ih2,d1);
+    var sg=g.createLinearGradient(ix,iy,ix+iw2,iy+ih2);sg.addColorStop(0,'rgba(255,255,255,.12)');sg.addColorStop(0.4,'rgba(255,255,255,0)');g.fillStyle=sg;g.fillRect(ix,iy,iw2,ih2);
+    g.fillStyle='#c9a227';g.fillRect(W/2-170,fy-86,340,16);g.fillStyle='#e9cf7a';g.fillRect(W/2-170,fy-86,340,5);g.restore()}
+   else if(s=='tv'){var gl=t>2600&&t<3700,show=t>=3300?A:B,cr=t>=3300?mcrop(A,LA,1.55,2.0):mcrop(B,LB,1.55,2.0);PR=t>=3300?1:0;
+    var rg2=g.createRadialGradient(W/2,820,50,W/2,820,900);rg2.addColorStop(0,'#2a1c14');rg2.addColorStop(1,'#050405');g.fillStyle=rg2;g.fillRect(0,0,W,H);
+    var tx=70,ty=430,tw=940,th=640;g.fillStyle='#050505';g.shadowColor='rgba(255,170,90,.35)';g.shadowBlur=60;g.fillRect(tx,ty,tw,th);g.shadowBlur=0;g.strokeStyle='#2a2a2c';g.lineWidth=6;g.strokeRect(tx+3,ty+3,tw-6,th-6);
+    var sx2=tx+20,sy2=ty+20,sw3=tw-40,sh3=th-40;g.save();g.beginPath();g.rect(sx2,sy2,sw3,sh3);g.clip();
+    if(!gl)drawM(show,cr,sx2,sy2,sw3,sh3);else{var n=16,hh=sh3/n;for(var k=0;k<n;k++){var rn=Math.sin(k*12.9898+Math.floor(t/60)*78.233)*43758.5453;rn=rn-Math.floor(rn);var off=(rn-0.5)*120,src=rn>0.55?A:B,cc=rn>0.55?mcrop(A,LA,1.55,2.0):mcrop(B,LB,1.55,2.0);
+      g.save();g.beginPath();g.rect(sx2,sy2+k*hh,sw3,hh);g.clip();drawM(src,cc,sx2+off,sy2,sw3,sh3);g.restore();if(rn>0.8){g.fillStyle='rgba(255,0,90,.25)';g.fillRect(sx2,sy2+k*hh,sw3,hh)}else if(rn<0.15){g.fillStyle='rgba(0,200,255,.25)';g.fillRect(sx2,sy2+k*hh,sw3,hh)}}}
+    g.fillStyle='rgba(0,0,0,.14)';for(var y3=sy2;y3<sy2+sh3;y3+=4)g.fillRect(sx2,y3,sw3,1.5);g.restore();
+    g.fillStyle='#1c1c1e';g.fillRect(W/2-150,ty+th,300,26);g.fillStyle='#2a2a2c';g.fillRect(W/2-260,ty+th+26,520,14)}
+   else if(s=='dots'){var xf=W*1.3*p;g.filter='grayscale(1) contrast(1.12)';drawI(B,tb);g.filter='none';
+    if(p>0){var stp=12;DG.clearRect(0,0,540,960);DG.fillStyle='#fff';DG.beginPath();for(var yy=stp/2,row=0;yy<960;yy+=stp,row++)for(var xx=stp/2+(row%2?stp/2:0);xx<540;xx+=stp){var rr=clamp((xf/2+22*Math.sin(yy*0.045)-xx)/150,0,1);if(rr>0){var rad=rr*stp*0.78;DG.moveTo(xx+rad,yy);DG.arc(xx,yy,rad,0,6.3)}}DG.fill();
+     DTG.globalCompositeOperation='source-over';DTG.setTransform(1,0,0,1,0,0);DTG.clearRect(0,0,W,H);DTG.setTransform(ta.a,ta.b,ta.c,ta.d,ta.e,ta.f);DTG.drawImage(A,0,0);DTG.setTransform(1,0,0,1,0,0);DTG.globalCompositeOperation='destination-in';DTG.drawImage(DM,0,0,W,H);g.drawImage(DT,0,0)}}
+   else if(s=='dsd'){var a=ease(clamp((t-900)/900,0,1));PR=a;drawI(B,tb);g.globalAlpha=a;drawI(A,ta);g.globalAlpha=1;
+    if(LA&&t>1800){var q=clamp((t-1800)/3200,0,1),top=tp(LA,10,A,ta),bot=tp(LA,152,A,ta),Lc=tp(LA,78,A,ta),Rc=tp(LA,308,A,ta),gold='rgba(216,195,165,.95)';
+     g.lineWidth=3;g.shadowColor='rgba(0,0,0,.7)';g.shadowBlur=6;
+     var m=clamp(q/0.3,0,1);g.strokeStyle='rgba(255,255,255,.9)';g.beginPath();g.moveTo(top[0],top[1]);g.lineTo(top[0]+(bot[0]-top[0])*m,top[1]+(bot[1]-top[1])*m);g.stroke();
+     var k=clamp((q-0.25)/0.45,0,1),W6=[0.6,1,1.6,1.6,1,0.6],tot=6.4,dx=Rc[0]-Lc[0],dy=Rc[1]-Lc[1],yb=Math.min(Lc[1],Rc[1])-90,acc=0,shown=Math.floor(k*7.001);
+     g.strokeStyle=gold;g.fillStyle=gold;g.font='700 34px system-ui,sans-serif';g.textAlign='center';
+     for(var i=0;i<=6;i++){var fx0=Lc[0]+dx*acc/tot,fy0=yb;if(i<=shown){g.beginPath();g.moveTo(fx0,fy0-26);g.lineTo(fx0,fy0+26);g.stroke();g.beginPath();g.moveTo(fx0,fy0);g.lineTo(Lc[0]+dx*Math.min(1,(acc+(W6[i]||0))/tot),fy0);if(i>=6){}g.stroke()}
+      if(i<6&&i<shown){var cx2=Lc[0]+dx*(acc+W6[i]/2)/tot;g.fillText(String(W6[i]),cx2,fy0-40)}acc+=W6[i]||0}
+     var ap=[78,191,80,81,82,13,312,311,310,415,308],n=Math.floor(clamp((q-0.6)/0.4,0,1)*(ap.length-1))+1;
+     if(q>0.6){g.strokeStyle='rgba(255,255,255,.95)';g.setLineDash([10,8]);g.beginPath();for(i=0;i<n;i++){var pq=tp(LA,ap[i],A,ta);i?g.lineTo(pq[0],pq[1]):g.moveTo(pq[0],pq[1])}g.stroke();g.setLineDash([])}
+     g.shadowBlur=0}}
+   else if(s=='curtain'){drawI(A,ta);var w=W/2*(1-p);if(w>1){g.save();g.beginPath();g.rect(0,0,w,H);g.rect(W-w,0,w,H);g.clip();drawI(B,tb);g.restore();if(p>0.02&&p<0.98)
+     [[w,1],[W-w,-1]].forEach(function(e){var gr=g.createLinearGradient(e[0],0,e[0]+e[1]*50,0);gr.addColorStop(0,'rgba(0,0,0,.65)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(Math.min(e[0],e[0]+e[1]*50),0,50,H);g.fillStyle='rgba(216,195,165,.9)';g.fillRect(e[0]-2,0,4,H)})}}
+   else if(s=='slider'){var k=[[0,0],[900,0],[2400,0.55],[3200,0.28],[4400,0.8],[5400,1.06],[99999,1.06]],x=0;for(var i=0;i<k.length-1;i++)if(t>=k[i][0]&&t<k[i+1][0]){x=lerp(k[i][1],k[i+1][1],ease((t-k[i][0])/(k[i+1][0]-k[i][0])));break}
+    PR=x;var hx=W*x;drawI(B,tb);if(hx>0){g.save();g.beginPath();g.rect(0,0,hx,H);g.clip();drawI(A,ta);g.restore()}
+    if(x>0&&x<1.02){g.fillStyle='#fff';g.fillRect(hx-3,0,6,H);g.beginPath();g.arc(hx,H/2,44,0,7);g.fillStyle='rgba(255,255,255,.95)';g.fill();g.fillStyle='#222';g.beginPath();g.moveTo(hx-8,H/2-14);g.lineTo(hx-24,H/2);g.lineTo(hx-8,H/2+14);g.fill();g.beginPath();g.moveTo(hx+8,H/2-14);g.lineTo(hx+24,H/2);g.lineTo(hx+8,H/2+14);g.fill()}}
+   else if(s=='scanner'){var sx=W*1.15*p;drawI(B,tb);g.save();g.beginPath();g.rect(0,0,Math.min(sx,W),H);g.clip();drawI(A,ta);g.restore();
+    if(P&&p<1){var band=380;g.beginPath();for(var i=0;i<conn.length;i++){var a=P[conn[i].start],b2=P[conn[i].end],d=sx-(a[0]+b2[0])/2;if(d<-110||d>band)continue;g.moveTo(a[0],a[1]);g.lineTo(b2[0],b2[1])}g.strokeStyle='rgba(90,255,130,.8)';g.lineWidth=1.6;g.shadowColor='#3f3';g.shadowBlur=8;g.stroke();g.shadowBlur=0}
+    if(p>0&&p<1){var gr=g.createLinearGradient(sx-40,0,sx+40,0);gr.addColorStop(0,'rgba(80,255,120,0)');gr.addColorStop(0.5,'rgba(190,255,200,.95)');gr.addColorStop(1,'rgba(80,255,120,0)');g.fillStyle=gr;g.fillRect(sx-40,0,80,H)}}
+   else if(s=='calendar'){drawI(A,ta);var sy=Math.cos(p*Math.PI/2);if(sy>0.01){var sh=g.createLinearGradient(0,H*sy,0,H*sy+120);sh.addColorStop(0,'rgba(0,0,0,.55)');sh.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=sh;g.fillRect(0,H*sy,W,120);
+     g.setTransform(1,0,0,sy,0,0);g.transform(tb.a,tb.b,tb.c,tb.d,tb.e,tb.f);g.drawImage(B,0,0);g.setTransform(1,0,0,1,0,0);g.fillStyle='rgba(0,0,0,'+(p*0.45)+')';g.fillRect(0,0,W,H*sy);g.fillStyle='rgba(255,255,255,.8)';g.fillRect(0,H*sy-3,W,3)}
+    g.fillStyle='#e6e6ea';g.fillRect(0,0,W,34);g.fillStyle='#777';for(var r=0;r<26;r++){g.beginPath();g.ellipse(24+r*41,17,9,13,0,0,7);g.fill()}}
+   else if(s=='peel'){var nx=0.6,ny=0.8,smax=nx*W+ny*H,d=Math.min(320,Math.max(0,p*(smax+320)*0.7))*(1-Math.pow(p,6)),sv=p*(smax+320),tx=-ny,ty=nx,px=nx*sv,py=ny*sv,L=4000;
+    function poly(o1,o2){g.beginPath();g.moveTo(nx*o1+tx*L,ny*o1+ty*L);g.lineTo(nx*o1-tx*L,ny*o1-ty*L);g.lineTo(nx*o2-tx*L,ny*o2-ty*L);g.lineTo(nx*o2+tx*L,ny*o2+ty*L);g.closePath()}
+    drawI(A,ta);g.save();poly(sv,sv+5000);g.clip();drawI(B,tb);g.restore();
+    if(p>0&&d>2){g.save();poly(sv-d-90,sv-d);var sg=g.createLinearGradient(nx*(sv-d),ny*(sv-d),nx*(sv-d-90),ny*(sv-d-90));sg.addColorStop(0,'rgba(0,0,0,.4)');sg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=sg;g.fill();g.restore();
+     g.save();poly(sv-d,sv);g.clip();g.setTransform(1-2*nx*nx,-2*nx*ny,-2*nx*ny,1-2*ny*ny,2*sv*nx,2*sv*ny);g.transform(tb.a,tb.b,tb.c,tb.d,tb.e,tb.f);g.drawImage(B,0,0);g.setTransform(1,0,0,1,0,0);
+     var fg=g.createLinearGradient(nx*sv,ny*sv,nx*(sv-d),ny*(sv-d));fg.addColorStop(0,'rgba(110,100,125,.55)');fg.addColorStop(0.25,'rgba(235,232,242,.82)');fg.addColorStop(1,'rgba(250,250,252,.9)');g.fillStyle=fg;g.fillRect(0,0,W,H);g.restore()}}}
+  function txt(t,x,y,sz,col,al,wt){g.setTransform(1,0,0,1,0,0);g.font=(wt||'700')+' '+sz+'px system-ui,sans-serif';g.fillStyle=col;g.textAlign=al||'center';g.shadowColor='rgba(0,0,0,.8)';g.shadowBlur=14;g.fillText(t,x,y);g.shadowBlur=0}
+  function frame(t){g.setTransform(1,0,0,1,0,0);g.fillStyle='#000';g.fillRect(0,0,W,H);
+   if(ST!='mesh'){fx(ST,t)}else{setT(g,tb);g.drawImage(B,0,0);
+   var u=clamp((t-900)/3600,0,1),u2=clamp((t-4500)/700,0,1),ry=t<900?0:u<1?top+(bot-top)*ease(u):bot+(H-bot)*ease(u2);
+   if(t>=900){g.save();g.setTransform(1,0,0,1,0,0);g.beginPath();g.rect(0,0,W,ry);g.clip();setT(g,ta);g.drawImage(A,0,0);g.restore()}
+   if(P&&t>=900&&u<1){g.setTransform(1,0,0,1,0,0);var band=170;for(var k=0;k<3;k++){g.beginPath();var lo=k/3,hi=(k+1)/3;
+     for(var i=0;i<conn.length;i++){var p=P[conn[i].start],q=P[conn[i].end],d=Math.abs((p[1]+q[1])/2-ry);if(d>=band)continue;var a=1-d/band;if(a<lo||a>=hi+0.001)continue;g.moveTo(p[0],p[1]);g.lineTo(q[0],q[1])}
+     g.strokeStyle='rgba(180,225,255,'+(0.25+0.3*(k+1))+')';g.lineWidth=1.3;g.stroke()}}
+   if(t>=900&&u<1){g.setTransform(1,0,0,1,0,0);var gr=g.createLinearGradient(0,ry-40,0,ry+40);gr.addColorStop(0,'rgba(120,200,255,0)');gr.addColorStop(0.5,'rgba(200,235,255,.95)');gr.addColorStop(1,'rgba(120,200,255,0)');g.fillStyle=gr;g.fillRect(0,ry-40,W,80)}}
+   g.setTransform(1,0,0,1,0,0);
+   txt('SMILE DESIGN',W/2,150,64,'#fff');txt(label(),W/2,222,36,'#d8c3a5','center','500');
+   if(ST!='side'){var after=ST!='mesh'?PR>0.5:(t>=900&&(u>=1||ry>H*0.6));txt(after?'AFTER':'BEFORE',W/2,H-330,66,'#fff');}
+   txt(CL,W/2,H-240,46,'#fff');txt(PH+(CT?'  ·  '+CT:''),W/2,H-180,34,'#d8c3a5','center','500');
+   txt($('kind').value=='real'?'Results vary from person to person.':'Computer simulation for illustration. Results vary.',W/2,H-110,28,'rgba(255,255,255,.7)','center','400')}
+  if(window.__reelDebug){window.__reelShots=[0,2000,3000,4300,6500].map(function(t){frame(t);return cv.toDataURL('image/jpeg',0.6)});b.disabled=false;return}
+  var st=cv.captureStream(30),rec=new MediaRecorder(st,{mimeType:mt,videoBitsPerSecond:6000000}),ch=[];rec.ondataavailable=function(e){if(e.data&&e.data.size)ch.push(e.data)};
+  rec.onstop=function(){b.disabled=false;msg.textContent='Reel ready.';showVideo(new Blob(ch,{type:mt.split(';')[0]}),'smile-reel-'+ST,out,tips()+(LB?'':' (No face found in the before photo, so a plain wipe was used.)')+(BKFAIL?' (The background could not be removed on this phone, so the original background is kept.)':''))};
+  msg.textContent='Recording the reel... 0%';frame(0);rec.start(250);var t0=performance.now();
+  (function loop(){var t=performance.now()-t0;frame(Math.min(t,DUR));msg.textContent='Recording the reel... '+Math.round(Math.min(1,t/DUR)*100)+'%';if(t<DUR+200)requestAnimationFrame(loop);else rec.stop()})()})})}).catch(function(e){b.disabled=false;msg.className='muted err';msg.textContent='Could not make the reel ('+((e&&e.message)||e)+').'})}
+
+/* ---------- 2. AI smiling clip (Veo image-to-video, staff only, costs money) ---------- */
+function post(o){return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})}
+function aiClip(){var msg=$('am'),out=$('ao'),b=$('ab'),ph=$('ph').value.replace(/\D/g,'');
+ if(!$('cons').checked){msg.className='muted err';msg.textContent='Please tick the consent box.';return}
+ var f=FILES.fa||FILES.fb;if(!f){msg.className='muted err';msg.textContent='Choose the photo to animate (the after photo is used if both are chosen).';return}
+ if(ph.length<10){msg.className='muted err';msg.textContent='Enter the staff mobile number.';return}
+ if(!confirm('This makes one 8-second AI clip and costs about Rs 40-60. Continue?'))return;
+ b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Preparing the photo...';
+ loadFile(f).then(function(im){var c=document.createElement('canvas');c.width=720;c.height=1280;var g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,720,1280);var s=Math.min(720/im.naturalWidth,1280/im.naturalHeight)*($('fit').value=='face'?1:1);var w=im.naturalWidth*s,h=im.naturalHeight*s;g.drawImage(im,(720-w)/2,(1280-h)/2,w,h);return c.toDataURL('image/jpeg',0.9)})
+ .then(function(data){msg.textContent='Sending to the AI video model...';return post({mode:'start',phone:ph,image:data,style:$('sty').value})})
+ .then(function(x){if(!x.ok||!x.j.op)throw new Error((x.j&&x.j.error)||'could not start');var op=x.j.op,n=0;msg.textContent='The AI is making your clip. This takes 1 to 4 minutes. Keep this page open.';
+  return new Promise(function(res,rej){(function poll(){setTimeout(function(){n++;post({mode:'status',phone:ph,op:op}).then(function(y){if(!y.ok){rej(new Error((y.j&&y.j.error)||'status failed'));return}if(y.j.done){y.j.error?rej(new Error(y.j.error)):res(y.j.url);return}if(n>60){rej(new Error('timed out'));return}msg.textContent='Still making the clip... '+(n*6)+' s';poll()}).catch(rej)},6000)})()})})
+ .then(function(url){msg.textContent='Downloading the clip...';return fetch(url).then(function(r){return r.blob()})})
+ .then(function(blob){b.disabled=false;msg.textContent='AI clip ready.';showVideo(blob,'ai-clip',out,'AI-generated video. Post it with an AI label, and only with the patient’s written consent. Google adds an invisible watermark to Veo videos.')})
+ .catch(function(e){b.disabled=false;msg.className='muted err';msg.textContent='Could not make the clip: '+((e&&e.message)||e)})}
+
+var Q={img:null,rot:0};
+function qdraw(){var im=Q.img,c=$('qc');if(!im)return;var r=parseFloat($('qa').value),sw=Q.rot%2,iw=im.naturalWidth,ih=im.naturalHeight,rw=sw?ih:iw,rh=sw?iw:ih,oh,ow;
+ if(r>0){oh=1600;ow=Math.round(oh*r)}else{var k=1600/Math.max(rw,rh);ow=Math.round(rw*k);oh=Math.round(rh*k)}
+ c.width=ow;c.height=oh;var g=c.getContext('2d'),a=parseFloat($('qr').value)*Math.PI/180,z=parseFloat($('qz').value),s=Math.max(ow/rw,oh/rh)*z*(1+Math.abs(a)*2);
+ g.fillStyle='#000';g.fillRect(0,0,ow,oh);g.save();g.translate(ow/2+parseFloat($('qx').value)*ow/200,oh/2+parseFloat($('qy').value)*oh/200);g.rotate(Q.rot*Math.PI/2+a);g.scale(s,s);g.drawImage(im,-iw/2,-ih/2);g.restore();
+ if($('qw').checked){var fs=Math.round(ow*0.04);g.textAlign='right';g.shadowColor='rgba(0,0,0,.7)';g.shadowBlur=8;g.fillStyle='rgba(255,255,255,.8)';g.font='700 '+fs+'px system-ui,sans-serif';g.fillText(CL,ow-fs*0.8,oh-fs*1.9);g.font='500 '+Math.round(fs*0.8)+'px system-ui,sans-serif';g.fillText(PH,ow-fs*0.8,oh-fs*0.7);g.shadowBlur=0}}
+$('qf').addEventListener('change',function(){var f=this.files[0];if(!f)return;$('qm').className='muted';$('qm').textContent='Reading the photo...';
+ f.arrayBuffer().then(function(buf){return loadFile(new Blob([buf],{type:f.type||'image/jpeg'}))}).then(function(im){Q.img=im;Q.rot=0;$('qm').textContent='';qdraw()}).catch(function(){$('qm').className='muted err';$('qm').textContent='Could not read this photo. Please choose it again.'})});
+['qa','qz','qr','qx','qy','qw'].forEach(function(i){$(i).addEventListener('input',qdraw)});
+$('ql').addEventListener('click',function(){Q.rot=(Q.rot+3)%4;qdraw()});$('qrt').addEventListener('click',function(){Q.rot=(Q.rot+1)%4;qdraw()});
+$('qd').addEventListener('click',function(){if(!Q.img){$('qm').className='muted err';$('qm').textContent='Choose a photo first.';return}$('qc').toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='smile-photo.jpg';document.body.appendChild(a);a.click();a.remove()},'image/jpeg',0.93)});
+$('mb').addEventListener('click',meshReel);$('ab').addEventListener('click',aiClip);
+var FILES={fb:null,fa:null};
+/* copy the picked photo into memory right away: on Android the picker's file can become unreadable later */
+function prev(id,pid){$(id).addEventListener('change',function(){var f=this.files[0];FILES[id]=null;$(pid).innerHTML='';if(!f)return;
+ $(pid).innerHTML='<span class="muted">Reading the photo...</span>';
+ f.arrayBuffer().then(function(buf){var bl=new Blob([buf],{type:f.type||'image/jpeg'});FILES[id]=bl;$(pid).innerHTML='<img src="'+URL.createObjectURL(bl)+'" style="max-width:140px;max-height:180px;border-radius:8px">'}).catch(function(){$(pid).innerHTML='<span class="muted err">Could not read this photo. Please choose it again, or pick a copy from Gallery or Downloads.</span>'})})}
+prev('fb','pb');prev('fa','pa');
+})();
+</script></body></html>
