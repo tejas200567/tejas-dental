@@ -281,7 +281,7 @@ if($('eb')){
 if($('sb6')){
  var STO=window.STO={},SNAME={implant:'Dental implant (single tooth)',allon4_lower:'All-on-4 lower jaw',allon4_upper:'All-on-4 upper jaw',overdenture:'Implant overdenture',root_canal:'Root canal treatment'};
  fetch('https://arxhbdyciylznmlamvri.supabase.co/rest/v1/edu_story?select=story,step,url&order=story,step',{headers:{apikey:'sb_publishable_adBYStaYs9aPDs33ozybdA_q3SvKexB'}}).then(function(r){return r.json()}).then(function(j){
-  j.forEach(function(r){(STO[r.story]=STO[r.story]||[]).push(r.url)});var h='';Object.keys(SNAME).forEach(function(k){var n=(STO[k]||[]).length;h+='<option value="'+k+'"'+(n?'':' disabled')+'>'+SNAME[k]+(n?' ('+n+' steps)':' (being made)')+'</option>'});$('ss6').innerHTML=h}).catch(function(){$('sm6').textContent='Could not load the stories.'});
+  j.forEach(function(r){(STO[r.story]=STO[r.story]||[]).push(r.url)});var NEED={implant:4,allon4_lower:5,allon4_upper:5,overdenture:4,root_canal:5},h='';Object.keys(SNAME).forEach(function(k){var n=(STO[k]||[]).length,ok=n>=NEED[k];h+='<option value="'+k+'"'+(ok?'':' disabled')+'>'+SNAME[k]+(ok?'':' (being made: '+n+' of '+NEED[k]+')')+'</option>'});$('ss6').innerHTML=h}).catch(function(){$('sm6').textContent='Could not load the stories.'});
  $('sb6').addEventListener('click',function(){var k=$('ss6').value,urls=STO[k]||[],msg=$('sm6'),out=$('so6'),b=$('sb6');if(!urls.length)return;
   var mt=mime();if(!mt||!HTMLCanvasElement.prototype.captureStream){msg.className='muted err';msg.textContent='Video recording needs Chrome.';return}
   b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Loading the steps...';
