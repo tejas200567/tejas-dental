@@ -1051,6 +1051,8 @@ function shrink(file){return new Promise(function(res,rej){var r=new FileReader(
 if(inp)inp.addEventListener('change',function(){prev.innerHTML='';if(inp.files[0]){prev.innerHTML='<img src="'+URL.createObjectURL(inp.files[0])+'" alt="Selected smile photo">'}});
 function loadFile(file){return new Promise(function(res,rej){var u=URL.createObjectURL(file),im=new Image();im.onload=function(){res(im)};im.onerror=rej;im.src=u})}
 function toURL(im,sx,sy,sw,sh,maxW,q){var k=Math.min(maxW/sw,3);var c=document.createElement('canvas');c.width=Math.round(sw*k);c.height=Math.round(sh*k);var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(im,sx,sy,sw,sh,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q||0.88)}
+var RLBL={red70:'Natural (RED 70%)',red75:'Soft (RED 75%)',red80:'Wide (RED 80%)',golden:'Golden proportion (62%)'};
+function aiOpts(){return{shade:S.shade,shade_rgb:(SHADE_RGB[S.shade]||[]).join(','),shape:FORMS[S.form].n,ratio:RLBL[S.ratio]||'',wh:String(Math.round(S.wh*100)),arch:S.arch}}
 function post(body){return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})}
 /* ---------- guided camera (MediaPipe face landmarks) ---------- */
 var CAM={stream:null,lm:null,raf:0,hold:0,lastT:0,lastNose:null,facing:'user',captured:null,ok:{},res:null,loading:false};
@@ -1178,7 +1180,7 @@ else{var full;p0=loadFile(inp.files[0]).then(function(im){full=im;return imgLand
  if(!beforeURL){var k=Math.min(1,1280/Math.max(W,H));beforeURL=toURL(full,0,0,W,H,Math.round(W*k),0.88)}})}
 p0.then(function(){
  btn.textContent='Designing your smile...';msg.textContent='Step 2 of 2: measuring your teeth. This takes 15 to 40 seconds.';
- return post({name:f.name.value,phone:f.phone.value,consent:f.consent.checked,website:f.website.value,image:beforeURL,facial_midline_x:fm})
+ return post({name:f.name.value,phone:f.phone.value,consent:f.consent.checked,website:f.website.value,image:beforeURL,facial_midline_x:fm,shade:aiOpts().shade,shade_rgb:aiOpts().shade_rgb,shape:aiOpts().shape,ratio:aiOpts().ratio,wh:aiOpts().wh,arch:aiOpts().arch})
 }).then(function(x){
 btn.disabled=false;btn.textContent='Design my smile';
 if(!x.ok||!x.j.analysis){msg.className='muted err';msg.textContent=(x.j&&x.j.error)||'Something went wrong. Please try again.';return}
@@ -1680,6 +1682,11 @@ var CAP={dsd:'DSD lines: the classic smile-design template on your photo. Blue: 
 function paint(){var cmp=document.getElementById('cmp');if(!cmp)return;var u=render(S.view);
  document.getElementById('cap').textContent=CAP[S.view]||'';document.getElementById('bt').style.display=S.view=='braces'?'flex':'none';
  var bx=document.getElementById('bx');bx.innerHTML='';
+ if(S.view=='ai'){bx.innerHTML='<div class="note"><b>The AI photo uses the choices below when it is made.</b> After changing shade, tooth shape, proportion, width : length or upper/lower teeth, tap the button to make a new AI photo (about 30 seconds).<br><button type="button" class="btn" id="rg" style="margin-top:8px">Redo AI photo with my choices</button><p class="muted" id="rgm"></p></div>';
+  document.getElementById('rg').addEventListener('click',function(){var b=this,m=document.getElementById('rgm');b.disabled=true;m.className='muted';m.textContent='Making your AI photo with shade '+S.shade+'... about 30 seconds.';
+   post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},aiOpts())).then(function(x){
+    if(!x.ok||!x.j.after){b.disabled=false;m.className='muted err';m.textContent=(x.j&&x.j.error)||'Could not make the AI photo. Please try again.';return}
+    aiBlend(S.a,x.j.after,function(u){S.after=u;S.cache={};paint()})}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='Could not make the AI photo ('+((e&&e.message)||e)+').'})})}
  if(S.view=='braces'){var D=design(),cur=S.brace;bx.innerHTML='<div class="note"><b>'+BR[cur].n+':</b> '+BR[cur].t+'</div><h3>All options on your smile</h3><div class="bg" id="bg"></div><p><a href="braces-comparison.html">Compare braces and aligners in detail</a></p>';
   var grid=document.getElementById('bg'),fc=S.face,cl0=S.clin;S.face=false;S.clin=false;Object.keys(BR).forEach(function(k){S.brace=k;var uu=render('braces');var fig=document.createElement('figure');fig.innerHTML='<img alt="'+BR[k].n+' preview"><figcaption>'+BR[k].n+'</figcaption>';grid.appendChild(fig);cropURL(uu,D,function(cu){fig.querySelector('img').src=cu});fig.addEventListener('click',function(){S.brace=k;[].forEach.call(document.getElementById('bt').children,function(x){x.className=x.getAttribute('data-b')==k?'on':''});paint()})});S.face=fc;S.clin=cl0;S.brace=cur;u=render('braces')}
  if(S.view=='analysis'){cmp.innerHTML='<div class="ba"><img src="'+u+'" alt="'+esc(S.view)+' view"></div>';return}
@@ -1739,6 +1746,123 @@ def dsd_page():
                       body, faqs)
 
 
+REEL_JS = r'''
+(function(){
+var API='__API__',MPV='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14',MODEL='https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+var CL='__CLINIC__',PH='__PHONE__';
+function $(i){return document.getElementById(i)}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function loadFile(f){return new Promise(function(res,rej){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){res(im)};im.onerror=function(){rej(new Error('photo not readable'))};im.src=u})}
+var LM=null;
+function lmInit(){if(LM)return Promise.resolve(LM);return import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'CPU'},runningMode:'IMAGE',numFaces:1})}).then(function(l){LM={l:l,T:m.FaceLandmarker.FACE_LANDMARKS_TESSELATION||[]};return LM})})}
+function detect(im){if(window.__reelLM)return Promise.resolve(window.__reelLM(im));return lmInit().then(function(M){var r=M.l.detect(im);return r&&r.faceLandmarks&&r.faceLandmarks.length?r.faceLandmarks[0]:null}).catch(function(){return null})}
+var W=1080,H=1920;
+/* map image px -> canvas px so the face is centred and ~60% of the width */
+function layBefore(im,L){var iw=im.naturalWidth,ih=im.naturalHeight,s,ox,oy;
+ if(L){var fw=Math.abs(L[454].x-L[234].x)*iw,cx=(L[454].x+L[234].x)/2*iw,cy=(L[10].y+L[152].y)/2*ih;s=clamp(650/fw,0.1,10);ox=W/2-cx*s;oy=860-cy*s}
+ else{s=Math.max(W/iw,H/ih);ox=(W-iw*s)/2;oy=(H-ih*s)/2}
+ return{a:s,b:0,c:0,d:s,e:ox,f:oy}}
+function pt(L,i,im){return[L[i].x*im.naturalWidth,L[i].y*im.naturalHeight]}
+function mid(p,q){return[(p[0]+q[0])/2,(p[1]+q[1])/2]}
+/* similarity transform that puts the after photo's eyes+mouth on the before photo's */
+function layAfter(imA,LA,tb,LB,imB){if(!LA||!LB)return layBefore(imA,LA);
+ function C(L,im,i,j){return mid(pt(L,i,im),pt(L,j,im))}
+ var a1=C(LA,imA,33,263),a2=C(LA,imA,61,291),b1=C(LB,imB,33,263),b2=C(LB,imB,61,291);
+ function T(p){return[tb.a*p[0]+tb.e,tb.d*p[1]+tb.f]}
+ var B1=T(b1),B2=T(b2),da=[a2[0]-a1[0],a2[1]-a1[1]],db=[B2[0]-B1[0],B2[1]-B1[1]],s=Math.hypot(db[0],db[1])/Math.hypot(da[0],da[1]),r=Math.atan2(db[1],db[0])-Math.atan2(da[1],da[0]),co=Math.cos(r)*s,si=Math.sin(r)*s;
+ return{a:co,b:si,c:-si,d:co,e:B1[0]-(co*a1[0]-si*a1[1]),f:B1[1]-(si*a1[0]+co*a1[1])}}
+function setT(g,t){g.setTransform(t.a,t.b,t.c,t.d,t.e,t.f)}
+function mime(){var c=['video/mp4;codecs=avc1.42E01E','video/mp4','video/webm;codecs=vp9','video/webm'];for(var i=0;i<c.length;i++)if(window.MediaRecorder&&MediaRecorder.isTypeSupported(c[i]))return c[i];return ''}
+function ease(x){return x<0.5?2*x*x:1-Math.pow(-2*x+2,2)/2}
+function showVideo(blob,name,box,note){var url=URL.createObjectURL(blob),ext=blob.type.indexOf('mp4')>=0?'mp4':'webm';
+ box.innerHTML='<video src="'+url+'" controls playsinline loop autoplay muted style="width:100%;max-width:320px;display:block;margin:8px 0"></video><div class="cta"><a class="btn" href="'+url+'" download="'+name+'.'+ext+'">Download</a> <button type="button" class="btn o2" id="rsh_'+name+'">Share</button></div><p class="muted">'+note+'</p>';
+ var f=new File([blob],name+'.'+ext,{type:blob.type}),sh=$('rsh_'+name);if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.style.display='none';
+ sh.addEventListener('click',function(){navigator.share({files:[f],title:'Smile reel'}).catch(function(){})})}
+function label(){var k=$('kind').value;return k=='real'?'Real treatment result':'AI smile simulation'}
+function tips(){return $('kind').value=='real'?'Post a patient’s face only with their written consent.':'AI-generated simulation, not a real result. Say so in the caption (#AIgenerated).'}
+
+/* ---------- 1. mesh-scan reveal reel (runs in the browser, free) ---------- */
+function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
+ if(!$('cons').checked){msg.className='muted err';msg.textContent='Please tick the consent box.';return}
+ var fb=$('fb').files[0],fa=$('fa').files[0];if(!fb||!fa){msg.className='muted err';msg.textContent='Please choose both the before and the after photo.';return}
+ var mt=mime();if(!mt||!HTMLCanvasElement.prototype.captureStream){msg.className='muted err';msg.textContent='Video recording needs Chrome.';return}
+ b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Reading the photos and finding the face...';
+ Promise.all([loadFile(fb),loadFile(fa)]).then(function(im){var B=im[0],A=im[1];return Promise.all([detect(B),detect(A)]).then(function(L){
+  var LB=L[0],LA=L[1],tb=layBefore(B,LB),ta=layAfter(A,LA,tb,LB,B);
+  var xs=[],ys=[],P=null;
+  if(LB){P=LB.map(function(q){return[q.x*B.naturalWidth*tb.a+tb.e,q.y*B.naturalHeight*tb.d+tb.f]});P.forEach(function(q){ys.push(q[1])})}
+  var top=ys.length?Math.min.apply(0,ys)-30:300,bot=ys.length?Math.max.apply(0,ys)+50:1500,conn=window.__reelConn||(LM&&LM.T)||[];
+  var cv=document.createElement('canvas');cv.width=W;cv.height=H;var g=cv.getContext('2d'),DUR=7600;
+  function txt(t,x,y,sz,col,al,wt){g.setTransform(1,0,0,1,0,0);g.font=(wt||'700')+' '+sz+'px system-ui,sans-serif';g.fillStyle=col;g.textAlign=al||'center';g.shadowColor='rgba(0,0,0,.8)';g.shadowBlur=14;g.fillText(t,x,y);g.shadowBlur=0}
+  function frame(t){g.setTransform(1,0,0,1,0,0);g.fillStyle='#000';g.fillRect(0,0,W,H);
+   setT(g,tb);g.drawImage(B,0,0);
+   var u=clamp((t-900)/3600,0,1),u2=clamp((t-4500)/700,0,1),ry=t<900?0:u<1?top+(bot-top)*ease(u):bot+(H-bot)*ease(u2);
+   if(t>=900){g.save();g.setTransform(1,0,0,1,0,0);g.beginPath();g.rect(0,0,W,ry);g.clip();setT(g,ta);g.drawImage(A,0,0);g.restore()}
+   if(P&&t>=900&&u<1){g.setTransform(1,0,0,1,0,0);var band=170;for(var k=0;k<3;k++){g.beginPath();var lo=k/3,hi=(k+1)/3;
+     for(var i=0;i<conn.length;i++){var p=P[conn[i].start],q=P[conn[i].end],d=Math.abs((p[1]+q[1])/2-ry);if(d>=band)continue;var a=1-d/band;if(a<lo||a>=hi+0.001)continue;g.moveTo(p[0],p[1]);g.lineTo(q[0],q[1])}
+     g.strokeStyle='rgba(180,225,255,'+(0.25+0.3*(k+1))+')';g.lineWidth=1.3;g.stroke()}}
+   if(t>=900&&u<1){g.setTransform(1,0,0,1,0,0);var gr=g.createLinearGradient(0,ry-40,0,ry+40);gr.addColorStop(0,'rgba(120,200,255,0)');gr.addColorStop(0.5,'rgba(200,235,255,.95)');gr.addColorStop(1,'rgba(120,200,255,0)');g.fillStyle=gr;g.fillRect(0,ry-40,W,80)}
+   g.setTransform(1,0,0,1,0,0);
+   txt('SMILE DESIGN',W/2,150,64,'#fff');txt(label(),W/2,222,36,'#d8c3a5','center','500');
+   var after=t>=900&&(u>=1||ry>H*0.6);txt(after?'AFTER':'BEFORE',W/2,H-330,66,'#fff');
+   txt(CL,W/2,H-240,46,'#fff');txt(PH+'  ·  Jogeshwari East, Mumbai',W/2,H-180,34,'#d8c3a5','center','500');
+   txt($('kind').value=='real'?'Results vary from person to person.':'Computer simulation for illustration. Results vary.',W/2,H-110,28,'rgba(255,255,255,.7)','center','400')}
+  if(window.__reelDebug){window.__reelShots=[0,2000,3000,4300,6500].map(function(t){frame(t);return cv.toDataURL('image/jpeg',0.6)});b.disabled=false;return}
+  var st=cv.captureStream(30),rec=new MediaRecorder(st,{mimeType:mt,videoBitsPerSecond:6000000}),ch=[];rec.ondataavailable=function(e){if(e.data&&e.data.size)ch.push(e.data)};
+  rec.onstop=function(){b.disabled=false;msg.textContent='Reel ready.';showVideo(new Blob(ch,{type:mt.split(';')[0]}),'mesh-reel',out,tips()+(LB?'':' (No face found in the before photo, so a plain wipe was used.)'))};
+  msg.textContent='Recording the reel... 0%';frame(0);rec.start(250);var t0=performance.now();
+  (function loop(){var t=performance.now()-t0;frame(Math.min(t,DUR));msg.textContent='Recording the reel... '+Math.round(Math.min(1,t/DUR)*100)+'%';if(t<DUR+200)requestAnimationFrame(loop);else rec.stop()})()})}).catch(function(e){b.disabled=false;msg.className='muted err';msg.textContent='Could not make the reel ('+((e&&e.message)||e)+').'})}
+
+/* ---------- 2. AI smiling clip (Veo image-to-video, staff only, costs money) ---------- */
+function post(o){return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})}
+function aiClip(){var msg=$('am'),out=$('ao'),b=$('ab'),ph=$('ph').value.replace(/\D/g,'');
+ if(!$('cons').checked){msg.className='muted err';msg.textContent='Please tick the consent box.';return}
+ var f=$('fa').files[0]||$('fb').files[0];if(!f){msg.className='muted err';msg.textContent='Choose the photo to animate (the after photo is used if both are chosen).';return}
+ if(ph.length<10){msg.className='muted err';msg.textContent='Enter the staff mobile number.';return}
+ if(!confirm('This makes one 8-second AI clip and costs about Rs 40-60. Continue?'))return;
+ b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Preparing the photo...';
+ loadFile(f).then(function(im){var c=document.createElement('canvas');c.width=720;c.height=1280;var g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,720,1280);var s=Math.min(720/im.naturalWidth,1280/im.naturalHeight)*($('fit').value=='face'?1:1);var w=im.naturalWidth*s,h=im.naturalHeight*s;g.drawImage(im,(720-w)/2,(1280-h)/2,w,h);return c.toDataURL('image/jpeg',0.9)})
+ .then(function(data){msg.textContent='Sending to the AI video model...';return post({mode:'start',phone:ph,image:data,style:$('sty').value})})
+ .then(function(x){if(!x.ok||!x.j.op)throw new Error((x.j&&x.j.error)||'could not start');var op=x.j.op,n=0;msg.textContent='The AI is making your clip. This takes 1 to 4 minutes. Keep this page open.';
+  return new Promise(function(res,rej){(function poll(){setTimeout(function(){n++;post({mode:'status',phone:ph,op:op}).then(function(y){if(!y.ok){rej(new Error((y.j&&y.j.error)||'status failed'));return}if(y.j.done){y.j.error?rej(new Error(y.j.error)):res(y.j.url);return}if(n>60){rej(new Error('timed out'));return}msg.textContent='Still making the clip... '+(n*6)+' s';poll()}).catch(rej)},6000)})()})})
+ .then(function(url){msg.textContent='Downloading the clip...';return fetch(url).then(function(r){return r.blob()})})
+ .then(function(blob){b.disabled=false;msg.textContent='AI clip ready.';showVideo(blob,'ai-clip',out,'AI-generated video. Post it with an AI label, and only with the patient’s written consent. Google adds an invisible watermark to Veo videos.')})
+ .catch(function(e){b.disabled=false;msg.className='muted err';msg.textContent='Could not make the clip: '+((e&&e.message)||e)})}
+
+$('mb').addEventListener('click',meshReel);$('ab').addEventListener('click',aiClip);
+function prev(id,pid){$(id).addEventListener('change',function(){var f=this.files[0];$(pid).innerHTML=f?'<img src="'+URL.createObjectURL(f)+'" style="max-width:140px;max-height:180px;border-radius:8px">':''})}
+prev('fb','pb');prev('fa','pa');
+})();
+'''
+
+
+def reel_page():
+    js = REEL_JS.replace("__API__", "https://arxhbdyciylznmlamvri.supabase.co/functions/v1/reel-ai").replace("__CLINIC__", CLINIC.replace('"', "").replace("'", "\\'")).replace("__PHONE__", PHONE)
+    body = (
+        '<h2>Reel studio (clinic staff)</h2>'
+        '<p>Insert the patient photos and make a reel for Instagram, WhatsApp or Google. This page is not linked from the website.</p>'
+        '<div class="note"><b>Before posting:</b> use a patient’s face only with their written consent. Label AI-generated content as AI, and do not present a simulation as a real treatment result.</div>'
+        '<form class="scf" onsubmit="return false">'
+        '<label>Before photo<input id="fb" type="file" accept="image/*"></label><div id="pb" class="prev one"></div>'
+        '<label>After photo (real result or AI simulation)<input id="fa" type="file" accept="image/*"></label><div id="pa" class="prev one"></div>'
+        '<label>The after photo is<select id="kind"><option value="ai">An AI simulation</option><option value="real">A real treatment result</option></select></label>'
+        '<label class="ck"><input type="checkbox" id="cons"> The patient has given written consent to use these photos for a reel, and I will label AI content as AI.</label>'
+        '<h3>1. Mesh-scan reveal reel (free, made on this device)</h3>'
+        '<p class="muted">A 3D face mesh scans down the face and reveals the new smile. 8 seconds, 9:16. Needs both photos, front-facing, similar distance.</p>'
+        '<button type="button" class="btn" id="mb">Make mesh-scan reel</button><p id="mm" class="muted" role="status"></p><div id="mo"></div>'
+        '<h3>2. AI smiling clip (costs about ₹40 to ₹60 each)</h3>'
+        '<p class="muted">Animates the photo (the after photo, or the before photo if that is the only one) into a short video. Clinic staff numbers only. Limited to 10 clips a day.</p>'
+        '<label>Staff mobile number<input id="ph" inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit staff number"></label>'
+        '<label>Movement<select id="sty"><option value="smile">Natural smile</option><option value="turn">Slow head turn to the side, smiling</option></select></label>'
+        '<input type="hidden" id="fit" value="fit">'
+        '<button type="button" class="btn o2" id="ab">Make AI clip</button><p id="am" class="muted" role="status"></p><div id="ao"></div>'
+        '</form>'
+        f'<script>{js}</script>')
+    h = guide_page("reel-studio", "Reel studio", "Reel studio", "Staff tool", "Staff tool for making patient reels.", body, None)
+    return h.replace("<head>", '<head>\n<meta name="robots" content="noindex,nofollow">', 1)
+
+
+
 GUIDES = [
     ("smile-design", "AI digital smile design", "See a simulated before and after of your smile, with ideal tooth proportions.", dsd_page),
     ("smile-check", "Free AI smile check", "Upload photos of your teeth for a tentative AI overview.", smile_page),
@@ -1786,6 +1910,7 @@ for p in PAGES:
 
 for slug, _n, _d, fn in GUIDES:
     (OUT / f"{slug}.html").write_text(fn(), encoding="utf-8")
+(OUT / "reel-studio.html").write_text(reel_page(), encoding="utf-8")
 
 urls = [f"{BASE}/"] + [f'{BASE}/{p["slug"]}.html' for p in PAGES] + [f'{BASE}/{g[0]}.html' for g in GUIDES]
 (OUT / "sitemap.xml").write_text(
