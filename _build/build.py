@@ -1274,9 +1274,9 @@ function shadeMatch(g,D){var tc=SHADES[S.shade].c,Lc=(tc[0]*0.3+tc[1]*0.59+tc[2]
  var md=mg.getImageData(0,0,S.W,S.H).data,im=g.getImageData(0,0,S.W,S.H),d=im.data,W=new Float32Array(S.W*S.H),sL=0,sw=0;
  for(var i=0,j=0;i<d.length;i+=4,j++){var mk=md[i+3]/255;if(mk<0.05)continue;var r=d[i],gg=d[i+1],b=d[i+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),L=r*0.3+gg*0.59+b*0.11,sat=mx?(mx-mn)/mx:0,red=(r-gg)/255;
   var w=mk*clamp((0.16-red)/0.08,0,1)*clamp((L/255-0.32)/0.15,0,1)*clamp((0.5-sat)/0.15,0,1);W[j]=w;if(w>0.5){sL+=L*w;sw+=w}}
- if(sw<20)return;var Lm=sL/sw,k=Lc/Lm;
- for(var i=0,j=0;i<d.length;i+=4,j++){var w=W[j];if(w<=0)continue;var L=d[i]*0.3+d[i+1]*0.59+d[i+2]*0.11,f=clamp(L*k/Lc,0.5,1.2),a=w*0.78;
-  d[i]=clamp(d[i]*(1-a)+tc[0]*f*a,0,255);d[i+1]=clamp(d[i+1]*(1-a)+tc[1]*f*a,0,255);d[i+2]=clamp(d[i+2]*(1-a)+tc[2]*f*a,0,255)}
+ if(sw<20)return;var cr=tc[0]/Lc,cg=tc[1]/Lc,cb=tc[2]/Lc;
+ for(var i=0,j=0;i<d.length;i+=4,j++){var w=W[j];if(w<=0)continue;var L=d[i]*0.3+d[i+1]*0.59+d[i+2]*0.11,a=w*0.7;
+  d[i]=clamp(d[i]*(1-a)+L*cr*a,0,255);d[i+1]=clamp(d[i+1]*(1-a)+L*cg*a,0,255);d[i+2]=clamp(d[i+2]*(1-a)+L*cb*a,0,255)}
  g.putImageData(im,0,0)}
 function mockup(c,g,D){var sh=SHADES[S.shade],st=sampleTooth(g,D),base=sh.c,mm=D.mm;
  // tone-match: brighten the patient's own (already whitened) tooth colour so the new teeth sit in the photo's light
