@@ -1202,17 +1202,17 @@ function design(){
   if(k)return side<0?mid-k.x0:k.x1-mid;
   if(l)return (side<0?mid-l.x0:l.x1-mid)*(1+r+r*r)/(1+r);
   return cwNow*(1+r+r*r)}
- var hR=span(-1),hL=span(1),half=avg([hR,hL]);
+ var hR=span(-1),hL=span(1),half=Math.max(hR,hL);
  // symmetric design: width set from the mouth corners (landmarks), cross-checked with the measured canines
  if(a._comm){var c1=a._comm[0][1]*S.W/1000,c2=a._comm[1][1]*S.W/1000,hcm=Math.abs(c2-c1)/2*0.8;half=clamp(half,hcm*0.88,hcm*1.12);hR=hL=half}
- var wc=clamp(half/(1+r+r*r),0.88*cwNow,1.15*cwNow),wl=wc*r,wk=wl*r,wp=wk*r*1.05;
+ var wc=clamp(half/(1+r+r*r),0.92*cwNow,1.05*cwNow),wl=wc*r,wk=wl*r,wp=wk*r*1.05;
  var incC=avg(cen.map(function(t){return t.y1})),gumNow=avg(cen.map(function(t){return t.y0}));
  var lipC=a.lower_lip_y_at_center!=null?a.lower_lip_y_at_center*S.H/1000:null,lipK=a.lower_lip_y_at_canines!=null?a.lower_lip_y_at_canines*S.H/1000:null,lowF=null;
  if(a._lower){var LP=a._lower.map(function(q){return[q[1]*S.W/1000,q[0]*S.H/1000]}).sort(function(p,q){return p[0]-q[0]});
   lowF=function(x){if(x<=LP[0][0])return LP[0][1];for(var i=1;i<LP.length;i++)if(x<=LP[i][0]){var u=(x-LP[i-1][0])/((LP[i][0]-LP[i-1][0])||1);return LP[i-1][1]+u*(LP[i][1]-LP[i-1][1])}return LP[LP.length-1][1]};
   lipC=lowF(mid);lipK=avg([lowF(mid-half*0.9),lowF(mid+half*0.9)])}
  var rise=(lipC!=null&&lipK!=null)?clamp((lipC-lipK)*0.92,0.6*mm,6*mm):1.2*mm;
- if(lipC!=null){var gap=clamp(lipC-incC,0.4*mm,2*mm);incC=clamp(lipC-gap,incC-1*mm,incC+1.5*mm)}
+ if(lipC!=null){var gap=clamp(lipC-incC,0.4*mm,2*mm),hasLow=Object.keys(teethPx(true)).length>=2;incC=clamp(lipC-gap,incC-0.8*mm,incC+(hasLow?0.2:0.5)*mm)}
  // smile arc: biting edges run parallel to the patient's own lower-lip line (consonant smile arc)
  function inc(dx){if(lowF){var d=Math.min(dx,half*1.05),lv=avg([lowF(mid-d),lowF(mid+d)]);return incC-clamp((lipC-lv)*0.92,0,7*mm)}var u=dx/half;return incC-rise*u*u}
  var hcIdeal=wc/S.wh,gumC=Math.min(inc(wc/2)-hcIdeal,gumNow+1.5*mm);
@@ -1290,9 +1290,13 @@ function mockup(c,g,D){var sh=SHADES[S.shade],st=sampleTooth(g,D),base=sh.c,mm=D
  var bx0=Math.min.apply(0,L2.map(function(t){return Math.min(t.xm,t.xd)}))-1.5*mm,bx1=Math.max.apply(0,L2.map(function(t){return Math.max(t.xm,t.xd)}))+1.5*mm;
  var by0=Math.min.apply(0,L2.map(function(t){return t.top})),by1=Math.max.apply(0,L2.map(function(t){return t.bot}))+0.6*mm;
  for(var k in D.T){var o=D.T[k];bx0=Math.min(bx0,o.x0-mm);bx1=Math.max(bx1,o.x1+mm)}
- // only where the old teeth were (so they don't show through), soft-edged and properly dark like the inside of a mouth
+ // blank the whole upper-teeth band inside the lips so no old tooth shows between or beside the new ones
  var oL=(oral[0]+oral[1]+oral[2])/3;if(oL>38)oral=oral.map(function(v){return v*38/oL});
- lg.save();lg.filter='blur('+Math.max(1.5,mm*0.8)+'px)';lg.fillStyle=rgb(oral,1);for(var k in D.T){var o=D.T[k];rrect(lg,o.x0-0.6*mm,o.y0-0.8*mm,o.x1-o.x0+1.2*mm,o.y1-o.y0+1.2*mm,mm);lg.fill()}lg.restore();
+ var sx0=Math.min.apply(0,L2.map(function(t){return Math.min(t.xm,t.xd)}))-D.wp*0.5,sx1=Math.max.apply(0,L2.map(function(t){return Math.max(t.xm,t.xd)}))+D.wp*0.5,ty=Math.min.apply(0,L2.map(function(t){return t.top}));
+ for(var k in D.T){var o=D.T[k];if(o.x1>sx0&&o.x0<sx1)ty=Math.min(ty,o.y0-mm)}
+ lg.save();lg.filter='blur('+Math.max(1.5,mm*0.5)+'px)';lg.fillStyle=rgb(oral,1);lg.beginPath();lg.moveTo(sx0,ty);lg.lineTo(sx1,ty);
+ for(var xx=sx1;xx>=sx0;xx-=Math.max(2,mm*0.5)){var dx=Math.abs(xx-D.mid),yb=D.inc(Math.min(dx,D.half*1.05))+0.4*mm;for(var k3 in D.T){var o3=D.T[k3];if(xx>=o3.x0&&xx<=o3.x1)yb=Math.max(yb,o3.y1+0.4*mm)}lg.lineTo(xx,yb)}
+ lg.closePath();lg.fill();lg.restore();
  // 2. teeth: back to front, textured from the patient's own enamel
  L2.slice().sort(function(p,q){return p.w-q.w}).forEach(function(t){var dx=Math.min(t.xm,t.xd),dw=Math.abs(t.xd-t.xm),dy=t.top,dh=t.bot-t.top,s=t.xd>t.xm?1:-1;
   lg.save();toothPath(lg,t);lg.clip();
