@@ -1148,13 +1148,14 @@ function cropFromL(L,W,H){function P(i){return[L[i].x*W,L[i].y*H]}
  var mx=(P(168)[0]+P(1)[0]+P(152)[0])/3,fm=Math.round((mx-sx)/cw*1000);if(fm<0||fm>1000)fm=null;
  function q(i){return[Math.round((L[i].y*H-sy)/ch*1000),Math.round((L[i].x*W-sx)/cw*1000)]}
  var e1=P(33),e2=P(263),ipl=Math.atan2(e2[1]-e1[1],e2[0]-e1[0]);if(ipl>Math.PI/2)ipl-=Math.PI;if(ipl<-Math.PI/2)ipl+=Math.PI;
- return{eyes:[e1[0],e1[1],e2[0],e2[1]],crop:[sx,sy,cw,ch],fm:fm,lips:{inner:LIP_IN.map(q),lower:LIP_LO.map(q),ipl:ipl,comm:[q(61),q(291)],upper:[78,191,80,81,82,13,312,311,310,415,308].map(q)}}}
+ var OV=[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,377,152,148,176,149,150,136,172,58,132,93,234,127,162,21,54,103,67,109];
+ return{oval:OV.map(P),eyes:[e1[0],e1[1],e2[0],e2[1]],crop:[sx,sy,cw,ch],fm:fm,lips:{inner:LIP_IN.map(q),lower:LIP_LO.map(q),ipl:ipl,comm:[q(61),q(291)],upper:[78,191,80,81,82,13,312,311,310,415,308].map(q)}}}
 function imgLandmarks(im){return (IMLM?Promise.resolve(IMLM):import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'CPU'},runningMode:'IMAGE',numFaces:1})})}).then(function(l){IMLM=l;return l})).then(function(l){var r=l.detect(im);return r&&r.faceLandmarks&&r.faceLandmarks.length?r.faceLandmarks[0]:null}).catch(function(){return null})}
 function camCapture(auto){var v=el('camv');if(!v||!v.videoWidth)return;var W=v.videoWidth,H=v.videoHeight,c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(v,0,0,W,H);
  var crop=null,fm=null,r=CAM.res;
  if(r&&r.faceLandmarks&&r.faceLandmarks.length){var L=r.faceLandmarks[0];function P(i){return[L[i].x*W,L[i].y*H]}
   var cr=cropFromL(L,W,H);crop=cr.crop;var lips=cr.lips,eyes=cr.eyes;fm=cr.fm;}
- camStop();CAM.captured={canvas:c,crop:crop,fm:fm,lips:lips,eyes:eyes};
+ camStop();CAM.captured={canvas:c,crop:crop,fm:fm,lips:lips,eyes:eyes,oval:cr.oval};
  el('camimg').src=toURL(c,0,0,W,H,900,0.88);
  el('camstage').hidden=true;el('camprev').hidden=false;el('cam').classList.add('pv');el('camh').textContent=auto?'Photo taken automatically':'Photo taken';el('camp').textContent='Check that your teeth are sharp and clearly visible.'}
 function camUse(){camClose();setTimeout(function(){var b=el('dsb');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})},50);var c=CAM.captured;if(!c)return;prev.innerHTML='<img src="'+toURL(c.canvas,0,0,c.canvas.width,c.canvas.height,700,0.85)+'" alt="Your photo">';
@@ -1166,9 +1167,9 @@ if(f)f.addEventListener('submit',function(ev){ev.preventDefault();out.innerHTML=
 if(!CAM.captured&&!inp.files.length){msg.textContent='Please take a photo with the guided camera or upload one.';return}
 btn.disabled=true;btn.textContent='Finding your smile...';msg.textContent='Step 1 of 2: locating your teeth.';beforeURL=null;
 var fm=null,p0;LIPS=null;FULL=null;FACEB=null;var ar=document.querySelector('input[name=arch]:checked');S.arch=ar?ar.value:'upper';
-if(CAM.captured){var c=CAM.captured;fm=c.fm;LIPS=c.lips||null;if(c.crop)FULL={img:c.canvas,crop:c.crop,eyes:c.eyes};beforeURL=c.crop?toURL(c.canvas,c.crop[0],c.crop[1],c.crop[2],c.crop[3],1200,0.9):toURL(c.canvas,0,0,c.canvas.width,c.canvas.height,1280,0.88);p0=Promise.resolve()}
+if(CAM.captured){var c=CAM.captured;fm=c.fm;LIPS=c.lips||null;if(c.crop)FULL={img:c.canvas,crop:c.crop,eyes:c.eyes,oval:c.oval};beforeURL=c.crop?toURL(c.canvas,c.crop[0],c.crop[1],c.crop[2],c.crop[3],1200,0.9):toURL(c.canvas,0,0,c.canvas.width,c.canvas.height,1280,0.88);p0=Promise.resolve()}
 else{var full;p0=loadFile(inp.files[0]).then(function(im){full=im;return imgLandmarks(im)}).then(function(L){var im=full,W=im.naturalWidth,H=im.naturalHeight,k=Math.min(1,1280/Math.max(W,H));
- if(L){var cr=cropFromL(L,W,H);fm=cr.fm;LIPS=cr.lips;FULL={img:full,crop:cr.crop,eyes:cr.eyes};beforeURL=toURL(full,cr.crop[0],cr.crop[1],cr.crop[2],cr.crop[3],1200,0.9);return {j:null}}
+ if(L){var cr=cropFromL(L,W,H);fm=cr.fm;LIPS=cr.lips;FULL={img:full,crop:cr.crop,eyes:cr.eyes,oval:cr.oval};beforeURL=toURL(full,cr.crop[0],cr.crop[1],cr.crop[2],cr.crop[3],1200,0.9);return {j:null}}
  return post({mode:'locate',image:toURL(im,0,0,W,H,Math.round(W*k),0.85)})}).then(function(x){if(beforeURL)return;
  var W=full.naturalWidth,H=full.naturalHeight;
  if(x.j&&x.j.ok&&x.j.mouth_box&&x.j.face_ok!==false){var b=x.j.mouth_box,y0=b[0]*H/1000,x0=b[1]*W/1000,y1=b[2]*H/1000,x1=b[3]*W/1000,mw=x1-x0,mh=y1-y0;
@@ -1283,9 +1284,20 @@ function mockup(c,g,D){var sh=SHADES[S.shade],st=sampleTooth(g,D),base=sh.c,mm=D
  var bx0=Math.min.apply(0,L2.map(function(t){return Math.min(t.xm,t.xd)}))-1.5*mm,bx1=Math.max.apply(0,L2.map(function(t){return Math.max(t.xm,t.xd)}))+1.5*mm;
  var by0=Math.min.apply(0,L2.map(function(t){return t.top})),by1=Math.max.apply(0,L2.map(function(t){return t.bot}))+0.6*mm;
  for(var k in D.T){var o=D.T[k];bx0=Math.min(bx0,o.x0-mm);bx1=Math.max(bx1,o.x1+mm)}
- // only where the old teeth were (so they don't show through), soft-edged and properly dark like the inside of a mouth
+ // blank the whole upper-teeth band inside the lips (old teeth never show through), soft-edged and dark like the inside of a mouth
  var oL=(oral[0]+oral[1]+oral[2])/3;if(oL>38)oral=oral.map(function(v){return v*38/oL});
- lg.save();lg.filter='blur('+Math.max(1.5,mm*0.8)+'px)';lg.fillStyle=rgb(oral,1);for(var k in D.T){var o=D.T[k];rrect(lg,o.x0-0.6*mm,o.y0-0.8*mm,o.x1-o.x0+1.2*mm,o.y1-o.y0+1.2*mm,mm);lg.fill()}lg.restore();
+ var sx0=Math.min.apply(0,L2.map(function(t){return Math.min(t.xm,t.xd)}))-D.wp*0.6,sx1=Math.max.apply(0,L2.map(function(t){return Math.max(t.xm,t.xd)}))+D.wp*0.6,ty=Math.min.apply(0,L2.map(function(t){return t.top}));
+ for(var k in D.T){var o=D.T[k];sx0=Math.min(sx0,o.x0-0.5*mm);sx1=Math.max(sx1,o.x1+0.5*mm);ty=Math.min(ty,o.y0-mm)}
+ lg.save();lg.filter='blur('+Math.max(1.5,mm*0.6)+'px)';lg.fillStyle=rgb(oral,1);lg.beginPath();lg.moveTo(sx0,ty);lg.lineTo(sx1,ty);
+ for(var xx=sx1;xx>=sx0;xx-=Math.max(2,mm*0.5)){var dx=Math.abs(xx-D.mid),yb=D.inc(Math.min(dx,D.half*1.05))+0.6*mm;for(var k3 in D.T){var o3=D.T[k3];if(xx>=o3.x0-0.5*mm&&xx<=o3.x1+0.5*mm)yb=Math.max(yb,o3.y1+0.6*mm)}lg.lineTo(xx,yb)}
+ lg.closePath();lg.fill();lg.restore();
+ // also blank the whole upper-teeth band across the designed span, down to whichever is lower: the old edge or the new edge, so no part of an old tooth peeks out beside a new one
+ var sx0=Math.min.apply(0,L2.map(function(t){return Math.min(t.xm,t.xd)}))-0.8*mm,sx1=Math.max.apply(0,L2.map(function(t){return Math.max(t.xm,t.xd)}))+0.8*mm,ty=Math.min.apply(0,L2.map(function(t){return t.top}))-4*mm;
+ function oldBot(x){var b=null;for(var k in D.T){var o=D.T[k];if(x>=o.x0-0.5*mm&&x<=o.x1+0.5*mm)b=b==null?o.y1:Math.max(b,o.y1)}return b}
+ function newBot(x){var b=null;L2.forEach(function(t){var a0=Math.min(t.xm,t.xd),a1=Math.max(t.xm,t.xd);if(x>=a0&&x<=a1)b=b==null?t.bot:Math.max(b,t.bot)});return b}
+ lg.save();lg.filter='blur('+Math.max(1.5,mm*0.6)+'px)';lg.fillStyle=rgb(oral,1);lg.beginPath();lg.moveTo(sx0,ty);
+ for(var xx=sx0;xx<=sx1;xx+=Math.max(2,mm*0.3)){var ob=oldBot(xx),nb=newBot(xx),yb=Math.max(ob==null?-1e9:ob,nb==null?-1e9:nb);if(yb<-1e8)yb=D.inc(Math.abs(xx-D.mid));lg.lineTo(xx,yb+0.5*mm)}
+ lg.lineTo(sx1,ty);lg.closePath();lg.fill();lg.restore();
  // 2. teeth: back to front, textured from the patient's own enamel
  L2.slice().sort(function(p,q){return p.w-q.w}).forEach(function(t){var dx=Math.min(t.xm,t.xd),dw=Math.abs(t.xd-t.xm),dy=t.top,dh=t.bot-t.top,s=t.xd>t.xm?1:-1;
   lg.save();toothPath(lg,t);lg.clip();
@@ -1467,16 +1479,24 @@ function segmentFull(){if(!FULL||FULL.mask||FULL.segBusy)return;FULL.segBusy=tru
   for(var i=0;i<a.length;i++){var v=a[i];v=clamp((v-0.45)/0.35,0,1);id.data[i*4]=255;id.data[i*4+1]=255;id.data[i*4+2]=255;id.data[i*4+3]=v*255}
   mg.putImageData(id,0,0);r.close&&r.close();if(FULL!==F)return;F.mask=mc;FACEB=null;S.cache={};paint()})
  .catch(function(){F.segFail=true})}
-function bgWrap(o){if(S.bg=='photo'||!FULL||!FULL.mask)return o;var W=o.width,H=o.height,n=document.createElement('canvas');n.width=W;n.height=H;var g=n.getContext('2d');
+function bgWrap(o){if(S.bg=='photo'||!FULL||(!FULL.mask&&!FULL.oval))return o;if(FULL.oval)return faceOnly(o);var W=o.width,H=o.height,n=document.createElement('canvas');n.width=W;n.height=H;var g=n.getContext('2d');
  var col={black:['#1a1a1a','#000'],grey:['#5a5d60','#2c2e30'],white:['#ffffff','#e4e4e4']}[S.bg]||['#111','#000'],rg=g.createRadialGradient(W/2,H*0.42,W*0.1,W/2,H*0.5,Math.max(W,H)*0.75);rg.addColorStop(0,col[0]);rg.addColorStop(1,col[1]);g.fillStyle=rg;g.fillRect(0,0,W,H);
  var p=document.createElement('canvas');p.width=W;p.height=H;var pg=p.getContext('2d');pg.drawImage(o,0,0);pg.globalCompositeOperation='destination-in';pg.filter='blur('+Math.max(2,W/160)+'px)';pg.drawImage(FULL.mask,0,0,W,H);
  g.drawImage(p,0,0);
  // studio fall-off: an oval around the face stays clear; hair, ears and shoulders melt into the background
  var I=FULL.img,iw=I.naturalWidth||I.width,k=W/iw,cr=FULL.crop,e=FULL.eyes,bc=S.bg=='white'?'255,255,255':S.bg=='grey'?'44,46,48':'0,0,0';
  var mx=(cr[0]+cr[2]/2)*k,my=(cr[1]+cr[3]/2)*k,d=e?Math.hypot(e[2]-e[0],e[3]-e[1])*k:cr[2]*k*0.9,ex=e?(e[0]+e[2])/2*k:mx,ey=e?(e[1]+e[3])/2*k:my-d;
- var cx=(ex+mx)/2,cy=ey+(my-ey)*0.32,rx=d*0.92,ry=d*1.5;
- g.save();g.translate(cx,cy);g.scale(1,ry/rx);var vg=g.createRadialGradient(0,0,rx*0.78,0,0,rx*1.18);vg.addColorStop(0,'rgba('+bc+',0)');vg.addColorStop(0.6,'rgba('+bc+',0.75)');vg.addColorStop(1,'rgba('+bc+',1)');
+ var cx=(ex+mx)/2,cy=ey+(my-ey)*0.38,rx=d*0.9,ry=d*1.38;
+ g.save();g.translate(cx,cy);g.scale(1,ry/rx);var vg=g.createRadialGradient(0,0,rx*0.8,0,0,rx*1.08);vg.addColorStop(0,'rgba('+bc+',0)');vg.addColorStop(0.5,'rgba('+bc+',0.9)');vg.addColorStop(1,'rgba('+bc+',1)');
  g.fillStyle=vg;g.fillRect(-W*2,-H*2,W*4,H*4);g.restore();return n}
+// only the face and jawline stay; hair, ears, neck and clothes fade into the studio background
+function faceOnly(o){var W=o.width,H=o.height,I=FULL.img,k=W/(I.naturalWidth||I.width),P=FULL.oval.map(function(p){return[p[0]*k,p[1]*k]});
+ var cx=0,cy=0;P.forEach(function(p){cx+=p[0];cy+=p[1]});cx/=P.length;cy/=P.length;var fw=Math.max.apply(0,P.map(function(p){return p[0]}))-Math.min.apply(0,P.map(function(p){return p[0]}));
+ var n=document.createElement('canvas');n.width=W;n.height=H;var g=n.getContext('2d'),col={black:['#141414','#000'],grey:['#55585b','#2a2c2e'],white:['#ffffff','#e6e6e6']}[S.bg]||['#111','#000'];
+ var rg=g.createRadialGradient(cx,cy,fw*0.3,cx,cy,Math.max(W,H)*0.8);rg.addColorStop(0,col[0]);rg.addColorStop(1,col[1]);g.fillStyle=rg;g.fillRect(0,0,W,H);
+ var m=document.createElement('canvas');m.width=W;m.height=H;var mg=m.getContext('2d');mg.filter='blur('+Math.max(2,fw*0.035)+'px)';mg.beginPath();
+ P.forEach(function(p,i){var x=cx+(p[0]-cx)*0.98,y=cy+(p[1]-cy)*(p[1]<cy?1.02:0.99);if(i)mg.lineTo(x,y);else mg.moveTo(x,y)});mg.closePath();mg.fillStyle='#fff';mg.fill();
+ var f=document.createElement('canvas');f.width=W;f.height=H;var fg=f.getContext('2d');fg.drawImage(o,0,0);fg.globalCompositeOperation='destination-in';fg.drawImage(m,0,0);g.drawImage(f,0,0);return n}
 /* ---------- 3D bracket sprites ---------- */
 var SPR={};
 function bracketSprite(kind){if(SPR[kind])return SPR[kind];var W=220,H=200,c=document.createElement('canvas');c.width=W;c.height=H;var g=c.getContext('2d');
