@@ -1765,10 +1765,18 @@ function toBlack(im){if(!$('bk').checked)return Promise.resolve(im);
   var ce=0,cn=0,bo=0,bn=0;for(j=0;j<mh;j++)for(i=0;i<mw;i++){var v=d[j*mw+i],inC=i>mw*0.3&&i<mw*0.7&&j>mh*0.25&&j<mh*0.75,inB=i<mw*0.08||i>mw*0.92||j<mh*0.05;if(inC){ce+=v;cn++}if(inB){bo+=v;bn++}}
   var inv=cn&&bn&&(bo/bn>ce/cn);
   var mc=document.createElement('canvas');mc.width=mw;mc.height=mh;var mg=mc.getContext('2d'),id=mg.createImageData(mw,mh);
-  for(i=0;i<mw*mh;i++){var x=inv?1-d[i]:d[i];x=clamp((x-0.3)/0.4,0,1);x=x*x*(3-2*x);id.data[i*4+3]=Math.round(x*255)}
+  var P=new Float32Array(mw*mh),lab=new Int32Array(mw*mh),best=0,bl=0,nl=0,st=[];for(i=0;i<mw*mh;i++)P[i]=inv?1-d[i]:d[i];
+  for(i=0;i<mw*mh;i++){if(P[i]<=0.5||lab[i])continue;nl++;var cnt=0;st.length=0;st.push(i);lab[i]=nl;while(st.length){var q=st.pop();cnt++;var qx=q%mw,qy=(q-qx)/mw,nb=[qx>0?q-1:-1,qx<mw-1?q+1:-1,qy>0?q-mw:-1,qy<mh-1?q+mw:-1];for(var z=0;z<4;z++){var n=nb[z];if(n>=0&&P[n]>0.5&&!lab[n]){lab[n]=nl;st.push(n)}}}if(cnt>best){best=cnt;bl=nl}}
+  var kp=new Uint8Array(mw*mh);for(i=0;i<mw*mh;i++)kp[i]=lab[i]==bl?1:0;
+  for(var it=0;it<2;it++){var k2=kp.slice();for(j=1;j<mh-1;j++)for(i=1;i<mw-1;i++){var o=j*mw+i;if(!kp[o]&&(kp[o-1]||kp[o+1]||kp[o-mw]||kp[o+mw]))k2[o]=1}kp=k2}
+  for(i=0;i<mw*mh;i++){var x=kp[i]?clamp((P[i]-0.5)/0.3,0,1):0;x=x*x*(3-2*x);id.data[i*4+3]=Math.round(x*255)}
   mg.putImageData(id,0,0);
   var m2=document.createElement('canvas');m2.width=w;m2.height=h;var g2=m2.getContext('2d');g2.imageSmoothingQuality='high';g2.filter='blur('+Math.max(1.5,w/350)+'px)';g2.drawImage(mc,0,0,w,h);g2.filter='none';
-  var c=document.createElement('canvas');c.width=w;c.height=h;var g=c.getContext('2d');g.filter='contrast(1.1) saturate(1.05)';g.drawImage(im,0,0,w,h);g.filter='none';g.globalCompositeOperation='destination-in';g.drawImage(m2,0,0);
+  var c=document.createElement('canvas');c.width=w;c.height=h;var g=c.getContext('2d');g.filter='contrast(1.1) saturate(1.05)';g.drawImage(im,0,0,w,h);g.filter='none';
+  /* crush dark tones so hair and shadows melt into the black */
+  var px=g.getImageData(0,0,w,h),dd=px.data;for(i=0;i<dd.length;i+=4){var lu=0.299*dd[i]+0.587*dd[i+1]+0.114*dd[i+2];if(lu<80){var f=lu/80;dd[i]*=f;dd[i+1]*=f;dd[i+2]*=f}}g.putImageData(px,0,0);
+  g.globalCompositeOperation='destination-in';g.drawImage(m2,0,0);
+  g.globalCompositeOperation='destination-out';var bg=g.createLinearGradient(0,h*0.9,0,h);bg.addColorStop(0,'rgba(0,0,0,0)');bg.addColorStop(1,'rgba(0,0,0,1)');g.fillStyle=bg;g.fillRect(0,h*0.9,w,h*0.1);g.globalCompositeOperation='source-over';
   var f=document.createElement('canvas');f.width=w;f.height=h;var fg=f.getContext('2d');fg.fillStyle='#000';fg.fillRect(0,0,w,h);fg.drawImage(c,0,0);f.naturalWidth=w;f.naturalHeight=h;return f})}
 function lmInit(){if(LM)return Promise.resolve(LM);return import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'CPU'},runningMode:'IMAGE',numFaces:1})}).then(function(l){LM={l:l,T:m.FaceLandmarker.FACE_LANDMARKS_TESSELATION||[]};return LM})})}
 function detect(im){if(window.__reelLM)return Promise.resolve(window.__reelLM(im));return lmInit().then(function(M){var r=M.l.detect(im);return r&&r.faceLandmarks&&r.faceLandmarks.length?r.faceLandmarks[0]:null}).catch(function(){return null})}
@@ -1777,6 +1785,10 @@ var W=1080,H=1920;
 function layBefore(im,L){var iw=im.naturalWidth,ih=im.naturalHeight,s,ox,oy;
  if(L){var fw=Math.abs(L[454].x-L[234].x)*iw,cx=(L[454].x+L[234].x)/2*iw,cy=(L[10].y+L[152].y)/2*ih;s=clamp(650/fw,0.1,10);ox=W/2-cx*s;oy=860-cy*s}
  else{s=Math.max(W/iw,H/ih);ox=(W-iw*s)/2;oy=(H-ih*s)/2}
+ return{a:s,b:0,c:0,d:s,e:ox,f:oy}}
+function layAt(im,L,cx,cy,fw){var iw=im.naturalWidth,ih=im.naturalHeight,s,ox,oy;
+ if(L){var f=Math.abs(L[454].x-L[234].x)*iw,mx=(L[454].x+L[234].x)/2*iw,my=(L[10].y+L[152].y)/2*ih;s=clamp(fw/f,0.1,10);ox=cx-mx*s;oy=cy-my*s}
+ else{s=Math.max(W/2/iw,H/ih);ox=cx-iw*s/2;oy=(H-ih*s)/2}
  return{a:s,b:0,c:0,d:s,e:ox,f:oy}}
 function pt(L,i,im){return[L[i].x*im.naturalWidth,L[i].y*im.naturalHeight]}
 function mid(p,q){return[(p[0]+q[0])/2,(p[1]+q[1])/2]}
@@ -1805,6 +1817,7 @@ function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
  b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Reading the photos and finding the face...';
  Promise.all([loadFile(fb),loadFile(fa)]).then(function(im){var B=im[0],A=im[1];msg.textContent='Finding the face and the background...';return Promise.all([detect(B),detect(A)]).then(function(L){return Promise.all([toBlack(B),toBlack(A)]).then(function(pp){B=pp[0];A=pp[1];
   var LB=L[0],LA=L[1],tb=layBefore(B,LB),ta=layAfter(A,LA,tb,LB,B);
+  var SB=layAt(B,LB,W*0.27,880,500),SA=layAt(A,LA,W*0.73,880,500);
   var xs=[],ys=[],P=null;
   if(LB){P=LB.map(function(q){return[q.x*B.naturalWidth*tb.a+tb.e,q.y*B.naturalHeight*tb.d+tb.f]});P.forEach(function(q){ys.push(q[1])})}
   var top=ys.length?Math.min.apply(0,ys)-30:300,bot=ys.length?Math.max.apply(0,ys)+50:1500,conn=window.__reelConn||(LM&&LM.T)||[];
@@ -1812,7 +1825,11 @@ function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
   function drawI(im,tr){setT(g,tr);g.drawImage(im,0,0);g.setTransform(1,0,0,1,0,0)}
   function lerp(a,b,x){return a+(b-a)*x}
   function fx(s,t){var p=ease(clamp((t-900)/4200,0,1));PR=p;
-   if(s=='curtain'){drawI(A,ta);var w=W/2*(1-p);if(w>1){g.save();g.beginPath();g.rect(0,0,w,H);g.rect(W-w,0,w,H);g.clip();drawI(B,tb);g.restore();if(p>0.02&&p<0.98)
+   if(s=='side'){var a1=ease(clamp(t/900,0,1)),a2=ease(clamp((t-1500)/1100,0,1)),sl=(1-a2)*70;PR=a2;
+    g.save();g.beginPath();g.rect(0,0,W/2,H);g.clip();g.globalAlpha=a1;drawI(B,SB);g.restore();
+    g.save();g.beginPath();g.rect(W/2,0,W/2,H);g.clip();g.globalAlpha=a2;g.translate(sl,0);drawI(A,SA);g.restore();g.globalAlpha=1;
+    txt('BEFORE',W*0.27,H-330,56,'rgba(255,255,255,'+a1+')');txt('AFTER',W*0.73,H-330,56,'rgba(255,255,255,'+a2+')')}
+   else if(s=='curtain'){drawI(A,ta);var w=W/2*(1-p);if(w>1){g.save();g.beginPath();g.rect(0,0,w,H);g.rect(W-w,0,w,H);g.clip();drawI(B,tb);g.restore();if(p>0.02&&p<0.98)
      [[w,1],[W-w,-1]].forEach(function(e){var gr=g.createLinearGradient(e[0],0,e[0]+e[1]*50,0);gr.addColorStop(0,'rgba(0,0,0,.65)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(Math.min(e[0],e[0]+e[1]*50),0,50,H);g.fillStyle='rgba(216,195,165,.9)';g.fillRect(e[0]-2,0,4,H)})}}
    else if(s=='slider'){var k=[[0,0],[900,0],[2400,0.55],[3200,0.28],[4400,0.8],[5400,1.06],[99999,1.06]],x=0;for(var i=0;i<k.length-1;i++)if(t>=k[i][0]&&t<k[i+1][0]){x=lerp(k[i][1],k[i+1][1],ease((t-k[i][0])/(k[i+1][0]-k[i][0])));break}
     PR=x;var hx=W*x;drawI(B,tb);if(hx>0){g.save();g.beginPath();g.rect(0,0,hx,H);g.clip();drawI(A,ta);g.restore()}
@@ -1840,7 +1857,7 @@ function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
    if(t>=900&&u<1){g.setTransform(1,0,0,1,0,0);var gr=g.createLinearGradient(0,ry-40,0,ry+40);gr.addColorStop(0,'rgba(120,200,255,0)');gr.addColorStop(0.5,'rgba(200,235,255,.95)');gr.addColorStop(1,'rgba(120,200,255,0)');g.fillStyle=gr;g.fillRect(0,ry-40,W,80)}}
    g.setTransform(1,0,0,1,0,0);
    txt('SMILE DESIGN',W/2,150,64,'#fff');txt(label(),W/2,222,36,'#d8c3a5','center','500');
-   var after=ST!='mesh'?PR>0.5:(t>=900&&(u>=1||ry>H*0.6));txt(after?'AFTER':'BEFORE',W/2,H-330,66,'#fff');
+   if(ST!='side'){var after=ST!='mesh'?PR>0.5:(t>=900&&(u>=1||ry>H*0.6));txt(after?'AFTER':'BEFORE',W/2,H-330,66,'#fff');}
    txt(CL,W/2,H-240,46,'#fff');txt(PH+'  ·  Jogeshwari East, Mumbai',W/2,H-180,34,'#d8c3a5','center','500');
    txt($('kind').value=='real'?'Results vary from person to person.':'Computer simulation for illustration. Results vary.',W/2,H-110,28,'rgba(255,255,255,.7)','center','400')}
   if(window.__reelDebug){window.__reelShots=[0,2000,3000,4300,6500].map(function(t){frame(t);return cv.toDataURL('image/jpeg',0.6)});b.disabled=false;return}
@@ -1889,7 +1906,7 @@ def reel_page():
         '<label class="ck"><input type="checkbox" id="cons"> The patient has given written consent to use these photos for a reel, and I will label AI content as AI.</label>'
         '<h3>1. Reveal reels (free, made on this device)</h3>'
         '<p class="muted">Pick a style, then make an 8 second 9:16 reel. Needs both photos, front-facing, similar distance.</p>'
-        '<label>Reel style<select id="rst"><option value="mesh">Mesh scan (3D face mesh scans down)</option><option value="peel">Peel-off (paper peels away)</option><option value="curtain">Curtain (opens from the middle)</option><option value="scanner">Scanner (green mesh sweeps across)</option><option value="calendar">Calendar page (page flips up)</option><option value="slider">Slider (before / after handle)</option></select></label>'
+        '<label>Reel style<select id="rst"><option value="side">Side by side (before | after, like the Instagram reel)</option><option value="mesh">Mesh scan (3D face mesh scans down)</option><option value="peel">Peel-off (paper peels away)</option><option value="curtain">Curtain (opens from the middle)</option><option value="scanner">Scanner (green mesh sweeps across)</option><option value="calendar">Calendar page (page flips up)</option><option value="slider">Slider (before / after handle)</option></select></label>'
         '<label class="ck"><input type="checkbox" id="bk" checked> Jet-black studio background (cuts out the person, removes the photo background)</label>'
         '<button type="button" class="btn" id="mb">Make reel</button><p id="mm" class="muted" role="status"></p><div id="mo"></div>'
         '<h3>2. AI smiling clip (costs about ₹40 to ₹60 each)</h3>'
