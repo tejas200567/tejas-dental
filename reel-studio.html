@@ -141,7 +141,7 @@ var API='https://arxhbdyciylznmlamvri.supabase.co/functions/v1/reel-ai',MPV='htt
 var CL='Dr Tejas Pradhan\'s Dental Clinic',PH='+91 83691 87806';
 function $(i){return document.getElementById(i)}
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
-function loadFile(f){return new Promise(function(res,rej){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){res(im)};im.onerror=function(){rej(new Error('photo not readable'))};im.src=u})}
+function loadFile(f){return new Promise(function(res,rej){var u=URL.createObjectURL(f),im=new Image();im.onload=function(){res(im)};im.onerror=function(){rej(new Error('photo not readable. Please choose the photos again'))};im.src=u})}
 var LM=null;
 function lmInit(){if(LM)return Promise.resolve(LM);return import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'CPU'},runningMode:'IMAGE',numFaces:1})}).then(function(l){LM={l:l,T:m.FaceLandmarker.FACE_LANDMARKS_TESSELATION||[]};return LM})})}
 function detect(im){if(window.__reelLM)return Promise.resolve(window.__reelLM(im));return lmInit().then(function(M){var r=M.l.detect(im);return r&&r.faceLandmarks&&r.faceLandmarks.length?r.faceLandmarks[0]:null}).catch(function(){return null})}
@@ -173,7 +173,7 @@ function tips(){return $('kind').value=='real'?'Post a patient’s face only wit
 /* ---------- 1. mesh-scan reveal reel (runs in the browser, free) ---------- */
 function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
  if(!$('cons').checked){msg.className='muted err';msg.textContent='Please tick the consent box.';return}
- var fb=$('fb').files[0],fa=$('fa').files[0];if(!fb||!fa){msg.className='muted err';msg.textContent='Please choose both the before and the after photo.';return}
+ var fb=FILES.fb,fa=FILES.fa;if(!fb||!fa){msg.className='muted err';msg.textContent='Please choose both the before and the after photo.';return}
  var mt=mime();if(!mt||!HTMLCanvasElement.prototype.captureStream){msg.className='muted err';msg.textContent='Video recording needs Chrome.';return}
  b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Reading the photos and finding the face...';
  Promise.all([loadFile(fb),loadFile(fa)]).then(function(im){var B=im[0],A=im[1];return Promise.all([detect(B),detect(A)]).then(function(L){
@@ -206,7 +206,7 @@ function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
 function post(o){return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})}
 function aiClip(){var msg=$('am'),out=$('ao'),b=$('ab'),ph=$('ph').value.replace(/\D/g,'');
  if(!$('cons').checked){msg.className='muted err';msg.textContent='Please tick the consent box.';return}
- var f=$('fa').files[0]||$('fb').files[0];if(!f){msg.className='muted err';msg.textContent='Choose the photo to animate (the after photo is used if both are chosen).';return}
+ var f=FILES.fa||FILES.fb;if(!f){msg.className='muted err';msg.textContent='Choose the photo to animate (the after photo is used if both are chosen).';return}
  if(ph.length<10){msg.className='muted err';msg.textContent='Enter the staff mobile number.';return}
  if(!confirm('This makes one 8-second AI clip and costs about Rs 40-60. Continue?'))return;
  b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Preparing the photo...';
@@ -219,7 +219,11 @@ function aiClip(){var msg=$('am'),out=$('ao'),b=$('ab'),ph=$('ph').value.replace
  .catch(function(e){b.disabled=false;msg.className='muted err';msg.textContent='Could not make the clip: '+((e&&e.message)||e)})}
 
 $('mb').addEventListener('click',meshReel);$('ab').addEventListener('click',aiClip);
-function prev(id,pid){$(id).addEventListener('change',function(){var f=this.files[0];$(pid).innerHTML=f?'<img src="'+URL.createObjectURL(f)+'" style="max-width:140px;max-height:180px;border-radius:8px">':''})}
+var FILES={fb:null,fa:null};
+/* copy the picked photo into memory right away: on Android the picker's file can become unreadable later */
+function prev(id,pid){$(id).addEventListener('change',function(){var f=this.files[0];FILES[id]=null;$(pid).innerHTML='';if(!f)return;
+ $(pid).innerHTML='<span class="muted">Reading the photo...</span>';
+ f.arrayBuffer().then(function(buf){var bl=new Blob([buf],{type:f.type||'image/jpeg'});FILES[id]=bl;$(pid).innerHTML='<img src="'+URL.createObjectURL(bl)+'" style="max-width:140px;max-height:180px;border-radius:8px">'}).catch(function(){$(pid).innerHTML='<span class="muted err">Could not read this photo. Please choose it again, or pick a copy from Gallery or Downloads.</span>'})})}
 prev('fb','pb');prev('fa','pa');
 })();
 </script>
