@@ -1148,7 +1148,8 @@ function cropFromL(L,W,H){function P(i){return[L[i].x*W,L[i].y*H]}
  var mx=(P(168)[0]+P(1)[0]+P(152)[0])/3,fm=Math.round((mx-sx)/cw*1000);if(fm<0||fm>1000)fm=null;
  function q(i){return[Math.round((L[i].y*H-sy)/ch*1000),Math.round((L[i].x*W-sx)/cw*1000)]}
  var e1=P(33),e2=P(263),ipl=Math.atan2(e2[1]-e1[1],e2[0]-e1[0]);if(ipl>Math.PI/2)ipl-=Math.PI;if(ipl<-Math.PI/2)ipl+=Math.PI;
- return{eyes:[e1[0],e1[1],e2[0],e2[1]],crop:[sx,sy,cw,ch],fm:fm,lips:{inner:LIP_IN.map(q),lower:LIP_LO.map(q),ipl:ipl,comm:[q(61),q(291)],upper:[78,191,80,81,82,13,312,311,310,415,308].map(q)}}}
+ var ML=[168,6,197,195,5,4,1,2,164,0,17,200,152].map(function(i){return[(L[i].x*W-sx)/cw*1000,(L[i].y*H-sy)/ch*1000]}),my_=avg(ML.map(function(p){return p[1]})),mx_=avg(ML.map(function(p){return p[0]})),sxy=0,syy=0;ML.forEach(function(p){sxy+=(p[1]-my_)*(p[0]-mx_);syy+=(p[1]-my_)*(p[1]-my_)});var fb=syy?sxy/syy:0,fa=mx_-fb*my_;
+ return{eyes:[e1[0],e1[1],e2[0],e2[1]],crop:[sx,sy,cw,ch],fm:fm,lips:{fml:[fa,fb],inner:LIP_IN.map(q),lower:LIP_LO.map(q),ipl:ipl,comm:[q(61),q(291)],upper:[78,191,80,81,82,13,312,311,310,415,308].map(q)}}}
 function imgLandmarks(im){return (IMLM?Promise.resolve(IMLM):import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'CPU'},runningMode:'IMAGE',numFaces:1})})}).then(function(l){IMLM=l;return l})).then(function(l){var r=l.detect(im);return r&&r.faceLandmarks&&r.faceLandmarks.length?r.faceLandmarks[0]:null}).catch(function(){return null})}
 function camCapture(auto){var v=el('camv');if(!v||!v.videoWidth)return;var W=v.videoWidth,H=v.videoHeight,c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(v,0,0,W,H);
  var crop=null,fm=null,r=CAM.res;
@@ -1192,12 +1193,18 @@ function design(){
  var cwNow=avg(cen.map(function(t){return t.x1-t.x0})),mm=cwNow/8.5;
  var dmid=T.UR1&&T.UL1?(T.UR1.x1+T.UL1.x0)/2:(a.dental_midline_x!=null?a.dental_midline_x*S.W/1000:avg(cen.map(function(t){return (t.x0+t.x1)/2}))),fmid=a.facial_midline_x!=null?a.facial_midline_x*S.W/1000:dmid;
  // stay close to where the teeth really are (looks natural on a selfie), correcting the midline only partly towards the face midline
- var mid=dmid+clamp(fmid-dmid,-1.5*cwNow/8.5,1.5*cwNow/8.5)*0.4;
+ if(a._fml){var iy=avg(cen.map(function(t){return t.y1}))/S.H*1000;fmid=(a._fml[0]+a._fml[1]*iy)*S.W/1000}
+ // DSD step 1: the design is centred on the facial midline (eyebrows–nose–philtrum–chin line) at the level of the biting edges
+ var mid=fmid;
+ // DSD step 1: with face landmarks the facial midline is reliable, so the design is centred on it
+ if(a._comm&&a.facial_midline_x!=null)mid=fmid;
  function span(side){var k=T[side<0?'UR3':'UL3'],l=T[side<0?'UR2':'UL2'];
   if(k)return side<0?mid-k.x0:k.x1-mid;
   if(l)return (side<0?mid-l.x0:l.x1-mid)*(1+r+r*r)/(1+r);
   return cwNow*(1+r+r*r)}
  var hR=span(-1),hL=span(1),half=avg([hR,hL]);
+ // symmetric design: width set from the mouth corners (landmarks), cross-checked with the measured canines
+ if(a._comm){var c1=a._comm[0][1]*S.W/1000,c2=a._comm[1][1]*S.W/1000,hcm=Math.abs(c2-c1)/2*0.8;half=clamp(half,hcm*0.88,hcm*1.12);hR=hL=half}
  var wc=clamp(half/(1+r+r*r),0.88*cwNow,1.15*cwNow),wl=wc*r,wk=wl*r,wp=wk*r*1.05;
  var incC=avg(cen.map(function(t){return t.y1})),gumNow=avg(cen.map(function(t){return t.y0}));
  var lipC=a.lower_lip_y_at_center!=null?a.lower_lip_y_at_center*S.H/1000:null,lipK=a.lower_lip_y_at_canines!=null?a.lower_lip_y_at_canines*S.H/1000:null,lowF=null;
@@ -1210,9 +1217,9 @@ function design(){
  function inc(dx){if(lowF){var d=Math.min(dx,half*1.05),lv=avg([lowF(mid-d),lowF(mid+d)]);return incC-clamp((lipC-lv)*0.92,0,7*mm)}var u=dx/half;return incC-rise*u*u}
  var hcIdeal=wc/S.wh,gumC=Math.min(inc(wc/2)-hcIdeal,gumNow+1.5*mm);
  var list=[],widths=[wc,wl,wk,wp],gumOff=[0,0.75*mm,0,0.5*mm],incOff=[0,0.8*mm,0,1.6*mm],types=['c','l','k','p'];
- [-1,1].forEach(function(s){var x=0,hs=s<0?hR:hL,f=clamp((hs-wc)/(wl+wk),0.8,1.25),ws=[wc,wl*f,wk*f,wp*f];for(var i=0;i<4;i++){var xm=mid+s*x,xd=mid+s*(x+ws[i]),cx=x+ws[i]/2;
+ [-1,1].forEach(function(s){var x=0,ws=[wc,wl,wk,wp];for(var i=0;i<4;i++){var xm=mid+s*x,xd=mid+s*(x+ws[i]),cx=x+ws[i]/2;
    var id=(s<0?'UR':'UL')+(i+1);list.push({id:id,type:types[i],xm:xm,xd:xd,top:gumC+gumOff[i]+(i==3?0.3*mm:0),bot:inc(cx)-incOff[i],w:ws[i],shade:[1,0.97,0.94,0.9][i]});x+=ws[i]}});
- return {TL:teethPx(true),T:T,list:list,mid:mid,mm:mm,wc:wc,wl:wl,wk:wk,wp:wp,half:half,hc:inc(wc/2)-gumC,gumC:gumC,incC:incC,rise:rise,inc:inc,cwNow:cwNow};
+ return {fmid:fmid,TL:teethPx(true),T:T,list:list,mid:mid,mm:mm,wc:wc,wl:wl,wk:wk,wp:wp,half:half,hc:inc(wc/2)-gumC,gumC:gumC,incC:incC,rise:rise,inc:inc,cwNow:cwNow};
 }
 function mouthPath(g,D){var a=S.a,p=a.mouth_polygon;
  g.beginPath();
@@ -1220,7 +1227,7 @@ function mouthPath(g,D){var a=S.a,p=a.mouth_polygon;
  var xs=[],ys=[];for(var k in D.T){var t=D.T[k];xs.push(t.x0,t.x1);ys.push(t.y0,t.y1)}
  var x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs),y0=Math.min.apply(0,ys)-2*D.mm,y1=Math.max.apply(0,ys)+3*D.mm,cx=(x0+x1)/2,rx=(x1-x0)/2+D.mm,ry=(y1-y0)/2;
  g.ellipse(cx,(y0+y1)/2,rx,ry,0,0,Math.PI*2)}
-function toothPath(g,t){var xm=t.xm,xd=t.xd,s=xd>xm?1:-1,w=Math.abs(xd-xm),top=t.top,bot=t.bot,h=bot-top,zen=xm+(xd-xm)*0.58;
+function toothPath(g,t){var xm=t.xm,xd=t.xd,s=xd>xm?1:-1,w=Math.abs(xd-xm),top=t.top,bot=t.bot,h=bot-top,zen=xm+(xd-xm)*(t.type=='l'?0.5:0.58);
  function X(u){return xm+s*u*w}
  var F=FORMS[S.form]||FORMS.oval,nk=F.neck,hh=Math.min(h,w*(t.type=='c'?1.3:1.45)),cz=bot-hh*(nk>0.08?0.38:0.55);
  var ang={c:0.012,l:0.03,k:0.05,p:0.04}[t.type]||0;g.save();g.translate((xm+xd)/2,bot);g.rotate(s*ang);g.translate(-(xm+xd)/2,-bot);
@@ -1339,8 +1346,8 @@ function dsdLines(g,D){var a=S.a,lw=Math.max(1.5,S.W/420),mm=D.mm,ang=a._ipl||0,
  D.list.forEach(function(t){toothPath(g,t);g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=lw*1.1;g.stroke()});
  var Ls=D.list.slice().sort(function(p,q){return Math.min(p.xm,p.xd)-Math.min(q.xm,q.xd)});
  // 5. gingival zenith line, contact-point line, incisal line (smile arc)
- g.save();g.lineWidth=lw;g.strokeStyle='rgba(255,140,40,.95)';g.beginPath();Ls.forEach(function(t,i){var x=t.xm+(t.xd-t.xm)*0.58,y=t.top;if(i)g.lineTo(x,y);else g.moveTo(x,y)});g.stroke();
- Ls.forEach(function(t){var x=t.xm+(t.xd-t.xm)*0.58;g.fillStyle='rgba(255,140,40,1)';g.beginPath();g.arc(x,t.top,lw*1.8,0,7);g.fill()});
+ g.save();g.lineWidth=lw;g.strokeStyle='rgba(255,140,40,.95)';g.beginPath();Ls.forEach(function(t,i){var x=t.xm+(t.xd-t.xm)*(t.type=='l'?0.5:0.58),y=t.top;if(i)g.lineTo(x,y);else g.moveTo(x,y)});g.stroke();
+ Ls.forEach(function(t){var x=t.xm+(t.xd-t.xm)*(t.type=='l'?0.5:0.58);g.fillStyle='rgba(255,140,40,1)';g.beginPath();g.arc(x,t.top,lw*1.8,0,7);g.fill()});
  g.strokeStyle='rgba(190,120,255,.95)';g.setLineDash([lw*2,lw*2]);g.beginPath();var first=true;
  for(var i=0;i<Ls.length-1;i++){var p=Ls[i],q=Ls[i+1],x=Math.max(p.xm,p.xd),hc=D.hc,y=Math.min(p.bot,q.bot)-hc*(p.type=='c'&&q.type=='c'?0.25:(p.type=='l'||q.type=='l')&&(p.type=='c'||q.type=='c')?0.33:0.45);if(first){g.moveTo(x,y);first=false}else g.lineTo(x,y)}
  g.stroke();g.setLineDash([lw*4,lw*2]);g.strokeStyle='rgba(255,215,120,.95)';g.beginPath();for(var x2=D.mid-D.half;x2<=D.mid+D.half;x2+=3){var y2=D.inc(Math.abs(x2-D.mid));if(x2==D.mid-D.half)g.moveTo(x2,y2);else g.lineTo(x2,y2)}g.stroke();g.restore();
@@ -1359,7 +1366,7 @@ function cleanDesign(g,D){var lw=Math.max(1.4,S.W/600),mm=D.mm,Ls=D.list.slice()
  function smooth(pts){g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length-1;i++){var mx=(pts[i][0]+pts[i+1][0])/2,my=(pts[i][1]+pts[i+1][1])/2;g.quadraticCurveTo(pts[i][0],pts[i][1],mx,my)}var l=pts[pts.length-1];g.lineTo(l[0],l[1])}
  g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=lw*2;g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=lw;g.lineJoin='round';
  // gingival curve through the zeniths and incisal curve, extended past the last teeth
- var zp=Ls.map(function(t){return[t.xm+(t.xd-t.xm)*0.58,t.top]}),ext=D.half*0.12;
+ var zp=Ls.map(function(t){return[t.xm+(t.xd-t.xm)*(t.type=='l'?0.5:0.58),t.top]}),ext=D.half*0.12;
  zp.unshift([zp[0][0]-ext,zp[0][1]+(zp[0][1]-zp[1][1])*0.6]);zp.push([zp[zp.length-1][0]+ext,zp[zp.length-1][1]+(zp[zp.length-1][1]-zp[zp.length-2][1])*0.6]);smooth(zp);g.stroke();
  g.beginPath();for(var x=D.mid-D.half*1.12;x<=D.mid+D.half*1.12;x+=2){var y=D.inc(Math.min(Math.abs(x-D.mid),D.half*1.12));if(x<=D.mid-D.half*1.12+1)g.moveTo(x,y);else g.lineTo(x,y)}g.stroke();
  D.list.forEach(function(t){toothPath(g,t);g.stroke()});g.restore();
@@ -1591,11 +1598,38 @@ function metrics(D){var T=D.T,mm=D.mm,R=[];
  R.push(['Smile arc (centrals lower than canines)',m(arc),'0.5–2 mm',arc!=null&&arc>=0.4&&arc<=2.5]);
  R.push(['Gum line of the two centrals',m(gum),'level (under 0.5 mm)',gum!=null&&gum<0.6]);
  return R}
+/* ---------- DSD 10-step smile-frame check ---------- */
+function tenSteps(D){var T=D.T,TL=D.TL||{},a=S.a,mm=D.mm,R=[],f1=function(v){return v.toFixed(1)};
+ var dmid=T.UR1&&T.UL1?(T.UR1.x1+T.UL1.x0)/2:null,fm=D.fmid;
+ // 1 midline
+ if(dmid!=null&&fm!=null){var dv=Math.abs(dmid-fm)/mm;R.push(['1. Midline','Teeth midline vs face midline (eyebrows–nose–philtrum–chin)',f1(dv)+' mm '+(dmid>fm?'to the right in photo':'to the left in photo'),'≤ 1 mm',dv<=1,'Design centred on your face midline'])}
+ else R.push(['1. Midline','Teeth midline vs face midline','–','≤ 1 mm',null,'Design centred on your face midline']);
+ // 2 smile curve
+ var cI=avg([T.UR1&&T.UR1.y1,T.UL1&&T.UL1.y1]),kI=avg([T.UR3&&T.UR3.y1,T.UL3&&T.UL3.y1]),lr=D.rise;
+ if(cI!=null&&kI!=null){var cr=(cI-kI)/mm,st=cr<0?'Reverse':cr<Math.max(0.5,0.35*lr/mm)?'Flat':'Consonant';R.push(['2. Smile curve','Biting edges vs lower-lip curve',st+' ('+f1(cr)+' mm rise)','Consonant, parallel to lower lip ('+f1(lr/mm)+' mm)',st=='Consonant','Edges redrawn parallel to your lower lip'])}
+ // 3 interdental proportion
+ var w=function(t){return t?t.x1-t.x0:null},c=avg([w(T.UR1),w(T.UL1)]),l=avg([w(T.UR2),w(T.UL2)]),k=avg([w(T.UR3),w(T.UL3)]);
+ if(c&&l&&k){var p1=l/c*100,p2=k/l*100,tg=Math.round((D.wl/D.wc)*100);R.push(['3. Interdental proportion','Lateral ÷ central, canine ÷ lateral (front view)',Math.round(p1)+'% / '+Math.round(p2)+'%',tg+'% / '+tg+'%',Math.abs(p1-tg)<8&&Math.abs(p2-tg)<8,'Widths set to '+tg+'% recurring proportion'])}
+ // 4 central proportion
+ var cc=T.UR1||T.UL1,gv=a._upper?true:false,cw=cc?(cc.x1-cc.x0):0,ch=cc?(cc.y1-cc.y0):0,lipHides=ch/cw<1.05;
+ R.push(['4. Central incisor proportion','Width ÷ length of central incisor',lipHides?'Gum line hidden by lip':Math.round(cw/ch*100)+'%','75–80%',lipHides?null:(cw/ch>=0.72&&cw/ch<=0.85),'Designed at '+Math.round(S.wh*100)+'%']);
+ // 5–7 gums
+ var gumMsg=lipHides?'Low smile line: gums hidden, checked in clinic':null,zs=[T.UR1,T.UL1,T.UR3,T.UL3].filter(Boolean).map(function(t){return t.y0}),zd=zs.length>=3?(Math.max.apply(0,zs)-Math.min.apply(0,zs))/mm:null;
+ R.push(['5. Gingival curve','Gum line of centrals and canines level, laterals ~0.5–1 mm lower',gumMsg||(zd!=null?f1(zd)+' mm difference':'–'),'Level (≤ 1 mm)',gumMsg?null:(zd!=null?zd<=1:null),'Gum zeniths designed level, laterals 0.75 mm lower']);
+ R.push(['6. Papilla curve','Gum tips between teeth follow a smooth curve',gumMsg||'See DSD lines view','Smooth, about 40–50% of crown length',null,'Contact-point line drawn in DSD lines view']);
+ R.push(['7. 12 o’clock (zenith)','Highest gum point slightly distal on centrals and canines, centred on laterals',gumMsg||'See DSD lines view','Distal on 1 and 3, centred on 2',null,'Zeniths placed distal on 1 and 3, centred on 2']);
+ // 8 occlusal
+ var lc=avg([TL.LR1&&TL.LR1.y0,TL.LL1&&TL.LL1.y0]);
+ if(cI!=null&&lc!=null){var ob=(cI-lc)/mm,os=ob<0?'Open bite / teeth apart':ob>4?'Deep bite':'Normal overlap';R.push(['8. Occlusal analysis','Upper edges overlapping lower front teeth (with teeth apart this reads as a gap)',os+' ('+f1(ob)+' mm)','About 2–3 mm overlap when teeth together',null,'Bite and lower midline checked in clinic'])}
+ else R.push(['8. Occlusal analysis','How upper and lower teeth meet','Lower teeth not visible','Show both rows, teeth slightly apart',null,'Bite checked in clinic']);
+ R.push(['9. Buccal of the central (profile)','Front-tooth inclination and lip support from the side','Needs a side-profile photo','Taken in clinic',null,'—']);
+ R.push(['10. Occlusal plane (profile)','Tilt of the biting plane vs face from the side','Needs a side-profile photo','Taken in clinic',null,'—']);
+ return R}
 function toothTable(D){var rows='';[1,2,3].forEach(function(n){var r=D.T['UR'+n],l=D.T['UL'+n],cur=avg([r&&8.5*(r.x1-r.x0)/D.cwNow,l&&8.5*(l.x1-l.x0)/D.cwNow]);
  var des=8.5*[D.wc,D.wl,D.wk][n-1]/D.cwNow;rows+='<tr><td>'+NUM[n]+'</td><td>'+(cur==null?'–':cur.toFixed(1)+' mm')+'</td><td>'+des.toFixed(1)+' mm</td></tr>'});return rows}
 
 /* ---------- UI ---------- */
-function show(a,after){if(LIPS&&a){a.mouth_polygon=LIPS.inner;a._lower=LIPS.lower;a._ipl=LIPS.ipl;a._comm=LIPS.comm;a._upper=LIPS.upper}S.a=a;S.after=after;S.cache={};var h='<div class="res"><h2>Your smile design</h2>';
+function show(a,after){if(LIPS&&a){a.mouth_polygon=LIPS.inner;a._lower=LIPS.lower;a._ipl=LIPS.ipl;a._comm=LIPS.comm;a._upper=LIPS.upper;a._fml=LIPS.fml}S.a=a;S.after=after;S.cache={};var h='<div class="res"><h2>Your smile design</h2>';
  if(!a.photo_ok){h+='<p>'+esc(a.photo_note||'The photo was not clear enough.')+'</p><p>Please retake a front-facing photo with a natural full smile, upper teeth clearly visible, in good daylight, phone at mouth level.</p></div>';out.innerHTML=h;return}
  var im=new Image();im.onload=function(){S.img=im;S.W=im.width;S.H=im.height;build()};im.src=beforeURL}
 function build(){var a=S.a,D=design();
@@ -1614,6 +1648,7 @@ function build(){var a=S.a,D=design();
  h+='<label class="ck2"><input type="checkbox" id="cl"> Clinical photo style (black background)</label><label class="ck2"><input type="checkbox" id="fc"'+(S.face?' checked':'')+'> Show full face</label><label class="ck2"><input type="checkbox" id="ol"'+(S.outline?' checked':'')+'> Show midline</label><button type="button" class="btn o2" id="dl">Download image</button></div>';
  h+='<p class="muted"><b>Simulation only.</b> These pictures are drawn by the computer from your photo to explain ideal proportions. They are not a promise of results. Your plan depends on your teeth, gums and bite, and is decided after an examination.</p>';
  h+='<div id="reel" class="note" style="background:#fff"></div>';
+ h+='<h3>DSD 10-step smile frame</h3><div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Step</th><th>Yours</th><th>Ideal</th><th>In your design</th></tr></thead><tbody>'+tenSteps(D).map(function(r){return'<tr><td><b>'+r[0]+'</b><br><span class="muted">'+r[1]+'</span></td><td>'+r[2]+(r[4]==null?'':(r[4]?' <span class="ok">OK</span>':' <span class="wn">Correct</span>'))+'</td><td>'+r[3]+'</td><td>'+r[5]+'</td></tr>'}).join('')+'</tbody></table></div>';
  h+='<h3>Your measurements</h3><div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Measure</th><th>Yours</th><th>Ideal</th><th></th></tr></thead><tbody>'+metrics(D).map(function(r){return'<tr><td>'+r[0]+'</td><td>'+(r[1]==null?'–':r[1])+'</td><td>'+r[2]+'</td><td>'+(r[1]==null?'':(r[3]?'<span class="ok">Within range</span>':'<span class="wn">Outside range</span>'))+'</td></tr>'}).join('')+'</tbody></table></div>';
  h+='<h3>Tooth widths: now and in the design</h3><div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Tooth</th><th>Yours (est.)</th><th>Design</th></tr></thead><tbody id="tt">'+toothTable(D)+'</tbody></table></div>';
  h+='<p class="muted">Millimetres are estimated from your photo by assuming an average central incisor width of 8.5 mm, so treat them as approximate.</p>';
