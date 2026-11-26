@@ -1759,13 +1759,16 @@ function segMask(im){if(window.__reelSeg)return Promise.resolve(window.__reelSeg
  return (SEG?Promise.resolve(SEG):import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.ImageSegmenter.createFromOptions(fs,{baseOptions:{modelAssetPath:SEGMODEL,delegate:'CPU'},runningMode:'IMAGE',outputCategoryMask:false,outputConfidenceMasks:true})})}).then(function(sg){SEG=sg;return sg}))
  .then(function(sg){var r=sg.segment(im),ms=r.confidenceMasks,m=ms[ms.length-1],o={w:m.width,h:m.height,d:new Float32Array(m.getAsFloat32Array())};try{r.close()}catch(e){}return o}).catch(function(){return null})}
 /* cut the person out and put them on jet black with a little contrast */
-function toBlack(im){if(!$('bk').checked)return Promise.resolve(im);
+function toBlack(im,Lm){if(!$('bk').checked)return Promise.resolve(im);
  return segMask(im).then(function(mk){if(!mk){BKFAIL=true;return im}
   var sc=Math.min(1,1600/Math.max(im.naturalWidth,im.naturalHeight)),w=Math.round(im.naturalWidth*sc),h=Math.round(im.naturalHeight*sc),mw=mk.w,mh=mk.h,d=mk.d,i,j;
   var ce=0,cn=0,bo=0,bn=0;for(j=0;j<mh;j++)for(i=0;i<mw;i++){var v=d[j*mw+i],inC=i>mw*0.3&&i<mw*0.7&&j>mh*0.25&&j<mh*0.75,inB=i<mw*0.08||i>mw*0.92||j<mh*0.05;if(inC){ce+=v;cn++}if(inB){bo+=v;bn++}}
   var inv=cn&&bn&&(bo/bn>ce/cn);
   var mc=document.createElement('canvas');mc.width=mw;mc.height=mh;var mg=mc.getContext('2d'),id=mg.createImageData(mw,mh);
   var P=new Float32Array(mw*mh),lab=new Int32Array(mw*mh),best=0,bl=0,nl=0,st=[];for(i=0;i<mw*mh;i++)P[i]=inv?1-d[i]:d[i];
+  /* above the chin, nothing wider than the hair line around the face may stay (kills wallpaper patches) */
+  if(Lm&&Lm[234]&&Lm[454]&&Lm[152]){var fcx=(Lm[234].x+Lm[454].x)/2*mw,fwm=Math.abs(Lm[454].x-Lm[234].x)*mw,fcy=Lm[152].y*mh;
+   for(j=0;j<Math.min(mh,Math.round(fcy));j++)for(i=0;i<mw;i++)P[j*mw+i]*=clamp((0.72*fwm-Math.abs(i-fcx))/(0.12*fwm),0,1)}
   for(i=0;i<mw*mh;i++){if(P[i]<=0.5||lab[i])continue;nl++;var cnt=0;st.length=0;st.push(i);lab[i]=nl;while(st.length){var q=st.pop();cnt++;var qx=q%mw,qy=(q-qx)/mw,nb=[qx>0?q-1:-1,qx<mw-1?q+1:-1,qy>0?q-mw:-1,qy<mh-1?q+mw:-1];for(var z=0;z<4;z++){var n=nb[z];if(n>=0&&P[n]>0.5&&!lab[n]){lab[n]=nl;st.push(n)}}}if(cnt>best){best=cnt;bl=nl}}
   var kp=new Uint8Array(mw*mh);for(i=0;i<mw*mh;i++)kp[i]=lab[i]==bl?1:0;
   for(var it=0;it<2;it++){var k2=kp.slice();for(j=1;j<mh-1;j++)for(i=1;i<mw-1;i++){var o=j*mw+i;if(!kp[o]&&(kp[o-1]||kp[o+1]||kp[o-mw]||kp[o+mw]))k2[o]=1}kp=k2}
@@ -1815,7 +1818,7 @@ function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
  var fb=FILES.fb,fa=FILES.fa;if(!fb||!fa){msg.className='muted err';msg.textContent='Please choose both the before and the after photo.';return}
  var mt=mime();if(!mt||!HTMLCanvasElement.prototype.captureStream){msg.className='muted err';msg.textContent='Video recording needs Chrome.';return}
  b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Reading the photos and finding the face...';
- Promise.all([loadFile(fb),loadFile(fa)]).then(function(im){var B=im[0],A=im[1];msg.textContent='Finding the face and the background...';return Promise.all([detect(B),detect(A)]).then(function(L){return Promise.all([toBlack(B),toBlack(A)]).then(function(pp){B=pp[0];A=pp[1];
+ Promise.all([loadFile(fb),loadFile(fa)]).then(function(im){var B=im[0],A=im[1];msg.textContent='Finding the face and the background...';return Promise.all([detect(B),detect(A)]).then(function(L){return Promise.all([toBlack(B,L[0]),toBlack(A,L[1])]).then(function(pp){B=pp[0];A=pp[1];
   var LB=L[0],LA=L[1],tb=layBefore(B,LB),ta=layAfter(A,LA,tb,LB,B);
   var SB=layAt(B,LB,W*0.27,880,500),SA=layAt(A,LA,W*0.73,880,500);
   var xs=[],ys=[],P=null;
