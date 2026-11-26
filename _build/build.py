@@ -1253,7 +1253,7 @@ function whiten(c,g,D){var sh=SHADES[S.shade];
   var w=mw*clamp((0.2-red)/0.1,0,1)*clamp((lum-0.28)/0.17,0,1)*clamp((0.62-sat)/0.15,0,1);if(w<=0)continue;
   var y=(r+gg)/2;if(sh.yr>=0){b=b+sh.yr*w*Math.max(0,y-b);r=r-sh.yr*w*0.25*(r-gg>0?r-gg:0)}else{b=b+sh.yr*w*0.12*b}
   d[i]=clamp(r+sh.lift*w*(255-r),0,255);d[i+1]=clamp(gg+sh.lift*w*(255-gg),0,255);d[i+2]=clamp(b+sh.lift*w*(255-b),0,255)}
- g.putImageData(im,0,0)}
+ g.putImageData(im,0,0);if(c&&c._final!==false)shadeMatch(g,D)}
 function sampleGum(D){var c=document.createElement('canvas');c.width=S.W;c.height=S.H;var g=c.getContext('2d');g.drawImage(S.img,0,0);
  var t=D.T.UR1||D.T.UL1,x=Math.round((t.x0+t.x1)/2),y=Math.round(t.y0-0.8*D.mm);if(y<1)y=1;
  var p=g.getImageData(clamp(x-3,0,S.W-7),clamp(y-2,0,S.H-5),7,5).data,r=0,gg=0,b=0,n=0;for(var i=0;i<p.length;i+=4){r+=p[i];gg+=p[i+1];b+=p[i+2];n++}
@@ -1268,6 +1268,16 @@ function sampleOral(g,D){var xs=[],ys=[];for(var k in D.T){var t=D.T[k];xs.push(
 function srcFor(id,D){var T=D.T,o=T[id],m=false;if(!o){o=T[(id[1]=='R'?'UL':'UR')+id[2]];m=!!o}if(!o)return null;
  var w=o.x1-o.x0,h=o.y1-o.y0;return{x:o.x0+w*0.18,y:o.y0+h*0.2,w:w*0.64,h:h*0.55,flip:m}}
 function lipMask(D,blur){var m=document.createElement('canvas');m.width=S.W;m.height=S.H;var g=m.getContext('2d');g.filter='blur('+blur+'px)';g.fillStyle='#fff';mouthPath(g,D);g.fill();return m}
+// final pass: every visible tooth (new and existing, upper and lower) is graded to the chosen VITA shade, keeping its own light and shadow
+function shadeMatch(g,D){var tc=SHADES[S.shade].c,Lc=(tc[0]*0.3+tc[1]*0.59+tc[2]*0.11);
+ var m=document.createElement('canvas');m.width=S.W;m.height=S.H;var mg=m.getContext('2d');mg.filter='blur('+Math.max(0.8,D.mm*0.25)+'px)';mg.fillStyle='#fff';mouthPath(mg,D);mg.fill();
+ var md=mg.getImageData(0,0,S.W,S.H).data,im=g.getImageData(0,0,S.W,S.H),d=im.data,W=new Float32Array(S.W*S.H),sL=0,sw=0;
+ for(var i=0,j=0;i<d.length;i+=4,j++){var mk=md[i+3]/255;if(mk<0.05)continue;var r=d[i],gg=d[i+1],b=d[i+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),L=r*0.3+gg*0.59+b*0.11,sat=mx?(mx-mn)/mx:0,red=(r-gg)/255;
+  var w=mk*clamp((0.16-red)/0.08,0,1)*clamp((L/255-0.32)/0.15,0,1)*clamp((0.5-sat)/0.15,0,1);W[j]=w;if(w>0.5){sL+=L*w;sw+=w}}
+ if(sw<20)return;var Lm=sL/sw,k=Lc/Lm;
+ for(var i=0,j=0;i<d.length;i+=4,j++){var w=W[j];if(w<=0)continue;var L=d[i]*0.3+d[i+1]*0.59+d[i+2]*0.11,f=clamp(L*k/Lc,0.5,1.2),a=w*0.78;
+  d[i]=clamp(d[i]*(1-a)+tc[0]*f*a,0,255);d[i+1]=clamp(d[i+1]*(1-a)+tc[1]*f*a,0,255);d[i+2]=clamp(d[i+2]*(1-a)+tc[2]*f*a,0,255)}
+ g.putImageData(im,0,0)}
 function mockup(c,g,D){var sh=SHADES[S.shade],st=sampleTooth(g,D),base=sh.c,mm=D.mm;
  // tone-match: brighten the patient's own (already whitened) tooth colour so the new teeth sit in the photo's light
  if(st){var gain=sh.gain||1.1,y=(st[0]+st[1])/2;base=[st[0]*gain,st[1]*gain,(sh.yr>=0?st[2]+sh.yr*0.6*Math.max(0,y-st[2]):st[2]*(1+sh.yr*0.12))*gain].map(function(v){return clamp(v,0,250)});
@@ -1308,7 +1318,7 @@ function mockup(c,g,D){var sh=SHADES[S.shade],st=sampleTooth(g,D),base=sh.c,mm=D
  lg.globalCompositeOperation='destination-in';lg.drawImage(lipMask(D,Math.max(0.8,mm*0.3)),0,0);lg.globalCompositeOperation='source-over';
  // 4. match the photo's grain so the teeth don't look painted
  var id=lg.getImageData(0,0,S.W,S.H),d=id.data,amp=12;for(var i=0;i<d.length;i+=4){if(d[i+3]<8)continue;var n=(Math.random()-0.5)*amp;d[i]=clamp(d[i]+n,0,255);d[i+1]=clamp(d[i+1]+n,0,255);d[i+2]=clamp(d[i+2]+n,0,255)}lg.putImageData(id,0,0);
- g.drawImage(Ly,0,0)}
+ g.drawImage(Ly,0,0);shadeMatch(g,D)}
 function lines(g,D,opt){var lw=Math.max(1.5,S.W/450);g.lineWidth=lw;g.font='600 '+Math.round(S.W/42)+'px system-ui,sans-serif';g.textAlign='center';
  if(opt.boxes){ORDER.forEach(function(id){var t=D.T[id];if(!t)return;g.strokeStyle='rgba(255,214,0,.95)';g.strokeRect(t.x0,t.y0,t.x1-t.x0,t.y1-t.y0);g.fillStyle='rgba(255,214,0,.95)';g.fillText(id.slice(2),(t.x0+t.x1)/2,t.y0-lw*2)})}
  var a=S.a;
