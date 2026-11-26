@@ -184,7 +184,7 @@ function meshReel(){var msg=$('mm'),out=$('mo'),b=$('mb');
    txt($('kind').value=='real'?'Results vary from person to person.':'Computer simulation for illustration. Results vary.',W/2,H-110,28,'rgba(255,255,255,.7)','center','400')}
   if(window.__reelDebug){window.__reelShots=[0,2000,3000,4300,6500].map(function(t){frame(t);return cv.toDataURL('image/jpeg',0.6)});b.disabled=false;return}
   var st=cv.captureStream(30),rec=new MediaRecorder(st,{mimeType:mt,videoBitsPerSecond:6000000}),ch=[];rec.ondataavailable=function(e){if(e.data&&e.data.size)ch.push(e.data)};
-  rec.onstop=function(){b.disabled=false;msg.textContent='Reel ready.';showVideo(new Blob(ch,{type:mt.split(';')[0]}),'smile-reel-'+ST,out,tips()+(LB?'':' (No face found in the before photo, so a plain wipe was used.)')+(BKFAIL?' (The background could not be removed on this phone, so the original background is kept.)':''))};
+  rec.onstop=function(){try{LASTFR=cv.toDataURL('image/jpeg',0.88)}catch(e){}b.disabled=false;msg.textContent='Reel ready.';showVideo(new Blob(ch,{type:mt.split(';')[0]}),'smile-reel-'+ST,out,tips()+(LB?'':' (No face found in the before photo, so a plain wipe was used.)')+(BKFAIL?' (The background could not be removed on this phone, so the original background is kept.)':''))};
   msg.textContent='Recording the reel... 0%';frame(0);rec.start(250);var t0=performance.now();
   (function loop(){var t=performance.now()-t0;frame(Math.min(t,DUR));msg.textContent='Recording the reel... '+Math.round(Math.min(1,t/DUR)*100)+'%';if(t<DUR+200)requestAnimationFrame(loop);else rec.stop()})()})})}).catch(function(e){b.disabled=false;msg.className='muted err';msg.textContent='Could not make the reel ('+((e&&e.message)||e)+').'})}
 
@@ -216,6 +216,32 @@ $('qf').addEventListener('change',function(){var f=this.files[0];if(!f)return;$(
 $('ql').addEventListener('click',function(){Q.rot=(Q.rot+3)%4;qdraw()});$('qrt').addEventListener('click',function(){Q.rot=(Q.rot+1)%4;qdraw()});
 $('qd').addEventListener('click',function(){if(!Q.img){$('qm').className='muted err';$('qm').textContent='Choose a photo first.';return}$('qc').toBlob(function(b){var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='smile-photo.jpg';document.body.appendChild(a);a.click();a.remove()},'image/jpeg',0.93)});
 $('mb').addEventListener('click',meshReel);$('ab').addEventListener('click',aiClip);
+
+/* ---------- 4. Post queue (staff only; drafts wait for the doctor's approval, nothing is published from here) ---------- */
+var LASTFR=null,QAPI='https://arxhbdyciylznmlamvri.supabase.co/functions/v1/post-queue';
+function qcall(o){return fetch(QAPI,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})}
+function qimg(){var s=$('qsrc').value;
+ if(s==='last')return Promise.resolve(LASTFR);
+ if(s==='photo')return Promise.resolve(Q.img?$('qc').toDataURL('image/jpeg',0.88):null);
+ var f=FILES.qpf;if(!f)return Promise.resolve(null);
+ return loadFile(f).then(function(im){var k=Math.min(1,1600/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement('canvas');c.width=Math.round(im.naturalWidth*k);c.height=Math.round(im.naturalHeight*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);return c.toDataURL('image/jpeg',0.88)})}
+var QT={smile:'Smile makeover planning at '+CL+'. A digital smile design lets you see a proposed result before treatment starts. Book a consultation to find out what is suitable for you.',tip:'Dental tip from '+CL+': brush twice a day with a fluoride toothpaste, clean between your teeth daily, and visit your dentist every six months for a check-up.',care:'Healthy teeth, healthy smile. Come in for a check-up at '+CL+'. Call '+PH+' to book your visit.'};
+if($('qs')){
+ $('qt').addEventListener('change',function(){if(QT[this.value])$('qcap').value=QT[this.value]});
+ $('qpf').addEventListener('change',function(){var f=this.files[0];FILES.qpf=null;if(!f)return;f.arrayBuffer().then(function(b){FILES.qpf=new Blob([b],{type:f.type||'image/jpeg'})})});
+ try{$('qph').value=localStorage.getItem('ss_qph')||''}catch(e){}
+ function qlist(){var m=$('qm2'),ph=$('qph').value.replace(/\D/g,'');if(ph.length<10)return;qcall({mode:'list',phone:ph}).then(function(x){if(!x.ok){return}var h='';(x.j.items||[]).forEach(function(i){h+='<div style="display:flex;gap:8px;align-items:center;margin:6px 0"><img src="'+i.image_url+'" style="width:44px;height:44px;object-fit:cover;border-radius:6px"><div style="flex:1;font-size:.85em"><b>'+i.status+'</b> · '+(i.caption||'').slice(0,60).replace(/</g,'&lt;')+'</div>'+(i.status==='pending'?'<button type="button" class="btn o2" data-x="'+i.id+'">Remove</button>':'')+'</div>'});$('ql2').innerHTML=h||'<span class="muted">No drafts yet.</span>';Array.prototype.forEach.call($('ql2').querySelectorAll('button[data-x]'),function(bt){bt.addEventListener('click',function(){qcall({mode:'cancel',phone:ph,id:bt.getAttribute('data-x')}).then(qlist)})})})}
+ $('qs').addEventListener('click',function(){var m=$('qm2'),ph=$('qph').value.replace(/\D/g,''),cap=$('qcap').value.trim(),con=$('qcons').value;
+  if(ph.length<10){m.className='muted err';m.textContent='Enter the staff mobile number.';return}
+  if(!con){m.className='muted err';m.textContent='Say who is in the photo.';return}
+  if(cap.length<10){m.className='muted err';m.textContent='Write a caption first.';return}
+  if(con==='patient_written'&&!$('qok').checked){m.className='muted err';m.textContent='Tick the written consent box.';return}
+  var b=$('qs');b.disabled=true;m.className='muted';m.textContent='Saving the draft...';
+  qimg().then(function(img){if(!img)throw new Error('Choose or make an image first.');return qcall({mode:'submit',phone:ph,image:img,caption:cap,consent:con,cta:$('qcta').value,kind:$('qsrc').value==='last'?'reel':'photo'})})
+  .then(function(x){b.disabled=false;if(!x.ok)throw new Error((x.j&&x.j.error)||'failed');try{localStorage.setItem('ss_qph',ph)}catch(e){}m.textContent='Draft saved. The doctor reviews it and approves before anything is posted.';qlist()})
+  .catch(function(e){b.disabled=false;m.className='muted err';m.textContent=(e&&e.message)||'Could not save the draft.'})});
+ $('qr2').addEventListener('click',qlist);qlist();
+}
 var FILES={fb:null,fa:null};
 /* copy the picked photo into memory right away: on Android the picker's file can become unreadable later */
 function prev(id,pid){$(id).addEventListener('change',function(){var f=this.files[0];FILES[id]=null;$(pid).innerHTML='';if(!f)return;
