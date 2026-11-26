@@ -1042,7 +1042,7 @@ var FORMS={oval:{n:'Oval (soft, rounded)',c:[0.16,0.32,0.035],l:[0.28,0.5,0.05],
 var SHADE_ORDER=['BL1','BL2','BL3','BL4','B1','A1','B2','D2','A2','C1','C2','D3','A3','D4','B3','A3.5','B4','C3','A4','C4'];
 var SHADE_RGB={BL1:[250,249,244],BL2:[247,245,236],BL3:[244,240,228],BL4:[240,235,220],B1:[238,232,214],A1:[234,224,200],B2:[233,222,190],D2:[226,214,192],A2:[228,214,184],C1:[222,212,190],C2:[214,200,172],D3:[218,204,178],A3:[224,204,166],D4:[210,192,160],B3:[222,202,158],'A3.5':[214,190,150],B4:[216,192,144],C3:[200,184,152],A4:[200,176,138],C4:[184,164,128]};
 var SHADES={};SHADE_ORDER.forEach(function(k,i){var f=1-i/(SHADE_ORDER.length-1);SHADES[k]={c:SHADE_RGB[k],n:k,yr:-0.35+1.3*f,lift:-0.08+0.26*f,gain:0.86+0.4*f}});
-var S={eyes:'off',clin:false,face:true,form:'oval',wh:0.78,a:null,after:null,img:null,W:0,H:0,ratio:'red70',shade:'A1',view:'mockup',outline:true,brace:'metal',cache:{}};
+var S={bg:'black',eyes:'off',clin:false,face:true,form:'oval',wh:0.78,a:null,after:null,img:null,W:0,H:0,ratio:'red70',shade:'A1',view:'mockup',outline:true,brace:'metal',cache:{}};
 var beforeURL=null;
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function avg(a){a=a.filter(function(v){return v!=null&&isFinite(v)});return a.length?a.reduce(function(p,q){return p+q},0)/a.length:null}
@@ -1385,7 +1385,7 @@ function clinical(c,D){var a=S.a,mm=D.mm,W=S.W,H=S.H,g=c.getContext('2d');
  var x0=Math.min.apply(0,xs)-2*mm,x1=Math.max.apply(0,xs)+2*mm,y0=Math.min.apply(0,ys)-5*mm,y1=Math.max.apply(0,ys)+3*mm,cw=x1-x0,ch=Math.max(y1-y0,cw*9/16),cy=(y0+y1)/2;
  x0=clamp(x0,0,W-1);cw=Math.min(cw,W-x0);var sy=clamp(cy-ch/2,0,H-1);ch=Math.min(ch,H-sy);
  var o=document.createElement('canvas'),k3=Math.min(3,1400/cw);o.width=Math.round(cw*k3);o.height=Math.round(ch*k3);var og=o.getContext('2d');og.imageSmoothingQuality='high';og.drawImage(c,x0,sy,cw,ch,0,0,o.width,o.height);o._t=[x0,sy,k3];return o}
-function render(view){var k=view+'|'+S.ratio+'|'+S.shade+'|'+S.outline+'|'+S.brace+'|'+S.form+'|'+S.wh+'|'+(S.face&&FULL?1:0)+'|'+(S.clin?1:0)+'|'+S.eyes;if(S.cache[k])return S.cache[k];
+function render(view){var k=view+'|'+S.ratio+'|'+S.shade+'|'+S.outline+'|'+S.brace+'|'+S.form+'|'+S.wh+'|'+(S.face&&FULL?1:0)+'|'+(S.clin?1:0)+'|'+S.eyes+'|'+S.bg+(FULL&&FULL.mask?'m':'');if(S.cache[k])return S.cache[k];
  var D=design(),cg=baseCanvas(),c=cg[0],g=cg[1];
  if(!D)return beforeURL;
  if(S.clin&&(view=='design'||view=='dsd'||view=='analysis')){var o=clinical(c,D),og=o.getContext('2d'),t=o._t;og.setTransform(t[2],0,0,t[2],-t[0]*t[2],-t[1]*t[2]);og.lineWidth=1;
@@ -1398,21 +1398,21 @@ function render(view){var k=view+'|'+S.ratio+'|'+S.shade+'|'+S.outline+'|'+S.bra
  else if(view=='braces'){braces(c,g,D,S.brace)}
  var u=(S.clin?clinical(c,D):faceWrap(c)).toDataURL('image/jpeg',0.9);S.cache[k]=u;return u}
 function faceWrap(c){if(!S.face||!FULL||!FULL.crop)return c;var I=FULL.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height,k=Math.min(1,1400/Math.max(W,H)),cr=FULL.crop;
- var o=document.createElement('canvas');o.width=Math.round(W*k);o.height=Math.round(H*k);var og=o.getContext('2d');og.imageSmoothingQuality='high';og.drawImage(I,0,0,o.width,o.height);og.drawImage(c,0,0,c.width,c.height,cr[0]*k,cr[1]*k,cr[2]*k,cr[3]*k);maskEyes(o,k);return o}
+ var o=document.createElement('canvas');o.width=Math.round(W*k);o.height=Math.round(H*k);var og=o.getContext('2d');og.imageSmoothingQuality='high';og.drawImage(I,0,0,o.width,o.height);og.drawImage(c,0,0,c.width,c.height,cr[0]*k,cr[1]*k,cr[2]*k,cr[3]*k);o=bgWrap(o);maskEyes(o,k);return o}
 function maskEyes(o,k){var e=FULL&&FULL.eyes;if(S.eyes=='off'||!e)return;var g=o.getContext('2d'),x1=e[0]*k,y1=e[1]*k,x2=e[2]*k,y2=e[3]*k,d=Math.hypot(x2-x1,y2-y1),a=Math.atan2(y2-y1,x2-x1),cx=(x1+x2)/2,cy=(y1+y2)/2,w=d*1.55,h=d*0.42;
  g.save();g.translate(cx,cy);g.rotate(a);g.beginPath();rrect(g,-w/2,-h*0.55,w,h,h*0.18);
  if(S.eyes=='bar'){g.fillStyle='#111';g.fill()}
  else{g.clip();g.rotate(-a);g.translate(-cx,-cy);var t=document.createElement('canvas');t.width=o.width;t.height=o.height;t.getContext('2d').drawImage(o,0,0);g.filter='blur('+Math.max(8,d*0.12)+'px)';g.drawImage(t,0,0);g.filter='none';g.drawImage(t,0,0,0,0);var t2=g.globalAlpha;g.globalAlpha=0.5;g.filter='blur('+Math.max(12,d*0.2)+'px)';g.drawImage(t,0,0);g.filter='none';g.globalAlpha=t2}
  g.restore()}
-function beforeShown(){if(S.clin){var D0=design();if(D0){if(!S.cache.cb)S.cache.cb=clinical(baseCanvas()[0],D0).toDataURL('image/jpeg',0.9);return S.cache.cb}}if(!S.face||!FULL)return beforeURL;if(!FACEB||FACEB.k!=S.eyes)FACEB={k:S.eyes,u:faceWrap(baseCanvas()[0]).toDataURL('image/jpeg',0.9)};return FACEB.u}
+function beforeShown(){if(S.clin){var D0=design();if(D0){if(!S.cache.cb)S.cache.cb=clinical(baseCanvas()[0],D0).toDataURL('image/jpeg',0.9);return S.cache.cb}}if(!S.face||!FULL)return beforeURL;if(!FACEB||FACEB.k!=S.eyes+S.bg)FACEB={k:S.eyes+S.bg,u:faceWrap(baseCanvas()[0]).toDataURL('image/jpeg',0.9)};return FACEB.u}
 
 /* ---------- reel maker: animated before/after video (9:16) ---------- */
 function loadImg(u){return new Promise(function(res,rej){var i=new Image();i.onload=function(){res(i)};i.onerror=rej;i.src=u})}
 function reelMime(){var c=['video/mp4;codecs=avc1.42E01E','video/mp4','video/webm;codecs=vp9','video/webm'];for(var i=0;i<c.length;i++)if(window.MediaRecorder&&MediaRecorder.isTypeSupported(c[i]))return c[i];return ''}
-function makeReel(bu,au,tpl,label,cb,prog){Promise.all([loadImg(bu),loadImg(au)]).then(function(im){var B=im[0],A=im[1];
+function makeReel(bu,au,tpl,label,cb,prog,lu){Promise.all([loadImg(bu),loadImg(au),lu?loadImg(lu):null]).then(function(im){var B=im[0],A=im[1],LY=im[2];
  var W=1080,H=1920,cv=document.createElement('canvas');cv.width=W;cv.height=H;var g=cv.getContext('2d');
  var px=60,py=330,pw=W-120,ph=1240,k=Math.min(pw/B.width,ph/B.height),iw=B.width*k,ih=B.height*k,ix=px+(pw-iw)/2,iy=py+(ph-ih)/2;
- var DUR=tpl=='split'?6000:9000;
+ var DUR=tpl=='split'?6000:tpl=='fly'?7000:9000;
  function txt(t,x,y,sz,col,al,wt){g.font=(wt||'700')+' '+sz+'px system-ui,sans-serif';g.fillStyle=col;g.textAlign=al||'center';g.fillText(t,x,y)}
  function frame(t){var u=t/DUR;g.fillStyle='#0b2236';g.fillRect(0,0,W,H);
   txt('SMILE DESIGN',W/2,150,64,'#ffffff');txt(label,W/2,225,40,'#d8c3a5','center','500');
@@ -1423,6 +1423,9 @@ function makeReel(bu,au,tpl,label,cb,prog){Promise.all([loadImg(bu),loadImg(au)]
    g.restore();var tx=ix+50,ty=iy+50,tw=190,th=96;g.save();g.shadowColor='rgba(255,255,255,'+(0.4+0.5*sw)+')';g.shadowBlur=30;rrect(g,tx,ty,tw,th,th/2);g.fillStyle=sw>0.5?'#ffffff':'rgba(255,255,255,.35)';g.fill();g.restore();
    g.beginPath();g.arc(tx+th/2+(tw-th)*sw,ty+th/2,th/2-8,0,7);g.fillStyle=sw>0.5?'#e9eef2':'#ffffff';g.fill();
    txt(sw>0.5?'AFTER':'BEFORE',ix+iw-40,iy+ih-40,48,'#ffffff','right')}
+  else if(tpl=='fly'&&LY){var e0=clamp((u-0.12)/0.33,0,1),e=1-Math.pow(1-e0,3),sc=1+0.35*(1-e),cx=ix+iw/2,cy=iy+ih*0.45;
+   g.drawImage(B,ix,iy,iw,ih);g.save();g.globalAlpha=Math.min(1,e0*2);g.translate(cx,cy-(1-e)*ih*0.3);g.scale(sc,sc);g.translate(-cx,-cy);g.drawImage(LY,ix,iy,iw,ih);g.restore();g.restore();
+   if(e0>=1){var fl=clamp(1-(u-0.45)/0.06,0,1);if(fl>0){g.fillStyle='rgba(255,255,255,'+(fl*0.35)+')';g.fillRect(ix,iy,iw,ih)}txt(label,ix+iw-40,iy+ih-40,44,'#ffffff','right')}}
   else if(tpl=='swipe'){var p=u<0.15?0:u<0.5?(u-0.15)/0.35:u<0.62?1:u<0.85?1-(u-0.62)/0.23*0.5:0.5,ease=p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2,sx=ix+iw*ease;
    g.drawImage(B,ix,iy,iw,ih);g.beginPath();g.rect(ix,iy,sx-ix,ih);g.save();g.clip();g.drawImage(A,ix,iy,iw,ih);g.restore();g.restore();
    g.fillStyle='#fff';g.fillRect(sx-3,iy,6,ih);g.beginPath();g.arc(sx,iy+ih/2,56,0,7);g.lineWidth=8;g.strokeStyle='#fff';g.stroke();txt('◀ ▶',sx,iy+ih/2+14,36,'#fff');
@@ -1438,16 +1441,54 @@ function makeReel(bu,au,tpl,label,cb,prog){Promise.all([loadImg(bu),loadImg(au)]
  rec.onstop=function(){cb(new Blob(ch,{type:mime.split(';')[0]}))};
  frame(0);rec.start(250);var t0=performance.now();
  (function loop(){var t=performance.now()-t0;frame(Math.min(t,DUR));prog&&prog(Math.min(1,t/DUR));if(t<DUR+150)requestAnimationFrame(loop);else rec.stop()})()}).catch(function(e){cb(null,'Could not prepare the images ('+e+').')})}
+function bracesLayer(){var D=design();if(!D||!FULL||!FULL.crop)return null;var c=document.createElement('canvas');c.width=S.W;c.height=S.H;var g=c.getContext('2d');braces(c,g,D,S.brace);
+ var I=FULL.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height,k=Math.min(1,1400/Math.max(W,H)),cr=FULL.crop,o=document.createElement('canvas');o.width=Math.round(W*k);o.height=Math.round(H*k);o.getContext('2d').drawImage(c,0,0,c.width,c.height,cr[0]*k,cr[1]*k,cr[2]*k,cr[3]*k);return o.toDataURL('image/png')}
 function reelUI(){var box=document.getElementById('reel');if(!box)return;
- box.innerHTML='<h3>Make a before/after reel</h3><p class="muted">A 9:16 video for Instagram Reels, WhatsApp status or Google. Uses the view selected above.</p><div class="ctl"><label>Style<select id="rtp"><option value="toggle">Toggle switch</option><option value="swipe">Swipe reveal</option><option value="split">Before above, after below</option></select></label><button type="button" class="btn" id="rgo">Create video</button></div><p class="muted" id="rmsg"></p><div id="rout"></div>';
+ box.innerHTML='<h3>Make a before/after reel</h3><p class="muted">A 9:16 video for Instagram Reels, WhatsApp status or Google. Uses the view selected above.</p><div class="ctl"><label>Style<select id="rtp"><option value="toggle">Toggle switch</option><option value="swipe">Swipe reveal</option><option value="split">Before above, after below</option><option value="fly">Braces fly-in (metal / self-ligating)</option></select></label><button type="button" class="btn" id="rgo">Create video</button></div><p class="muted" id="rmsg"></p><div id="rout"></div>';
  document.getElementById('rgo').addEventListener('click',function(){var b=this,msg=document.getElementById('rmsg'),out=document.getElementById('rout'),v=S.view=='analysis'||S.view=='dsd'?'mockup':S.view;
   var au=v=='ai'?S.after:render(v),bu=beforeShown(),lbl=v=='braces'?BR[S.brace].n+' braces preview':v=='white'?'Teeth whitening preview':v=='design'?'Smile design plan':'Smile makeover preview';
   b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Recording the video… 0%';
-  makeReel(bu,au,document.getElementById('rtp').value,lbl,function(blob,err){b.disabled=false;if(!blob){msg.className='muted err';msg.textContent=err;return}
+  var tp=document.getElementById('rtp').value,lu=null;if(tp=='fly'){if(!(S.brace=='metal'||S.brace=='self')||!S.face||S.clin||!FULL){b.disabled=false;msg.className='muted err';msg.textContent='For the fly-in reel: open Braces preview, pick Metal or Self-ligating, tick Show full face and untick Clinical style.';return}lu=bracesLayer();bu=beforeShown();lbl=BR[S.brace].n+' braces'}
+  makeReel(bu,au,tp,lbl,function(blob,err){b.disabled=false;if(!blob){msg.className='muted err';msg.textContent=err;return}
    var ext=blob.type.indexOf('mp4')>=0?'mp4':'webm',url=URL.createObjectURL(blob),name='smile-reel.'+ext;msg.textContent='Video ready ('+ext.toUpperCase()+').'+(ext=='webm'?' If Instagram does not accept it, send it to yourself on WhatsApp first, or update Chrome.':'');
    out.innerHTML='<video src="'+url+'" controls playsinline loop style="width:100%;max-width:320px;display:block;margin:8px 0"></video><div class="cta"><a class="btn" href="'+url+'" download="'+name+'">Download video</a> <button type="button" class="btn o2" id="rsh">Share</button></div><p class="muted">Only post a patient’s face with their written consent.</p>';
    var sh=document.getElementById('rsh'),f=new File([blob],name,{type:blob.type});if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.style.display='none';
-   sh.addEventListener('click',function(){navigator.share({files:[f],title:'Smile design'}).catch(function(){})})},function(p){msg.textContent='Recording the video… '+Math.round(p*100)+'%'})})}
+   sh.addEventListener('click',function(){navigator.share({files:[f],title:'Smile design'}).catch(function(){})})},function(p){msg.textContent='Recording the video… '+Math.round(p*100)+'%'},lu)})}
+/* ---------- studio background: person segmentation (MediaPipe selfie segmenter, runs on the phone) ---------- */
+var SEGM='https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite',SEG=null;
+function segmentFull(){if(!FULL||FULL.mask||FULL.segBusy)return;FULL.segBusy=true;var F=FULL;
+ (SEG?Promise.resolve(SEG):import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.ImageSegmenter.createFromOptions(fs,{baseOptions:{modelAssetPath:SEGM,delegate:'CPU'},runningMode:'IMAGE',outputConfidenceMasks:true,outputCategoryMask:false})})}).then(function(s){SEG=s;return s}))
+ .then(function(s){var I=F.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height,k=Math.min(1,1024/Math.max(W,H)),c=document.createElement('canvas');c.width=Math.round(W*k);c.height=Math.round(H*k);c.getContext('2d').drawImage(I,0,0,c.width,c.height);
+  var r=s.segment(c),cm=r.confidenceMasks&&r.confidenceMasks[r.confidenceMasks.length-1];if(!cm)throw 0;var a=cm.getAsFloat32Array(),mw=cm.width,mh=cm.height;
+  var mc=document.createElement('canvas');mc.width=mw;mc.height=mh;var mg=mc.getContext('2d'),id=mg.createImageData(mw,mh);
+  for(var i=0;i<a.length;i++){var v=a[i];v=clamp((v-0.35)/0.3,0,1);id.data[i*4]=255;id.data[i*4+1]=255;id.data[i*4+2]=255;id.data[i*4+3]=v*255}
+  mg.putImageData(id,0,0);r.close&&r.close();if(FULL!==F)return;F.mask=mc;FACEB=null;S.cache={};paint()})
+ .catch(function(){F.segFail=true})}
+function bgWrap(o){if(S.bg=='photo'||!FULL||!FULL.mask)return o;var W=o.width,H=o.height,n=document.createElement('canvas');n.width=W;n.height=H;var g=n.getContext('2d');
+ var col={black:['#1a1a1a','#000'],grey:['#5a5d60','#2c2e30'],white:['#ffffff','#e4e4e4']}[S.bg]||['#111','#000'],rg=g.createRadialGradient(W/2,H*0.42,W*0.1,W/2,H*0.5,Math.max(W,H)*0.75);rg.addColorStop(0,col[0]);rg.addColorStop(1,col[1]);g.fillStyle=rg;g.fillRect(0,0,W,H);
+ var p=document.createElement('canvas');p.width=W;p.height=H;var pg=p.getContext('2d');pg.drawImage(o,0,0);pg.globalCompositeOperation='destination-in';pg.filter='blur('+Math.max(1,W/500)+'px)';pg.drawImage(FULL.mask,0,0,W,H);
+ g.drawImage(p,0,0);return n}
+/* ---------- 3D bracket sprites ---------- */
+var SPR={};
+function bracketSprite(kind){if(SPR[kind])return SPR[kind];var W=220,H=200,c=document.createElement('canvas');c.width=W;c.height=H;var g=c.getContext('2d');
+ function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+ function steel(x0,y0,x1,y1,stops){var gr=g.createLinearGradient(x0,y0,x1,y1);stops.forEach(function(s){gr.addColorStop(s[0],s[1])});return gr}
+ // base pad (mesh) with soft shadow
+ g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=14;g.shadowOffsetY=6;rr(18,22,184,156,26);g.fillStyle=steel(0,22,0,178,[[0,'#7d858c'],[0.5,'#4d555c'],[1,'#2b3136']]);g.fill();g.restore();
+ // body
+ rr(46,40,128,120,14);g.fillStyle=steel(46,40,174,160,[[0,'#cfd5da'],[0.35,'#8e979f'],[0.7,'#59626a'],[1,'#3a4147']]);g.fill();
+ // vertical channel
+ g.fillStyle=steel(100,0,120,0,[[0,'#2a3035'],[0.5,'#11151a'],[1,'#2a3035']]);g.fillRect(101,30,18,140);
+ // four tie wings: bright bevelled tops
+ [[30,20],[126,20],[30,118],[126,118]].forEach(function(q,i){var x=q[0],y=q[1],w=64,h=62;g.save();g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=6;g.shadowOffsetY=3;rr(x,y,w,h,12);
+  g.fillStyle=steel(x,y,x,y+h,i<2?[[0,'#ffffff'],[0.22,'#e3e8ec'],[0.55,'#9aa3ab'],[1,'#4f575e']]:[[0,'#e9edf0'],[0.3,'#b3bbc2'],[0.7,'#6c757c'],[1,'#3a4147']]);g.fill();g.restore();
+  rr(x,y,w,h,12);g.lineWidth=2.5;g.strokeStyle='rgba(20,24,28,.85)';g.stroke();
+  g.fillStyle='rgba(255,255,255,.9)';rr(x+10,y+7,w*0.45,8,4);g.fill();
+  g.fillStyle='rgba(255,255,255,.35)';rr(x+w-18,y+12,7,h-26,3);g.fill()});
+ // archwire slot
+ g.fillStyle=steel(0,88,0,112,[[0,'#0d1013'],[0.5,'#23292e'],[1,'#0d1013']]);g.fillRect(16,90,188,20);
+ if(kind=='self'){rr(40,58,140,84,14);g.fillStyle=steel(0,58,0,142,[[0,'#ffffff'],[0.3,'#d5dbe0'],[0.65,'#8f98a0'],[1,'#4a5259']]);g.fill();g.lineWidth=3;g.strokeStyle='rgba(15,18,22,.9)';g.stroke();g.fillStyle='rgba(255,255,255,.95)';rr(52,66,80,9,4);g.fill();g.fillStyle='rgba(30,35,40,.7)';g.fillRect(44,96,132,4)}
+ SPR[kind]=c;return c}
 /* ---------- braces preview ---------- */
 var BR={metal:{n:'Metal',t:'Most visible. Strong and reliable for every case. Lowest cost.'},
  ceramic:{n:'Ceramic',t:'Tooth-coloured brackets, much less noticeable. Costs more; ties can stain.'},
@@ -1499,6 +1540,12 @@ function braces(c,g,D,kind){var T=D.T,mm=D.mm,ids=ORDER.filter(function(id){retu
    g.fillStyle='rgba(255,255,255,'+(MET?0.95:0.7)+')';g.fillRect(q[0]+ww*0.18,q[1]+wh*0.14,ww*0.28,wh*0.12)});
   // slot
   g.fillStyle=MET?'rgba(12,14,16,.92)':'rgba(120,110,100,.5)';g.fillRect(x+w*0.02,p.cy-h*0.07,w*0.96,h*0.14);if(MET){g.fillStyle='rgba(12,14,16,.75)';g.fillRect(p.cx-w*0.05,y+h*0.05,w*0.1,h*0.9)}}
+ if(kind=='metal'||kind=='self'){var spr=bracketSprite(kind);
+  pts.forEach(function(p,i){var d=Math.abs(p.cx-D.mid)/Math.max(1,D.half),pf=clamp(1-0.5*d*d,0.45,1),sl=0;if(i>0&&i<pts.length-1)sl=Math.atan2(pts[i+1].cy-pts[i-1].cy,pts[i+1].cx-pts[i-1].cx);
+   var w=p.bw*1.15*pf,h=p.bh*1.15;g.save();g.translate(p.cx,p.cy);g.rotate(sl*0.8);g.drawImage(spr,-w/2,-h/2,w,h);g.restore()});
+  wire();
+  if(kind=='metal')pts.forEach(function(p){var d=Math.abs(p.cx-D.mid)/Math.max(1,D.half),pf=clamp(1-0.5*d*d,0.45,1),w=p.bw*1.15*pf,h=p.bh*1.15;g.save();g.beginPath();g.ellipse(p.cx,p.cy,w*0.36,h*0.34,0,0,Math.PI*2);g.lineWidth=Math.max(0.8,h*0.07);g.strokeStyle='rgba(45,50,56,.75)';g.stroke();g.restore()});
+  g.restore();return}
  pts.forEach(bracket);wire();
  pts.forEach(function(p){var x=p.cx-p.bw/2,y=p.cy-p.bh/2,w=p.bw,h=p.bh;
   if(kind=='metal'){g.save();g.beginPath();g.ellipse(p.cx,p.cy,w*0.4,h*0.4,0,0,Math.PI*2);g.lineWidth=Math.max(1.4,h*0.17);g.strokeStyle='rgba(70,76,82,.95)';g.stroke();g.lineWidth=Math.max(0.6,h*0.05);g.strokeStyle='rgba(200,206,210,.6)';g.stroke();g.restore()}
@@ -1549,6 +1596,7 @@ function build(){var a=S.a,D=design();
  h+='<label>Tooth shape<select id="fm">'+Object.keys(FORMS).map(function(k){return'<option value="'+k+'">'+FORMS[k].n+'</option>'}).join('')+'</select></label>';
  h+='<label>Central width : length<select id="wh"><option value="0.75">75% (longer)</option><option value="0.78">78% (classic)</option><option value="0.8">80%</option><option value="0.85">85% (shorter)</option></select></label>';
  h+='<div class="vita"><b>Shade (VITA classical)</b><input type="hidden" id="sh"><div class="vg">'+SHADE_ORDER.map(function(k){var c=SHADE_RGB[k];return'<button type="button" class="vs" data-s="'+k+'" title="VITA '+k+'"><i style="background:linear-gradient(180deg,rgb('+Math.round(c[0]*0.93)+','+Math.round(c[1]*0.9)+','+Math.round(c[2]*0.85)+') 0%,rgb('+c+') 45%,rgb('+Math.min(255,c[0]+6)+','+Math.min(255,c[1]+8)+','+Math.min(255,c[2]+14)+') 100%)"></i>'+k+'</button>'}).join('')+'</div><p class="muted">Lightest on the left. BL = bleach shades. Screen colours are approximate; the clinic matches your shade with a real VITA guide.</p></div>';
+ h+='<label>Background<select id="bgs"><option value="black">Black studio</option><option value="grey">Grey studio</option><option value="white">White studio</option><option value="photo">Original photo</option></select></label>';
  h+='<label>Hide eyes (privacy)<select id="ey"><option value="off">Show</option><option value="bar">Black bar</option><option value="blur">Blur</option></select></label>';
  h+='<label class="ck2"><input type="checkbox" id="cl"> Clinical photo style (black background)</label><label class="ck2"><input type="checkbox" id="fc"'+(S.face?' checked':'')+'> Show full face</label><label class="ck2"><input type="checkbox" id="ol"'+(S.outline?' checked':'')+'> Show midline</label><button type="button" class="btn o2" id="dl">Download image</button></div>';
  h+='<p class="muted"><b>Simulation only.</b> These pictures are drawn by the computer from your photo to explain ideal proportions. They are not a promise of results. Your plan depends on your teeth, gums and bite, and is decided after an examination.</p>';
@@ -1571,9 +1619,10 @@ function build(){var a=S.a,D=design();
  document.getElementById('ol').addEventListener('change',function(){S.outline=this.checked;paint()});
  document.getElementById('fc').addEventListener('change',function(){S.face=this.checked;paint()});
  document.getElementById('cl').addEventListener('change',function(){S.clin=this.checked;paint()});
+ document.getElementById('bgs').value=S.bg;document.getElementById('bgs').addEventListener('change',function(){S.bg=this.value;paint()});
  document.getElementById('ey').value=S.eyes;document.getElementById('ey').addEventListener('change',function(){S.eyes=this.value;paint()});if(!FULL||!FULL.eyes)document.getElementById('ey').parentNode.style.display='none';if(!FULL)document.getElementById('fc').parentNode.style.display='none';
  document.getElementById('dl').addEventListener('click',function(){var a2=document.createElement('a');a2.href=S.view=='ai'?S.after:render(S.view);a2.download='smile-design-'+S.view+'.jpg';document.body.appendChild(a2);a2.click();a2.remove()});
- paint();reelUI();out.scrollIntoView({behavior:'smooth'})}
+ paint();reelUI();segmentFull();out.scrollIntoView({behavior:'smooth'})}
 var CAP={dsd:'DSD lines: the classic smile-design template on your photo. Blue: face midline. Yellow: horizontal reference parallel to your eyes. Orange dots: gum zeniths. Purple: contact points. Gold: biting-edge curve, which should follow the green lower lip. Percentages: central width ÷ length, and each tooth’s width compared with the tooth in front of it.',mockup:'Smile mock-up: your photo with ideal-proportion teeth drawn in, plus whitening. Drag the slider to compare with your current smile.',design:'Ideal design: the planned tooth outlines drawn on your own photo, with the gum curve and biting-edge curve, the face midline and the biting-edge reference (gold dotted). Drag the slider to compare.',white:'Whitening only: your own teeth at the chosen shade, without changing their shape.',analysis:'Analysis: yellow boxes mark your 8 front teeth (1 central, 2 lateral, 3 canine, 4 premolar). Blue: face midline. Red: teeth midline. Green: lower lip line that the tooth edges should follow.',ai:'AI photo: a realistic AI-generated preview of your smile after treatment.',braces:'Braces preview: how each type of braces or aligners would look on your current teeth (upper teeth shown). Pick a type above and drag the slider.'};
 function paint(){var cmp=document.getElementById('cmp');if(!cmp)return;var u=S.view=='ai'?S.after:render(S.view);
  document.getElementById('cap').textContent=CAP[S.view]||'';document.getElementById('bt').style.display=S.view=='braces'?'flex':'none';
