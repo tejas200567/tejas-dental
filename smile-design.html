@@ -782,7 +782,7 @@ function recOpt(){return PLAN.options.filter(function(q){return q.key==PLAN.reco
 function optTxt(o){return 'Shape: '+(MN[o.morphology]||FN[o.form])+' · Proportion reference: '+(RLBL[o.ratio]||o.ratio).replace(/.*\((.*)\)/,'$1')+' · Width : length '+Math.round(o.wh*100)+'% · Shade VITA '+o.shade+' (provisional)'}
 function withOpt(o,fn){var k={form:S.form,ratio:S.ratio,wh:S.wh,shade:S.shade};S.form=o.form;S.ratio=o.ratio;S.wh=o.wh;S.shade=o.shade;try{return fn()}finally{S.form=k.form;S.ratio=k.ratio;S.wh=k.wh;S.shade=k.shade}}
 function planImage(){try{if(FULL&&FULL.img){var I=FULL.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height;return toURL(I,0,0,W,H,900,0.85)}}catch(e){}return beforeURL}
-function optImg(o){return (PLAN.ai&&PLAN.ai[o.key])||withOpt(o,function(){return render('mockup')})}
+function optImg(o){if(PLAN.ai&&PLAN.ai[o.key])return PLAN.ai[o.key];if(o.key==PLAN.recommended&&S.after)return render('ai');return withOpt(o,function(){return render('mockup')})}
 function optImgCrop(o){var f0=S.face;S.face=false;try{return optImg(o)}finally{S.face=f0}}
 function fullFaceAI(R){return new Promise(function(res){var f0=S.face;
  function done(u){S.face=f0;res(u)}
@@ -823,20 +823,20 @@ function showPlan(){var P=PLAN,o=document.getElementById('rpo'),D=design();if(!P
  if(P.current.improve.length)h+='<p><b>May benefit from:</b> '+esc(P.current.improve.join('; '))+'</p>';
  if(P.checklist.length)h+='<div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Smile frame check</th><th></th><th>Note</th></tr></thead><tbody>'+P.checklist.map(function(c){return'<tr><td>'+esc(c.item)+'</td><td>'+(c.status=='good'?'<span class="ok">Good</span>':c.status=='improve'?'<span class="wn">Improve</span>':'<span class="muted">Not assessed</span>')+'</td><td>'+esc(c.note)+'</td></tr>'}).join('')+'</tbody></table></div>';
  if(P.limitations.length)h+='<p class="muted"><b>What one photo cannot show:</b> '+esc(P.limitations.join('; '))+'. Shades are provisional until checked with a shade guide in the clinic.</p>';
- if(isStaff())h+='<div class="note" style="background:#fff"><b>Clinic staff:</b> after you approve the designs, make realistic AI photos of all 3 (about 1–2 minutes, uses AI credit). They replace the drawings in the cards and the PDF.<br><button type="button" class="btn" id="aib" style="margin-top:8px">Make AI photos of the 3 designs</button><p class="muted" id="aim"></p></div>';
+ h+='<div class="note" style="background:#fff"><b>AI photos:</b> after you approve the designs, make realistic AI photos of all 3 (about 1–2 minutes, uses AI credit). They replace the drawings in the cards and the PDF.<br><button type="button" class="btn" id="aib" style="margin-top:8px">Redo AI photos of the 3 designs</button><p class="muted" id="aim"></p></div>';
  h+='<div class="cta"><button type="button" class="btn" id="pdfb">Download my smile design report (PDF)</button></div><p class="muted" id="pdfm"></p>';h+=animHTML();
  o.innerHTML=h;countUp(document.getElementById('ss0'),cs);setTimeout(function(){countUp(document.getElementById('ss1'),rs)},500);
  thumbs();
  o.querySelectorAll('.pa').forEach(function(b){b.addEventListener('click',function(){applyOpt(P.options.filter(function(q){return q.key==b.dataset.k})[0])})});
  document.getElementById('pdfb').addEventListener('click',makePDF);animWire();document.getElementById('shb').addEventListener('click',shareScore);
- var ab=document.getElementById('aib');if(ab)ab.addEventListener('click',aiPhotos)}
+ var ab=document.getElementById('aib');if(ab){ab.addEventListener('click',aiPhotos);if(!PLAN._auto){PLAN._auto=1;aiPhotos()}}}
 function sv(v){return v==null?'<span class="muted">Not assessed</span>':String(Math.round(v*10)/10)}
 function thumbs(){var D=design(),o=document.getElementById('rpo');PLAN.options.forEach(function(op){cropURL(optImgCrop(op),D,function(cu){var im=o.querySelector('img.pi[data-k="'+op.key+'"]');if(im)im.src=cu})})}
-function aiPhotos(){var b=document.getElementById('aib'),m=document.getElementById('aim'),i=0;b.disabled=true;
- (function next(){if(i>=3){b.disabled=false;m.textContent='AI photos ready. They are now used in the cards and the PDF.';thumbs();return}var op=PLAN.options[i];m.className='muted';m.textContent='Making AI photo '+(i+1)+' of 3 ('+op.style+')…';
+function aiPhotos(){var b=document.getElementById('aib'),m=document.getElementById('aim'),i=0,pb=document.getElementById('pdfb');b.disabled=true;if(pb)pb.disabled=true;
+ (function next(){if(i>=3){b.disabled=false;if(pb)pb.disabled=false;m.textContent='AI photos ready. They are now used in the cards and the PDF.';thumbs();return}var op=PLAN.options[i];m.className='muted';m.textContent='Making AI photo '+(i+1)+' of 3 ('+op.style+')…';
   post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},withOpt(op,aiOpts))).then(function(x){
-   if(!x.ok||!x.j.after){m.className='muted err';m.textContent=(x.j&&x.j.error)||'AI photo failed.';b.disabled=false;return}
-   aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;i++;next()},op.shade)}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='AI photo failed ('+((e&&e.message)||e)+').'})})()}
+   if(!x.ok||!x.j.after){m.className='muted err';m.textContent=(x.j&&x.j.error)||'AI photo failed.';b.disabled=false;if(pb)pb.disabled=false;return}
+   aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;i++;next()},op.shade)}).catch(function(e){b.disabled=false;if(pb)pb.disabled=false;m.className='muted err';m.textContent='AI photo failed ('+((e&&e.message)||e)+').'})})()}
 function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function ring(g,cx,cy,r,v,col){g.lineWidth=22;g.strokeStyle='rgba(255,255,255,.12)';g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.stroke();if(v!=null){g.strokeStyle=col;g.lineCap='round';g.beginPath();g.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*v/100);g.stroke()}}
 function shareScore(){var P=PLAN,R=recOpt(),cs=P.current.score.total,rs=R.score.total,inc=document.getElementById('shp').checked,D=design();
