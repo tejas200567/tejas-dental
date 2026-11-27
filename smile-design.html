@@ -761,6 +761,12 @@ function optTxt(o){return 'Shape: '+(MN[o.morphology]||FN[o.form])+' · Proporti
 function withOpt(o,fn){var k={form:S.form,ratio:S.ratio,wh:S.wh,shade:S.shade};S.form=o.form;S.ratio=o.ratio;S.wh=o.wh;S.shade=o.shade;try{return fn()}finally{S.form=k.form;S.ratio=k.ratio;S.wh=k.wh;S.shade=k.shade}}
 function planImage(){try{if(FULL&&FULL.img){var I=FULL.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height;return toURL(I,0,0,W,H,900,0.85)}}catch(e){}return beforeURL}
 function optImg(o){return (PLAN.ai&&PLAN.ai[o.key])||withOpt(o,function(){return render('mockup')})}
+function optImgCrop(o){var f0=S.face;S.face=false;try{return optImg(o)}finally{S.face=f0}}
+function fullFaceAI(R){return new Promise(function(res){var f0=S.face;
+ function done(u){S.face=f0;res(u)}
+ try{if(!(FULL&&FULL.crop)){res(optImg(R));return}
+  if(PLAN.ai&&PLAN.ai[R.key]){loadImg(PLAN.ai[R.key]).then(function(I){var u=null;S.face=true;try{u=faceWrap(I).toDataURL('image/jpeg',0.92)}catch(e){}S.face=f0;res(u||optImg(R))}).catch(function(){res(optImg(R))});return}
+  S.face=true;var u2=optImg(R);done(u2)}catch(e){S.face=f0;res(optImg(R))}})}
 function applyOpt(o){S.form=o.form;S.ratio=o.ratio;S.wh=o.wh;S.shade=o.shade;S.cache={};
  var q=function(id,v){var e=document.getElementById(id);if(e)e.value=v};q('fm',o.form);q('rt',o.ratio);q('wh',String(o.wh));
  document.querySelectorAll('.vs').forEach(function(b){b.classList.toggle('on',b.dataset.s==o.shade)});var tt=document.getElementById('tt');if(tt)tt.innerHTML=toothTable(design());
@@ -800,7 +806,7 @@ function showPlan(){var P=PLAN,o=document.getElementById('rpo'),D=design();if(!P
  document.getElementById('pdfb').addEventListener('click',makePDF);document.getElementById('shb').addEventListener('click',shareScore);
  var ab=document.getElementById('aib');if(ab)ab.addEventListener('click',aiPhotos)}
 function sv(v){return v==null?'<span class="muted">Not assessed</span>':String(Math.round(v*10)/10)}
-function thumbs(){var D=design(),o=document.getElementById('rpo');PLAN.options.forEach(function(op){cropURL(optImg(op),D,function(cu){var im=o.querySelector('img.pi[data-k="'+op.key+'"]');if(im)im.src=cu})})}
+function thumbs(){var D=design(),o=document.getElementById('rpo');PLAN.options.forEach(function(op){cropURL(optImgCrop(op),D,function(cu){var im=o.querySelector('img.pi[data-k="'+op.key+'"]');if(im)im.src=cu})})}
 function aiPhotos(){var b=document.getElementById('aib'),m=document.getElementById('aim'),i=0;b.disabled=true;
  (function next(){if(i>=3){b.disabled=false;m.textContent='AI photos ready. They are now used in the cards and the PDF.';thumbs();return}var op=PLAN.options[i];m.className='muted';m.textContent='Making AI photo '+(i+1)+' of 3 ('+op.style+')…';
   post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},withOpt(op,aiOpts))).then(function(x){
@@ -829,8 +835,8 @@ function dims(u){return loadImg(u).then(function(i){return{u:u,w:i.width,h:i.hei
 function cropP(u,D){return new Promise(function(r){cropURL(u,D,r)})}
 function makePDF(){var P=PLAN,m=document.getElementById('pdfm'),b=document.getElementById('pdfb');if(!P)return;var R0=recOpt();if(isStaff()&&!P.ai[R0.key]&&!P.noai){b.disabled=true;m.className='muted';m.textContent='Making the realistic AI photo of design '+R0.key+' (shade '+R0.shade+') for the report, about 30 seconds...';aiFor(R0).then(function(){b.disabled=false;makePDF()}).catch(function(e){P.noai=true;b.disabled=false;m.className='muted err';m.textContent='AI photo failed ('+((e&&e.message)||e)+'), using the drawing instead.';makePDF()});return}b.disabled=true;m.className='muted';m.textContent='Preparing your PDF…';
  var D=design(),R=recOpt(),cl=S.clin;S.clin=false;
- var bFull=beforeShown(),aFull=optImg(R),full=P.options.map(optImg);S.clin=cl;
- Promise.all([jspdf(),dims(bFull),dims(aFull),cropP(beforeURL,D)].concat(full.map(function(u){return cropP(u,D).then(dims)}))).then(function(r){
+ var bFull=beforeShown(),full=P.options.map(optImgCrop);S.clin=cl;var aFull=fullFaceAI(R);
+ Promise.all([jspdf(),dims(bFull),aFull.then(dims),cropP(beforeURL,D)].concat(full.map(function(u){return cropP(u,D).then(dims)}))).then(function(r){
   var J=r[0].jsPDF,bi=r[1],ai=r[2],th=r.slice(4);var doc=new J({unit:'mm',format:'a4'});
   var NV=[11,34,54],GD=[183,159,140],IN=[29,26,23],MU=[107,100,92],GR=[31,140,80],OR=[184,98,30],IV=[250,247,242],L=16,Wd=178,pg=0;
   var name=A(f.name.value||''),dt=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
@@ -873,8 +879,8 @@ function makePDF(){var P=PLAN,m=document.getElementById('pdfm'),b=document.getEl
   y=hd('What each design offers',y+3);P.options.forEach(function(op){y=para(op.key+' '+op.style+': strengths: '+op.strengths.join('; ')+'. Limitations: '+op.limitations.join('; ')+'. Who may prefer it: '+op.suits,y,8.4)});
   // 5 recommendation
   y=page('AI recommended smile design');var hr=fit(ai,L,y,108,120);scorePill(L+116,y+2,R.score.total,'Smile Score with this design',true);scorePill(L+116,y+36,P.current.score.total,'Smile Score now',false);
-  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor.apply(doc,NV);doc.text(R.key+'  '+A(R.style),L+116,y+80);doc.setFont('helvetica','normal');para(optTxt(R),y+86,8,MU,60,L+116);
-  y+=Math.max(hr,105)+8;y=hd('Why this design was selected',y);y=para(P.why,y);y=hd('What makes it harmonious',y+2);y=bullets([R.morphology_why,R.proportion_why,R.shade_why].filter(Boolean),y);y=para('This is an aesthetic planning suggestion. Dr. Tejas Pradhan makes the final decision after examining you.',y+2,8.4,MU);
+  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor.apply(doc,NV);doc.text(R.key+'  '+A(R.style),L+116,y+80);doc.setFont('helvetica','normal');para(optTxt(R),y+86,8,MU,60,L+116);fit(th[Math.max(0,P.options.indexOf(R))],L+116,y+104,60,34);
+  y+=Math.max(hr,140)+8;y=hd('Why this design was selected',y);y=para(P.why,y);y=hd('What makes it harmonious',y+2);y=bullets([R.morphology_why,R.proportion_why,R.shade_why].filter(Boolean),y);y=para('This is an aesthetic planning suggestion. Dr. Tejas Pradhan makes the final decision after examining you.',y+2,8.4,MU);
   // 6 clinical consultation
   y=page('Your clinical consultation');y=hd("Dentist's assessment",y);for(var i2=0;i2<5;i2++){doc.setDrawColor(200,190,178);doc.line(L,y+4+i2*8,194,y+4+i2*8)}y+=46;
   y=hd('Additional records needed',y);y=bullets(P.records.length?P.records:['Retracted intraoral photographs','Profile photograph','Shade photograph with a shade guide','Digital scan or impressions'],y);
@@ -923,7 +929,7 @@ function shadeLock(g,M,W,H,shade){try{
   var lab=rgb2lab(r,gg,b);wt[j]=w;LL[j]=lab[0];AA[j]=lab[1];BB[j]=lab[2];if(w>0.5){sL+=lab[0]*w;sA+=lab[1]*w;sB+=lab[2]*w;sw+=w}}
  if(sw<30)return;var mL=sL/sw,mA=sA/sw,mB=sB/sw,t;
  if(S.tabLab&&S.tabShade==shade)t=S.tabLab; // real shade tab photographed in the same light: exact match
- else{var v=VLAB[shade]||VLAB.A1;t=[clamp(mL*0.5+v[0]*0.5,55,92),v[1],v[2]]} // no tab: exact hue/chroma, lightness kept close to the photo's exposure
+ else{var v=VLAB[shade]||VLAB.A1;t=[clamp(Math.max(mL*0.4+v[0]*0.6,v[0]-2)+3,62,90),v[1]*0.8,v[2]*0.72]} // no tab: exact hue/chroma, lightness kept close to the photo's exposure
  var dL=t[0]-mL,dA=t[1]-mA,dB=t[2]-mB;
  for(var j2=0,i2=0;j2<n;j2++,i2+=4){var w2=wt[j2];if(!w2)continue;var o=lab2rgb(LL[j2]+dL*w2,AA[j2]+dA*w2,BB[j2]+dB*w2);d[i2]=o[0];d[i2+1]=o[1];d[i2+2]=o[2]}
  g.putImageData(im,0,0);S.lockInfo={from:[mL,mA,mB],to:t}}catch(e){}}
