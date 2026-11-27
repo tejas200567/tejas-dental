@@ -30,6 +30,7 @@ fi
 
 # Build all pages (uses the photos in images/ if present)
 python _build/build.py .
+[ -f .keep ] && git checkout HEAD -- $(cat .keep) 2>/dev/null
 
 # Put the real address into the pages
 sed -i "s#https://SITE_URL#$URL#g" *.html *.txt *.xml
