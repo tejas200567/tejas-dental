@@ -64,7 +64,8 @@ def load_images():
 IMAGES = load_images()
 doctor_img = next((i for i in IMAGES if i["base"] == "doctor"), None)
 hero_img = next((i for b in ("front", "reception", "treatment-room") for i in IMAGES if i["base"] == b), None)
-CLINIC_IMAGES = [i for i in IMAGES if not i["base"].startswith(("guide-", "ortho-"))]
+# only real photos of the clinic: 3D renders, guide charts, cards and the PPE photo are not clinic photos
+CLINIC_IMAGES = [i for i in IMAGES if not i["base"].startswith(("guide-", "ortho-", "braces-", "implant-", "brushing-", "hero-", "t-", "card-")) and i["base"] != "ppe"]
 gallery = [i for i in CLINIC_IMAGES if i is not doctor_img and i is not hero_img]
 
 
@@ -123,6 +124,11 @@ FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox
 
 # ---------------------------------------------------------------- shared CSS
 CSS = """
+.iog{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}@media(min-width:760px){.iog{grid-template-columns:repeat(3,1fr)}}
+.ioc{display:block;border-radius:14px;overflow:hidden;background:#0d1b2a;color:#fff;text-decoration:none;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.ioc img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.ioc span{display:block;padding:8px 10px;font-size:.85rem;line-height:1.3}
+.ioc b{color:#d9c8b8;margin-right:4px}
 :root{--ink:#1d1a17;--navy:#0b2236;--navy2:#143550;--sand:#e8e0d6;--cream:#faf7f2;--taupe:#b79f8c;--taupe-d:#8a705a;--muted:#6b645c;--line:#e3dbd0;--wa:#1faa59}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
 body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.7;color:var(--ink);background:var(--cream);padding-bottom:62px}
@@ -313,7 +319,7 @@ def tlist(skip=None):
 HOME_FAQS = [
     ("Where is Dr Tejas Pradhan's Dental Clinic?",
      "Shop No. A-19, Aareshwar Society, opposite Dheeraj Darshan, Kokan Nagar Road, near Kokan Hospital, Jogeshwari East, Mumbai 400060."),
-    ("What are the clinic timings?", "Monday to Saturday, 11 am to 2:30 pm and 5:30 pm to 9 pm. Closed on Sunday."),
+    ("What are the clinic timings?", "Monday to Saturday, 12 noon to 2 pm and 6 pm to 9:30 pm. Sundays by appointment."),
     ("Do I need an appointment?", "Appointments are recommended. Call or WhatsApp +91 83691 87806 or +91 91675 11565."),
     ("Who is the dentist?", "Dr. Tejas Pradhan, registered with the Maharashtra State Dental Council, Reg. No. A-20222."),
     ("Do you do root canal treatment in Jogeshwari East?",
@@ -347,10 +353,10 @@ def home():
         "openingHoursSpecification": [
             {"@type": "OpeningHoursSpecification",
              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-             "opens": "11:00", "closes": "14:30"},
+             "opens": "12:00", "closes": "14:00"},
             {"@type": "OpeningHoursSpecification",
              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-             "opens": "17:30", "closes": "21:00"}],
+             "opens": "18:00", "closes": "21:30"}],
         "founder": {"@type": "Person", "name": "Dr. Tejas Pradhan", "jobTitle": "Dentist"},
         "availableService": [{"@type": "MedicalProcedure", "name": n} for n in SERVICES_LD],
         "amenityFeature": [
@@ -450,7 +456,7 @@ def home():
   <p class="kick">Timings</p><h2>Clinic timings</h2>
   <table>
     <tr><td>Monday – Saturday</td><td>11:00 am – 2:30 pm<br>5:30 pm – 9:00 pm</td></tr>
-    <tr><td>Sunday</td><td>Closed</td></tr>
+    <tr><td>Sunday</td><td>By appointment</td></tr>
   </table>
   <p class="muted">Appointments recommended. Call or WhatsApp {PHONE} or {PHONE2}.</p>
 </div></section>
@@ -517,6 +523,30 @@ def video_section(slug):
 
 
 # ---------------------------------------------------------------- treatment pages
+# ---- implant prosthetic options strip (pictures live on implant-options.html)
+IMG_NAMES = {f.name for f in (OUT / "images").iterdir()} if (OUT / "images").is_dir() else set()
+BRUSH3D = next((n for n in ("brushing-bass-3d.jpg", "brushing-bass-3d.png") if n in IMG_NAMES), None)
+IMPLANT_OPTS = [("implant-fp1", "FP-1", "Single crown on one implant"), ("implant-fp2", "FP-2", "Bridge on implants"),
+                ("implant-fp3lower4", "FP-3", "Full fixed arch on 4 implants"), ("implant-fp3upper6", "FP-3", "Full fixed arch on 6 implants"),
+                ("implant-rp4", "RP-4", "Bar-retained removable denture"), ("implant-rp5lower2", "RP-5", "Overdenture on 2 implants")]
+
+
+def implant_options_block(slug):
+    if slug not in ("dental-implants", "all-on-4-implants", "implant-overdenture"):
+        return ""
+    cards = []
+    for stem, code, label in IMPLANT_OPTS:
+        f = next((n for n in sorted(IMG_NAMES) if n.rsplit(".", 1)[0] == stem), None)
+        if f:
+            cards.append(f'<a class="ioc" href="implant-options.html"><img src="images/{f}" alt="{e(code)}: {e(label)}, 3D illustration" loading="lazy" decoding="async"><span><b>{e(code)}</b> {e(label)}</span></a>')
+    if not cards:
+        return ""
+    return ('<h2 style="margin-top:36px">Teeth on implants: your options</h2>'
+            '<p>The teeth fixed on implants can be a single crown, a bridge, a full fixed arch or a removable denture that clips on. Tap a picture to compare all options.</p>'
+            '<div class="iog">' + "".join(cards) + '</div>'
+            '<p><a href="implant-options.html">Compare FP-1 to RP-5 options →</a></p>')
+
+
 def page(p):
     url = f'{BASE}/{p["slug"]}.html'
     faq_ld = {"@context": "https://schema.org", "@type": "FAQPage",
@@ -558,6 +588,7 @@ def page(p):
 </section>
 <section class="sec"><div class="wrap narrow">
 <h2>About {e(p["name"].lower())}</h2><p>{e(p["intro"])}</p>
+{implant_options_block(p["slug"])}
 <h2 style="margin-top:36px">{e(p["signs_title"])}</h2><ul class="b">{signs}</ul>
 <h2 style="margin-top:36px">What to expect</h2><ol class="b">{steps}</ol>
 {video_section(p["slug"])}
@@ -569,7 +600,7 @@ def page(p):
 <section class="sec"><div class="wrap narrow">
 <h2>Visit the clinic</h2>
 <p>{e(ADDR)}</p>
-<p>Monday to Saturday, 11 am – 2:30 pm and 5:30 pm – 9 pm. Closed Sunday. Appointments recommended: call or WhatsApp {PHONE} or {PHONE2}.</p>
+<p>Monday to Saturday, 12 noon – 2 pm and 6 pm – 9:30 pm. Sundays by appointment. Appointments recommended: call or WhatsApp {PHONE} or {PHONE2}.</p>
 <p>Dr. Tejas Pradhan, Maharashtra State Dental Council Reg. No. A-20222. <a href="{MAPS}">Open in Google Maps</a></p>
 <p class="muted">This page gives general information. Your treatment is decided after an examination at the clinic.</p>
 </div></section>
@@ -636,7 +667,7 @@ def guide_page(slug, title, h1, kick, desc, body, faqs=None):
 <section class="sec"><div class="wrap narrow">
 <h2>Visit the clinic</h2>
 <p>{e(ADDR)}</p>
-<p>Monday to Saturday, 11 am – 2:30 pm and 5:30 pm – 9 pm. Closed Sunday. Call or WhatsApp {PHONE} or {PHONE2}.</p>
+<p>Monday to Saturday, 12 noon – 2 pm and 6 pm – 9:30 pm. Sundays by appointment. Call or WhatsApp {PHONE} or {PHONE2}.</p>
 <p class="muted">General information only. Follow the instructions your own dentist gives you, and treatment is decided after an examination.</p>
 </div></section>
 <section class="sec alt"><div class="wrap"><p class="kick">More</p><h2>Treatments</h2>{tlist()}</div></section>
@@ -875,8 +906,8 @@ def brushing_page():
     body = (
         '<h2>Brushing technique</h2>'
         '<p>Most people brush for long enough but miss the area where teeth meet the gums. The Modified Bass technique is the method dentists most often recommend because it cleans just under the gum edge, where plaque causes gum disease.</p>'
-        f'<div class="card" style="margin:18px 0"><div class="ph">{brushing_svg()}</div></div>'
-        '<h2 style="margin-top:36px">Step by step</h2>'
+        + (f'<figure class="chart"><img src="images/{BRUSH3D}" alt="Toothbrush held at 45 degrees to the gum line, Modified Bass technique" loading="lazy" decoding="async" style="border-radius:14px"></figure>' if BRUSH3D else f'<div class="card" style="margin:18px 0"><div class="ph">{brushing_svg()}</div></div>')
+        + '<h2 style="margin-top:36px">Step by step</h2>'
         + ol(["Use a soft toothbrush and a pea-sized amount of fluoride toothpaste.",
               "Place the bristles at a 45-degree angle, pointing towards the gum line.",
               "Move the brush in very small, gentle back-and-forth vibrations, covering 2 to 3 teeth at a time, about 10 strokes each.",
@@ -2256,7 +2287,7 @@ urls = [f"{BASE}/"] + [f'{BASE}/{p["slug"]}.html' for p in PAGES] + [f'{BASE}/{g
 
 llms = [f"# {CLINIC}", "",
         f"> Dental clinic in Jogeshwari East, Mumbai, led by Dr. Tejas Pradhan (Reg. No. A-20222). {ADDR}. "
-        f"Mon–Sat 11:00–14:30 and 17:30–21:00, closed Sunday. Phone/WhatsApp {PHONE} or {PHONE2}.", "",
+        f"Mon–Sat 12:00–14:00 and 18:00–21:30, Sundays by appointment. Phone/WhatsApp {PHONE} or {PHONE2}.", "",
         "## Treatments", ""]
 llms += [f'- [{p["name"]}]({BASE}/{p["slug"]}.html): {one_liner(p)}' for p in PAGES]
 llms += ["", "## Patient guides", ""] + [f"- [{n}]({BASE}/{sl}.html): {d}" for sl, n, d, _ in GUIDES]
