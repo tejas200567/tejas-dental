@@ -14,11 +14,11 @@ URL="https://$USER.github.io/$REPO"
 
 # Shrink big phone photos (needs ImageMagick: pkg install imagemagick). Skipped if not installed.
 if [ -d images ]; then
-  if command -v convert >/dev/null; then
+  if command -v magick >/dev/null; then
     for f in images/*.jpg images/*.jpeg images/*.png; do
       [ -f "$f" ] || continue
       if [ "$(stat -c %s "$f")" -gt 600000 ]; then
-        convert "$f" -auto-orient -resize '1600x1600>' -strip -quality 82 "$f"
+        magick "$f" -auto-orient -resize '1600x1600>' -strip -quality 82 "$f"
       fi
     done
   else
