@@ -756,6 +756,13 @@ var PLAN=null,FN={oval:'Oval',triangular:'Triangular',rectangular:'Rectangular',
 var CRIT=[['facial','Facial harmony',25],['proportion','Tooth proportions',20],['curve','Smile curve and lips',15],['morphology','Tooth shape',15],['gingival','Gum line',10],['colour','Natural colour',10],['preference','Your preference',5]];
 var SITE='tejas200567.github.io/tejas-dental/smile-design.html';
 function lvl(n){return n==null?'':n>=90?'Outstanding':n>=80?'Great':n>=70?'Good':n>=60?'Fair':'Room to shine'}
+var SHRANK=['BL1','BL2','BL3','BL4','B1','A1','B2','D2','A2','C1','C2','D3','A3'];
+/* shade by age: young teeth are naturally brighter, so the design never goes darker than the age limit */
+function shadeAge(P){var ag=document.getElementById('rpage'),pf=document.getElementById('rppref'),cap={u30:4,u45:5,u60:6,o60:8}[ag?ag.value:'u45'];if(cap==null)cap=5;var wh=pf&&pf.value=='white';
+ P.options.forEach(function(o,i){var c=Math.max(2,cap-(i==2?1:0)-(wh?1:0)),r=SHRANK.indexOf(o.shade);if(r<0||r>c)o.shade=SHRANK[c]})}
+/* when tooth size, shape and smile line are already good, say a full design is not needed */
+function dsdNotNeeded(P){try{var sc=P.current.score,s=sc.parts||{};function ok(k){return s[k]==null||s[k]>=7}
+ return s.proportion!=null&&s.curve!=null&&s.morphology!=null&&ok('proportion')&&ok('curve')&&ok('morphology')&&ok('gingival')&&ok('facial')&&sc.total>=72}catch(e){return false}}
 function recOpt(){return PLAN.options.filter(function(q){return q.key==PLAN.recommended})[0]||PLAN.options[0]}
 function optTxt(o){return 'Shape: '+(MN[o.morphology]||FN[o.form])+' · Proportion reference: '+(RLBL[o.ratio]||o.ratio).replace(/.*\((.*)\)/,'$1')+' · Width : length '+Math.round(o.wh*100)+'% · Shade VITA '+o.shade+' (provisional)'}
 function withOpt(o,fn){var k={form:S.form,ratio:S.ratio,wh:S.wh,shade:S.shade};S.form=o.form;S.ratio=o.ratio;S.wh=o.wh;S.shade=o.shade;try{return fn()}finally{S.form=k.form;S.ratio=k.ratio;S.wh=k.wh;S.shade=k.shade}}
@@ -775,12 +782,13 @@ function applyOpt(o){S.form=o.form;S.ratio=o.ratio;S.wh=o.wh;S.shade=o.shade;S.c
 function rptUI(){var box=document.getElementById('rpt');if(!box)return;PLAN=null;
  box.innerHTML='<p class="kick">AI personalised smile design report</p><h3 style="margin-top:4px">Get your Smile Score and 3 smile designs</h3><p class="muted">Our AI looks at your face first, then your smile: the facial midline, the smile curve against your lower lip, tooth proportions, the gum line and how the tooth shape suits your face. It gives your current Smile Score, designs 3 different smiles (Natural Harmony, Soft Aesthetic, Confident Aesthetic), scores each one and recommends the most harmonious. Download it all as a PDF report.</p>'
   +'<label>What kind of smile do you like?<select id="rppref"><option value="">No preference</option><option value="natural">Natural</option><option value="soft">Soft and gentle</option><option value="bold">Confident and defined</option><option value="white">Whiter teeth</option></select></label>'
+  +'<label>Age group<select id="rpage"><option value="u30">Under 30</option><option value="u45" selected>30 to 45</option><option value="u60">45 to 60</option><option value="o60">Over 60</option></select></label>'
   +'<button type="button" class="btn" id="rpgo">Get my Smile Score</button><p class="muted" id="rpm"></p><div id="rpo"></div>';
  document.getElementById('rpgo').addEventListener('click',function(){var b=this,m=document.getElementById('rpm');b.disabled=true;m.className='muted';m.textContent='Studying your face and smile… about 30–60 seconds.';
   var mt=metrics(design()).map(function(r){return r[0]+': '+(r[1]==null?'n/a':r[1])+' (reference '+r[2]+')'});
   post({mode:'plan',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,preference:document.getElementById('rppref').value,image:planImage(),metrics:mt,findings:(S.a&&S.a.findings)||[]}).then(function(x){b.disabled=false;
    if(!x.ok||!x.j.plan){m.className='muted err';m.textContent=(x.j&&x.j.error)||'Could not make the report. Please try again.';return}
-   m.textContent='';PLAN=x.j.plan;PLAN.ai={};PLAN.pref=document.getElementById('rppref').selectedOptions[0].text;showPlan()}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='Could not make the report ('+((e&&e.message)||e)+').'})})}
+   m.textContent='';PLAN=x.j.plan;PLAN.ai={};try{shadeAge(PLAN)}catch(e){}PLAN.pref=document.getElementById('rppref').selectedOptions[0].text;showPlan()}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='Could not make the report ('+((e&&e.message)||e)+').'})})}
 function countUp(el,to){if(to==null){el.textContent='–';return}var t0=performance.now();(function f2(t){var k=Math.min(1,(t-t0)/1200);el.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f2)})(t0)}
 function showPlan(){var P=PLAN,o=document.getElementById('rpo'),D=design();if(!P||!o)return;var R=recOpt(),cs=P.current.score.total,rs=R.score.total;
  var h='<div class="ss"><div class="sc"><span>Your Smile Score now</span><b id="ss0">0</b><i>'+lvl(cs)+'</i></div><div class="sa">→</div><div class="sc hi"><span>With design '+R.key+'</span><b id="ss1">0</b><i>'+esc(R.style)+'</i></div></div>';
@@ -790,6 +798,7 @@ function showPlan(){var P=PLAN,o=document.getElementById('rpo'),D=design();if(!P
   return '<div class="po'+(rec?' rec':'')+'">'+(rec?'<span class="pb">AI recommended</span>':'')+'<img class="pi" data-k="'+op.key+'" alt="Design '+op.key+' preview"><div class="pt"><b>'+op.key+' · '+esc(op.style)+'</b><span class="psc">'+(op.score.total==null?'':op.score.total)+'</span></div><p class="ps">'+esc(optTxt(op))+'</p><p>'+esc(op.look)+'</p><p class="muted"><b>How it differs:</b> '+esc(op.differs)+'</p>'
    +'<details><summary>Why this design</summary><p><b>Shape:</b> '+esc(op.morphology_why)+'</p><p><b>Proportion:</b> '+esc(op.proportion_why)+'</p><p><b>Shade:</b> '+esc(op.shade_why)+'</p><p><b>Strengths:</b> '+esc(op.strengths.join('; '))+'</p><p><b>Limitations:</b> '+esc(op.limitations.join('; '))+'</p><p><b>Who may prefer it:</b> '+esc(op.suits)+'</p><p class="muted"><b>Dentist to confirm:</b> '+esc(op.clinical)+'</p></details>'
    +'<button type="button" class="btn o2 pa" data-k="'+op.key+'">Show on my photo</button></div>'}).join('')+'</div>';
+ if(dsdNotNeeded(P))h+='<div class="note" style="background:#eef6ee"><b>A full smile design is not required.</b> Your tooth size, shape and smile line are already well balanced. Whitening alone (see Whitening only) can brighten the colour. The designs below are optional.</div>';
  h+='<div class="note" style="background:#fff"><b>Why design '+P.recommended+' is recommended:</b> '+esc(P.why)+' <span class="muted">The dentist makes the final decision.</span></div>';
  h+='<h3>Compare the 3 designs</h3><div class="cmpw"><table class="cmp" style="min-width:560px"><thead><tr><th></th><th>Now</th>'+P.options.map(function(q){return'<th>'+q.key+' '+esc(q.style)+'</th>'}).join('')+'</tr></thead><tbody>'
    +CRIT.map(function(c){return'<tr><td>'+c[1]+' ('+c[2]+')</td><td>'+sv(P.current.score.parts[c[0]])+'</td>'+P.options.map(function(q){return'<td>'+sv(q.score.parts[c[0]])+'</td>'}).join('')+'</tr>'}).join('')
@@ -929,7 +938,7 @@ function shadeLock(g,M,W,H,shade){try{
   var lab=rgb2lab(r,gg,b);wt[j]=w;LL[j]=lab[0];AA[j]=lab[1];BB[j]=lab[2];if(w>0.5){sL+=lab[0]*w;sA+=lab[1]*w;sB+=lab[2]*w;sw+=w}}
  if(sw<30)return;var mL=sL/sw,mA=sA/sw,mB=sB/sw,t;
  if(S.tabLab&&S.tabShade==shade)t=S.tabLab; // real shade tab photographed in the same light: exact match
- else{var v=VLAB[shade]||VLAB.A1;t=[clamp(Math.max(mL*0.4+v[0]*0.6,v[0]-2)+3,62,90),v[1]*0.8,v[2]*0.72]} // no tab: exact hue/chroma, lightness kept close to the photo's exposure
+ else{var v=VLAB[shade]||VLAB.A1;t=[clamp(Math.max(mL*0.4+v[0]*0.6,v[0]-2)+3,62,90),v[1]*0.8,v[2]*0.72];t[0]=clamp(Math.max(t[0],mL+6),62,92);t[2]=Math.min(t[2],Math.max(4,mB*0.7));t[1]=Math.min(t[1],Math.max(mA,0.2))} // no tab: exact hue/chroma, lightness kept close to the photo's exposure
  var dL=t[0]-mL,dA=t[1]-mA,dB=t[2]-mB;
  for(var j2=0,i2=0;j2<n;j2++,i2+=4){var w2=wt[j2];if(!w2)continue;var o=lab2rgb(LL[j2]+dL*w2,AA[j2]+dA*w2,BB[j2]+dB*w2);d[i2]=o[0];d[i2+1]=o[1];d[i2+2]=o[2]}
  g.putImageData(im,0,0);S.lockInfo={from:[mL,mA,mB],to:t}}catch(e){}}
