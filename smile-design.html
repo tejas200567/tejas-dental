@@ -805,7 +805,7 @@ function aiPhotos(){var b=document.getElementById('aib'),m=document.getElementBy
  (function next(){if(i>=3){b.disabled=false;m.textContent='AI photos ready. They are now used in the cards and the PDF.';thumbs();return}var op=PLAN.options[i];m.className='muted';m.textContent='Making AI photo '+(i+1)+' of 3 ('+op.style+')…';
   post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},withOpt(op,aiOpts))).then(function(x){
    if(!x.ok||!x.j.after){m.className='muted err';m.textContent=(x.j&&x.j.error)||'AI photo failed.';b.disabled=false;return}
-   aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;i++;next()})}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='AI photo failed ('+((e&&e.message)||e)+').'})})()}
+   aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;i++;next()},op.shade)}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='AI photo failed ('+((e&&e.message)||e)+').'})})()}
 function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function ring(g,cx,cy,r,v,col){g.lineWidth=22;g.strokeStyle='rgba(255,255,255,.12)';g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.stroke();if(v!=null){g.strokeStyle=col;g.lineCap='round';g.beginPath();g.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*v/100);g.stroke()}}
 function shareScore(){var P=PLAN,R=recOpt(),cs=P.current.score.total,rs=R.score.total,inc=document.getElementById('shp').checked,D=design();
@@ -827,7 +827,7 @@ function A(s){return String(s==null?'':s).replace(/÷/g,'/').replace(/[≈~]/g,'
 function jspdf(){return window.jspdf?Promise.resolve(window.jspdf):new Promise(function(res,rej){var sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';sc.onload=function(){res(window.jspdf)};sc.onerror=function(){rej(new Error('PDF library did not load'))};document.head.appendChild(sc)})}
 function dims(u){return loadImg(u).then(function(i){return{u:u,w:i.width,h:i.height}})}
 function cropP(u,D){return new Promise(function(r){cropURL(u,D,r)})}
-function makePDF(){var P=PLAN,m=document.getElementById('pdfm'),b=document.getElementById('pdfb');if(!P)return;b.disabled=true;m.className='muted';m.textContent='Preparing your PDF…';
+function makePDF(){var P=PLAN,m=document.getElementById('pdfm'),b=document.getElementById('pdfb');if(!P)return;var R0=recOpt();if(isStaff()&&!P.ai[R0.key]&&!P.noai){b.disabled=true;m.className='muted';m.textContent='Making the realistic AI photo of design '+R0.key+' (shade '+R0.shade+') for the report, about 30 seconds...';aiFor(R0).then(function(){b.disabled=false;makePDF()}).catch(function(e){P.noai=true;b.disabled=false;m.className='muted err';m.textContent='AI photo failed ('+((e&&e.message)||e)+'), using the drawing instead.';makePDF()});return}b.disabled=true;m.className='muted';m.textContent='Preparing your PDF…';
  var D=design(),R=recOpt(),cl=S.clin;S.clin=false;
  var bFull=beforeShown(),aFull=optImg(R),full=P.options.map(optImg);S.clin=cl;
  Promise.all([jspdf(),dims(bFull),dims(aFull),cropP(beforeURL,D)].concat(full.map(function(u){return cropP(u,D).then(dims)}))).then(function(r){
@@ -904,8 +904,41 @@ function fixTeeth(a){if(!a._upper||!a._lower||!a._comm)return;var W=S.W,H=S.H;
   var y0=yu-0.012*Wm,y1=Math.min(yu+h,yl-0.006*Wm);if(y1-y0<0.03*Wm)continue;teeth['U'+sd+(i+1)]={box:[y0*1000/H,x0*1000/W,y1*1000/H,x1*1000/W]};inc[sd+(i+1)]=y1}
   x=fm;for(var i=0;i<3;i++){var w=lw[i]*Wm,x0=dir>0?x:x-w,x1=dir>0?x+w:x;x+=dir*w;var cx=(x0+x1)/2,top=(inc[sd+(i+1)]||yAt(up,cx))-0.012*Wm,yl=yAt(lo,cx);if(yl-top>0.03*Wm)teeth['L'+sd+(i+1)]={box:[top*1000/H,x0*1000/W,(yl+0.008*Wm)*1000/H,x1*1000/W]}}});
  if(teeth.UR1&&teeth.UL1){a.teeth=teeth;a.dental_midline_x=fm*1000/W;a.lower_lip_y_at_center=yAt(lo,fm)*1000/H;a.lower_lip_y_at_canines=(yAt(lo,fm-0.3*Wm)+yAt(lo,fm+0.3*Wm))/2*1000/H}}
+/* ---------- shade lock: CIELAB shift of the AI teeth to the chosen VITA shade (or to a real shade tab sampled in the photo) ---------- */
+// approximate CIELAB (D65) of VITA classical tabs; a real tab in the photo overrides these
+var VLAB={BL1:[88,-0.8,4],BL2:[86.5,-0.6,6],BL3:[85,-0.4,8],BL4:[83.5,-0.2,9.5],B1:[80.5,-0.5,11],A1:[79,0.3,14],B2:[78,0,17.5],D2:[75.5,0.8,13.5],A2:[76.5,1.4,18],C1:[74.5,0.5,14.5],C2:[71.5,1.2,17.5],D3:[72.5,1.4,16],A3:[73.5,2.2,21.5],D4:[71,1.6,18.5],B3:[74,1.6,24],'A3.5':[70.5,3.2,23.5],B4:[72.5,2,25.5],C3:[67.5,1.8,19.5],A4:[66,3.8,24.5],C4:[62.5,3.2,21.5]};
+function s2l(v){v/=255;return v<=0.04045?v/12.92:Math.pow((v+0.055)/1.055,2.4)}
+function l2s(v){v=v<=0.0031308?12.92*v:1.055*Math.pow(v,1/2.4)-0.055;return clamp(Math.round(v*255),0,255)}
+function fLab(t){return t>0.008856?Math.cbrt(t):7.787*t+16/116}
+function iLab(t){var t3=t*t*t;return t3>0.008856?t3:(t-16/116)/7.787}
+function rgb2lab(r,g,b){r=s2l(r);g=s2l(g);b=s2l(b);
+ var x=(r*0.4124+g*0.3576+b*0.1805)/0.95047,y=r*0.2126+g*0.7152+b*0.0722,z=(r*0.0193+g*0.1192+b*0.9505)/1.08883;
+ var fx=fLab(x),fy=fLab(y),fz=fLab(z);return[116*fy-16,500*(fx-fy),200*(fy-fz)]}
+function lab2rgb(L,a,b){var fy=(L+16)/116,fx=fy+a/500,fz=fy-b/200,x=iLab(fx)*0.95047,y=iLab(fy),z=iLab(fz)*1.08883;
+ return[l2s(x*3.2406-y*1.5372-z*0.4986),l2s(-x*0.9689+y*1.8758+z*0.0415),l2s(x*0.0557-y*0.2040+z*1.0570)]}
+function shadeLock(g,M,W,H,shade){try{
+ var md=M.getContext('2d').getImageData(0,0,W,H).data,im=g.getImageData(0,0,W,H),d=im.data,n=W*H,wt=new Float32Array(n),LL=new Float32Array(n),AA=new Float32Array(n),BB=new Float32Array(n),sL=0,sA=0,sB=0,sw=0;
+ for(var j=0,i=0;j<n;j++,i+=4){var mk=md[i+3]/255;if(mk<0.05)continue;var r=d[i],gg=d[i+1],b=d[i+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),lum=(0.299*r+0.587*gg+0.114*b)/255,sat=mx?(mx-mn)/mx:0,red=(r-gg)/255;
+  var w=mk*clamp((0.16-red)/0.08,0,1)*clamp((lum-0.3)/0.15,0,1)*clamp((0.5-sat)/0.15,0,1);if(w<=0)continue;
+  var lab=rgb2lab(r,gg,b);wt[j]=w;LL[j]=lab[0];AA[j]=lab[1];BB[j]=lab[2];if(w>0.5){sL+=lab[0]*w;sA+=lab[1]*w;sB+=lab[2]*w;sw+=w}}
+ if(sw<30)return;var mL=sL/sw,mA=sA/sw,mB=sB/sw,t;
+ if(S.tabLab&&S.tabShade==shade)t=S.tabLab; // real shade tab photographed in the same light: exact match
+ else{var v=VLAB[shade]||VLAB.A1;t=[clamp(mL*0.5+v[0]*0.5,55,92),v[1],v[2]]} // no tab: exact hue/chroma, lightness kept close to the photo's exposure
+ var dL=t[0]-mL,dA=t[1]-mA,dB=t[2]-mB;
+ for(var j2=0,i2=0;j2<n;j2++,i2+=4){var w2=wt[j2];if(!w2)continue;var o=lab2rgb(LL[j2]+dL*w2,AA[j2]+dA*w2,BB[j2]+dB*w2);d[i2]=o[0];d[i2+1]=o[1];d[i2+2]=o[2]}
+ g.putImageData(im,0,0);S.lockInfo={from:[mL,mA,mB],to:t}}catch(e){}}
+function aiFor(op){return post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},withOpt(op,aiOpts))).then(function(x){
+ if(!x.ok||!x.j.after)throw new Error((x.j&&x.j.error)||'AI photo failed');
+ return new Promise(function(res){aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;try{thumbs()}catch(e){}res(u)},op.shade)})})}
+// staff: tap a real VITA tab on the Before side to lock the exact shade under this photo's light
+document.addEventListener('click',function(e){var t=e.target;if(t&&t.id=='tabb'){S.tabPick=true;var m=document.getElementById('tabm');if(m)m.textContent='Now tap the middle of the shade tab on the Before side of the photo.';return}
+ if(!S.tabPick)return;var ba=t&&t.closest&&t.closest('#cmp .ba');if(!ba)return;var im=ba.querySelector('img');if(!im)return;var R=ba.getBoundingClientRect(),fx=(e.clientX-R.left)/R.width,fy=(e.clientY-R.top)/R.height;S.tabPick=false;
+ loadImg(im.src).then(function(I){var c=document.createElement('canvas');c.width=I.width;c.height=I.height;var g=c.getContext('2d');g.drawImage(I,0,0);var x=Math.round(fx*I.width),y=Math.round(fy*I.height),r=Math.max(3,Math.round(I.width/250));
+  var p=g.getImageData(clamp(x-r,0,I.width-1),clamp(y-r,0,I.height-1),2*r+1,2*r+1).data,L=0,A=0,B=0,k=0;for(var i=0;i<p.length;i+=4){var lab=rgb2lab(p[i],p[i+1],p[i+2]);L+=lab[0];A+=lab[1];B+=lab[2];k++}
+  S.tabLab=[L/k,A/k,B/k];S.tabShade=S.shade;var m=document.getElementById('tabm');if(m)m.textContent='Shade tab locked for VITA '+S.shade+' (L '+S.tabLab[0].toFixed(0)+', a '+S.tabLab[1].toFixed(1)+', b '+S.tabLab[2].toFixed(1)+'). Tap "Redo AI photo" to apply it.'})},true);
+
 var AIC=null;
-function aiBlend(a,after,cb){AIC=null;if(!after||!beforeURL){cb(after);return}
+function aiBlend(a,after,cb,shade){AIC=null;if(!after||!beforeURL){cb(after);return}
  var P=(LIPS&&LIPS.inner)||(a&&a.mouth_polygon);if(!P||P.length<6){cb(after);return}
  Promise.all([loadImg(beforeURL),loadImg(after)]).then(function(im){var B=im[0],A=im[1],W=B.width,H=B.height;
   var c=document.createElement('canvas');c.width=W;c.height=H;var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(B,0,0,W,H);
@@ -913,7 +946,7 @@ function aiBlend(a,after,cb){AIC=null;if(!after||!beforeURL){cb(after);return}
   if(Math.abs(ra/rb-1)<0.04)lg.drawImage(A,0,0,W,H);else{var ka=Math.max(W/A.width,H/A.height),aw=A.width*ka,ah=A.height*ka;lg.drawImage(A,(W-aw)/2,(H-ah)/2,aw,ah)}
   var M=document.createElement('canvas');M.width=W;M.height=H;var mg=M.getContext('2d');mg.filter='blur('+Math.max(1.5,W*0.003)+'px)';mg.fillStyle='#fff';mg.beginPath();
   P.forEach(function(q,i){var x=q[1]*W/1000,y=q[0]*H/1000;if(i)mg.lineTo(x,y);else mg.moveTo(x,y)});mg.closePath();mg.fill();
-  lg.globalCompositeOperation='destination-in';lg.drawImage(M,0,0);g.drawImage(L,0,0);AIC=c;cb(c.toDataURL('image/jpeg',0.92))
+  lg.globalCompositeOperation='destination-in';lg.drawImage(M,0,0);g.drawImage(L,0,0);shadeLock(g,M,W,H,shade||S.shade);AIC=c;cb(c.toDataURL('image/jpeg',0.92))
  }).catch(function(){cb(after)})}
 function show(a,after){if(LIPS&&a){a.mouth_polygon=LIPS.inner;a._lower=LIPS.lower;a._ipl=LIPS.ipl;a._comm=LIPS.comm;a._upper=LIPS.upper}S.a=a;S.after=after;S.cache={};var h='<div class="res"><h2>Your smile design</h2>';
  if(!a.photo_ok){h+='<p>'+esc(a.photo_note||'The photo was not clear enough.')+'</p><p>Please retake a front-facing photo with a natural full smile, upper teeth clearly visible, in good daylight, phone at mouth level.</p></div>';out.innerHTML=h;return}
@@ -961,7 +994,7 @@ var CAP={dsd:'DSD lines: the classic smile-design template on your photo. Blue: 
 function paint(){var cmp=document.getElementById('cmp');if(!cmp)return;var u=render(S.view);
  document.getElementById('cap').textContent=CAP[S.view]||'';document.getElementById('bt').style.display=S.view=='braces'?'flex':'none';
  var bx=document.getElementById('bx');bx.innerHTML='';
- if(S.view=='ai'){bx.innerHTML='<div class="note"><b>The AI photo uses the choices below when it is made.</b> After changing shade, tooth shape, proportion, width : length or upper/lower teeth, tap the button to make a new AI photo (about 30 seconds).<br><button type="button" class="btn" id="rg" style="margin-top:8px">Redo AI photo with my choices</button><p class="muted" id="rgm"></p></div>';
+ if(S.view=='ai'){bx.innerHTML='<div class="note"><b>The AI photo uses the choices below when it is made.</b> After changing shade, tooth shape, proportion, width : length or upper/lower teeth, tap the button to make a new AI photo (about 30 seconds).<br><button type="button" class="btn" id="rg" style="margin-top:8px">Redo AI photo with my choices</button><p class="muted" id="rgm"></p>'+(isStaff()?'<p style="margin-top:10px"><button type="button" class="btn o2" id="tabb">Lock exact shade from a real VITA tab</button></p><p class="muted" id="tabm">For an exact match: photograph the patient holding the chosen VITA tab beside the teeth. Drag the slider fully right, tap this button, then tap the tab.</p>':'')+'</div>';
   document.getElementById('rg').addEventListener('click',function(){var b=this,m=document.getElementById('rgm');b.disabled=true;m.className='muted';m.textContent='Making your AI photo with shade '+S.shade+'... about 30 seconds.';
    post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},aiOpts())).then(function(x){
     if(!x.ok||!x.j.after){b.disabled=false;m.className='muted err';m.textContent=(x.j&&x.j.error)||'Could not make the AI photo. Please try again.';return}
