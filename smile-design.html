@@ -799,11 +799,11 @@ function showPlan(){var P=PLAN,o=document.getElementById('rpo'),D=design();if(!P
  if(P.checklist.length)h+='<div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Smile frame check</th><th></th><th>Note</th></tr></thead><tbody>'+P.checklist.map(function(c){return'<tr><td>'+esc(c.item)+'</td><td>'+(c.status=='good'?'<span class="ok">Good</span>':c.status=='improve'?'<span class="wn">Improve</span>':'<span class="muted">Not assessed</span>')+'</td><td>'+esc(c.note)+'</td></tr>'}).join('')+'</tbody></table></div>';
  if(P.limitations.length)h+='<p class="muted"><b>What one photo cannot show:</b> '+esc(P.limitations.join('; '))+'. Shades are provisional until checked with a shade guide in the clinic.</p>';
  if(isStaff())h+='<div class="note" style="background:#fff"><b>Clinic staff:</b> after you approve the designs, make realistic AI photos of all 3 (about 1–2 minutes, uses AI credit). They replace the drawings in the cards and the PDF.<br><button type="button" class="btn" id="aib" style="margin-top:8px">Make AI photos of the 3 designs</button><p class="muted" id="aim"></p></div>';
- h+='<div class="cta"><button type="button" class="btn" id="pdfb">Download my smile design report (PDF)</button></div><p class="muted" id="pdfm"></p>';
+ h+='<div class="cta"><button type="button" class="btn" id="pdfb">Download my smile design report (PDF)</button></div><p class="muted" id="pdfm"></p>';h+=animHTML();
  o.innerHTML=h;countUp(document.getElementById('ss0'),cs);setTimeout(function(){countUp(document.getElementById('ss1'),rs)},500);
  thumbs();
  o.querySelectorAll('.pa').forEach(function(b){b.addEventListener('click',function(){applyOpt(P.options.filter(function(q){return q.key==b.dataset.k})[0])})});
- document.getElementById('pdfb').addEventListener('click',makePDF);document.getElementById('shb').addEventListener('click',shareScore);
+ document.getElementById('pdfb').addEventListener('click',makePDF);animWire();document.getElementById('shb').addEventListener('click',shareScore);
  var ab=document.getElementById('aib');if(ab)ab.addEventListener('click',aiPhotos)}
 function sv(v){return v==null?'<span class="muted">Not assessed</span>':String(Math.round(v*10)/10)}
 function thumbs(){var D=design(),o=document.getElementById('rpo');PLAN.options.forEach(function(op){cropURL(optImgCrop(op),D,function(cu){var im=o.querySelector('img.pi[data-k="'+op.key+'"]');if(im)im.src=cu})})}
@@ -943,6 +943,27 @@ document.addEventListener('click',function(e){var t=e.target;if(t&&t.id=='tabb')
   var p=g.getImageData(clamp(x-r,0,I.width-1),clamp(y-r,0,I.height-1),2*r+1,2*r+1).data,L=0,A=0,B=0,k=0;for(var i=0;i<p.length;i+=4){var lab=rgb2lab(p[i],p[i+1],p[i+2]);L+=lab[0];A+=lab[1];B+=lab[2];k++}
   S.tabLab=[L/k,A/k,B/k];S.tabShade=S.shade;var m=document.getElementById('tabm');if(m)m.textContent='Shade tab locked for VITA '+S.shade+' (L '+S.tabLab[0].toFixed(0)+', a '+S.tabLab[1].toFixed(1)+', b '+S.tabLab[2].toFixed(1)+'). Tap "Redo AI photo" to apply it.'})},true);
 
+/* ---------- Animate photo (clinic staff): AI clips of the Before and the AI After, side by side ---------- */
+function animHTML(){if(!isStaff())return'';
+ return '<div class="note" style="background:#fff" id="anim"><b>Clinic staff: animate before and after</b><br><span class="muted">Turns the Before photo and the AI After photo into two 8-second videos of the patient, side by side. Each clip uses AI credit (about 0.4 USD), so a pair is about 0.8 USD. Limit: 10 clips a day.</span><div class="ctl"><label>Animation<select id="anty"><option value="smile">Smile (person smiles naturally)</option><option value="talk">Talk (person appears to speak)</option></select></label></div><button type="button" class="btn" id="ango">Animate before and after</button><p class="muted" id="anm"></p><div id="ano"></div></div>'}
+function animWire(){var b=document.getElementById('ango');if(b)b.addEventListener('click',animGo)}
+function veoFrame(u){return loadImg(u).then(function(I){var W=720,H=1280,c=document.createElement('canvas');c.width=W;c.height=H;var g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,W,H);
+ var k=Math.max(W/I.width,H/I.height),w=I.width*k,h=I.height*k;g.imageSmoothingQuality='high';g.drawImage(I,(W-w)/2,(H-h)*0.25,w,h);return c.toDataURL('image/jpeg',0.86)})}
+function veoPost(b){return fetch(API.replace('smile-design','reel-ai'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json()})}
+function veoClip(u,style,tick){return veoPost({mode:'start',phone:f.phone.value,image:u,style:style}).then(function(j){if(!j.op)throw new Error(j.error||'The clip could not start.');
+ return new Promise(function(res,rej){var n=0;(function poll(){setTimeout(function(){veoPost({mode:'status',phone:f.phone.value,op:j.op}).then(function(s){
+  if(s.done){if(s.error||!s.url)throw new Error(s.error||'No clip was returned.');return res(s.url)}
+  if(s.error)throw new Error(s.error);if(++n>70)throw new Error('The clip took too long. Please try again.');if(tick)tick(n);poll()}).catch(rej)},5000)})()})})}
+function animGo(){var b=document.getElementById('ango'),m=document.getElementById('anm'),out=document.getElementById('ano'),st=document.getElementById('anty').value;if(!PLAN)return;var R=recOpt();
+ b.disabled=true;out.innerHTML='';m.className='muted';m.textContent='Preparing the photos…';
+ var pre=(PLAN.ai&&PLAN.ai[R.key])?Promise.resolve():(m.textContent='Making the realistic AI After photo first (about 30 seconds)…',aiFor(R));
+ pre.then(function(){var c0=S.clin,f0=S.face,bu;S.clin=false;S.face=true;try{bu=beforeShown()}finally{S.clin=c0;S.face=f0}return Promise.all([veoFrame(bu),fullFaceAI(R).then(veoFrame)])})
+ .then(function(fr){var n=0;m.textContent='Animating both clips… this takes about 1 to 2 minutes.';return Promise.all([veoClip(fr[0],st,function(){m.textContent='Animating both clips… '+(++n*5)+' seconds so far'}),veoClip(fr[1],st)])})
+ .then(function(u){b.disabled=false;m.className='muted';m.textContent='Done. Only post a patient’s face with their written consent.';
+  function vid(url,l){return'<figure style="margin:0"><video src="'+url+'" controls playsinline loop muted preload="auto" style="width:100%;display:block;background:#000"></video><figcaption class="muted" style="text-align:center">'+l+'</figcaption></figure>'}
+  out.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:520px;margin-top:8px">'+vid(u[0],'Before')+vid(u[1],'After')+'</div><div class="cta"><button type="button" class="btn" id="anp">Play both</button><a class="btn o2" href="'+u[0]+'" target="_blank" rel="noopener">Open Before</a><a class="btn o2" href="'+u[1]+'" target="_blank" rel="noopener">Open After</a></div><p class="muted">The links work for about an hour. Open a clip, then press and hold or use Download to save it.</p>';
+  document.getElementById('anp').addEventListener('click',function(){var vs=out.querySelectorAll('video');[].forEach.call(vs,function(v){v.currentTime=0;v.play().catch(function(){})})})})
+ .catch(function(e){b.disabled=false;m.className='muted err';m.textContent=(e&&e.message)||'The clips could not be made.'})}
 var AIC=null;
 function aiBlend(a,after,cb,shade){AIC=null;if(!after||!beforeURL){cb(after);return}
  var P=(LIPS&&LIPS.inner)||(a&&a.mouth_polygon);if(!P||P.length<6){cb(after);return}
