@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#16181d">
+<title>3D Face Scan | Clinic staff</title>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<style>
+:root{--bg:#16181d;--pa:#20232a;--ln:#2e323b;--tx:#e8e9ec;--mu:#9aa0ab;--ac:#2ea3d8;--ok:#3fbf7f;--wa:#e0a43a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{padding:12px 14px;border-bottom:1px solid var(--ln);display:flex;align-items:center;gap:10px}
+header b{font-size:17px}
+header span{color:var(--mu);font-size:13px}
+.tabs{display:flex;gap:4px;padding:6px 8px;background:var(--pa);border-bottom:1px solid var(--ln);overflow-x:auto}
+.tabs button{flex:0 0 auto;background:none;border:0;color:var(--mu);padding:8px 12px;font:inherit;border-bottom:2px solid transparent}
+.tabs button.on{color:var(--tx);border-color:var(--ac)}
+.pane{display:none;padding:12px}
+.pane.on{display:block}
+.card{background:var(--pa);border:1px solid var(--ln);border-radius:12px;padding:12px;margin-bottom:12px}
+label.ck{display:flex;gap:10px;align-items:flex-start}
+input[type=text]{width:100%;background:#111317;color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:9px;font:inherit}
+.btn{display:inline-block;background:var(--ac);color:#fff;border:0;border-radius:9px;padding:10px 14px;font:inherit;font-weight:600;margin:4px 4px 0 0}
+.btn.o{background:none;border:1px solid var(--ln);color:var(--tx)}
+.btn:disabled{opacity:.4}
+.stage{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:3/4;background:#000;border-radius:12px;overflow:hidden}
+.stage video,.stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mir{transform:scaleX(-1)}
+.msg{position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.8));text-align:center;font-weight:600;font-size:17px}
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.steps span{padding:5px 10px;border-radius:20px;border:1px solid var(--ln);color:var(--mu);font-size:13px}
+.steps span.ok{border-color:var(--ok);color:var(--ok)}
+.steps span.now{border-color:var(--ac);color:var(--tx)}
+#view3d{position:relative;width:100%;max-width:560px;margin:0 auto;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:radial-gradient(circle at 50% 35%,#3a3e47,#15171b)}
+#view3d canvas{display:block;width:100%!important;height:100%!important}
+.seg{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}
+.seg button{background:var(--pa);border:1px solid var(--ln);color:var(--mu);border-radius:8px;padding:7px 11px;font:inherit}
+.seg button.on{color:#fff;border-color:var(--ac);background:#1c3646}
+table{width:100%;border-collapse:collapse;font-size:14px}
+td,th{padding:7px 6px;border-bottom:1px solid var(--ln);text-align:left;vertical-align:top}
+th{color:var(--mu);font-weight:500}
+.good{color:var(--ok)} .warn{color:var(--wa)}
+.muted{color:var(--mu);font-size:13px}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.thumbs img{width:100%;border-radius:8px;aspect-ratio:3/4;object-fit:cover;background:#000}
+#err{display:none;background:#3a1d1d;border:1px solid #6b2b2b;color:#ffd6d6;padding:10px;border-radius:10px;margin:10px 12px 0}
+a.dl{color:var(--ac)}
+</style>
+</head>
+<body>
+<header><b>3D Face Scan</b><span>Clinic staff only · nothing is uploaded</span></header>
+<div id="err"></div>
+<nav class="tabs">
+  <button data-t="scan" class="on">1 · Scan</button>
+  <button data-t="face">2 · 3D face</button>
+  <button data-t="meas">3 · Measurements</button>
+  <button data-t="file">Save / open</button>
+</nav>
+
+<section class="pane on" id="p-scan">
+  <div class="card" id="consentCard">
+    <label class="ck"><input type="checkbox" id="consent"> <span>The patient has agreed to face photos for treatment planning. Faces are used in posts only with separate written consent.</span></label>
+    <div style="margin-top:10px"><input type="text" id="pname" placeholder="Patient name or file no. (used only in file names)"></div>
+  </div>
+  <div class="stage" id="stage">
+    <video id="vid" playsinline muted></video>
+    <canvas id="ov"></canvas>
+    <div class="msg" id="msg">Tick consent, then start the camera</div>
+  </div>
+  <div class="steps" id="steps">
+    <span data-k="front">Front, lips closed</span>
+    <span data-k="side1">Turn one way</span>
+    <span data-k="side2">Turn the other way</span>
+    <span data-k="smile">Big smile, teeth showing</span>
+  </div>
+  <div>
+    <button class="btn" id="bStart">Start camera</button>
+    <button class="btn o" id="bFlip" disabled>Switch camera</button>
+    <button class="btn o" id="bShot" disabled>Capture now</button>
+    <button class="btn o" id="bSkip" disabled>Skip smile</button>
+    <button class="btn o" id="bReset">Start again</button>
+  </div>
+  <p class="muted">Hold the phone at face height, about 40 cm away, in even light. Capture is automatic: the patient looks straight, then slowly turns the head about 30° to each side, then smiles. Use the back camera when the dentist holds the phone.</p>
+  <div class="thumbs" id="thumbs"></div>
+</section>
+
+<section class="pane" id="p-face">
+  <div id="view3d"></div>
+  <div class="seg" id="segMode">
+    <button data-m="photo" class="on">Photo</button><button data-m="clay">Clay</button><button data-m="wire">Mesh</button>
+  </div>
+  <div class="seg" id="segExpr">
+    <button data-e="rest" class="on">Lips closed</button><button data-e="smile">Smile</button>
+  </div>
+  <div class="seg" id="segView">
+    <button data-v="front">Front</button><button data-v="left">Left</button><button data-v="right">Right</button><button data-v="three">¾</button><button data-v="spin">Swing</button><button data-v="guides" class="on">Guide lines</button>
+  </div>
+  <div>
+    <button class="btn" id="bPng">Save picture</button>
+    <button class="btn o" id="bRec">Record 8-second video</button>
+  </div>
+  <p class="muted" id="recOut"></p>
+  <p class="muted">Guide lines: blue = pupil line, yellow = facial midline (perpendicular through the centre of the pupils), pink = mouth-corner line. The face is built from the 2D photos, so depth is approximate. It is a planning and communication aid, not a measured 3D scan.</p>
+</section>
+
+<section class="pane" id="p-meas">
+  <div class="card"><div id="measOut" class="muted">Complete the scan first.</div></div>
+  <p class="muted">The millimetre values use an average adult pupil distance of 63 mm as the scale, so they are approximate (about ±2–3 mm). Confirm clinically before treatment decisions.</p>
+</section>
+
+<section class="pane" id="p-file">
+  <div class="card">
+    <p>Save the scan as one file on this phone to compare visits later. The file holds the patient's photos: keep it private.</p>
+    <button class="btn" id="bSave">Save scan file</button>
+    <label class="btn o" style="cursor:pointer">Open scan file<input type="file" id="fOpen" accept=".json,application/json" hidden></label>
+    <p class="muted" id="fileOut"></p>
+  </div>
+</section>
+
+<script type="module">
+const $ = s => document.querySelector(s);
+const err = m => { const e = $('#err'); e.textContent = m; e.style.display = 'block'; };
+const VER = '0.10.14';
+const VISION = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${VER}/vision_bundle.mjs`;
+const WASM = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${VER}/wasm`;
+const MODEL = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+
+// ---------------------------------------------------------------- tabs
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.t));
+function showTab(t) {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.toggle('on', x.dataset.t === t));
+  document.querySelectorAll('.pane').forEach(p => p.classList.toggle('on', p.id === 'p-' + t));
+  if (t === 'face') { ensureViewer(); resize3d(); }
+  if (t === 'meas') renderMeasurements();
+}
+
+// ---------------------------------------------------------------- face landmarker
+let FL = null, TRIS = null;
+async function loadLandmarker() {
+  if (FL) return FL;
+  $('#msg').textContent = 'Loading face model…';
+  const m = await import(VISION);
+  const FaceLandmarker = m.FaceLandmarker || (m.default && m.default.FaceLandmarker);
+  const FilesetResolver = m.FilesetResolver || (m.default && m.default.FilesetResolver);
+  const fs = await FilesetResolver.forVisionTasks(WASM);
+  const opts = d => ({ baseOptions: { modelAssetPath: MODEL, delegate: d }, runningMode: 'VIDEO', numFaces: 1 });
+  try { FL = await FaceLandmarker.createFromOptions(fs, opts('GPU')); }
+  catch (e) { FL = await FaceLandmarker.createFromOptions(fs, opts('CPU')); }
+  TRIS = trianglesFromEdges(FaceLandmarker.FACE_LANDMARKS_TESSELATION);
+  return FL;
+}
+
+// triangles = 3-cliques of the tessellation edge graph
+function trianglesFromEdges(edges) {
+  const adj = new Map();
+  const add = (a, b) => { if (!adj.has(a)) adj.set(a, new Set()); adj.get(a).add(b); };
+  for (const e of edges) { const a = e.start ?? e[0], b = e.end ?? e[1]; if (a === b) continue; add(a, b); add(b, a); }
+  const out = [];
+  for (const [a, na] of adj) for (const b of na) {
+    if (b <= a) continue;
+    for (const c of adj.get(b)) if (c > b && na.has(c)) out.push([a, b, c]);
+  }
+  return out;
+}
+window.__trianglesFromEdges = trianglesFromEdges;
+
+// ---------------------------------------------------------------- camera + capture
+const vid = $('#vid'), ov = $('#ov'), octx = ov.getContext('2d');
+let stream = null, facing = 'user', running = false, lastT = -1;
+const ORDER = ['front', 'side1', 'side2', 'smile'];
+const PROMPT = {
+  front: 'Look straight at the camera, lips gently closed',
+  side1: 'Now turn the head slowly to one side (about 30°)',
+  side2: 'Now slowly turn to the other side',
+  smile: 'Face the camera and give a big smile showing the teeth'
+};
+let scan = newScan(), hist = [];
+function newScan() { return { v: 1, patient: '', date: new Date().toISOString(), views: {} }; }
+function stepNow() { return ORDER.find(k => !scan.views[k]); }
+
+$('#bStart').onclick = async () => {
+  if (!$('#consent').checked) { $('#msg').textContent = 'Tick the consent box first'; return; }
+  try { await loadLandmarker(); await startCam(); }
+  catch (e) { err('Could not start: ' + (e && e.message || e) + '. Check camera permission and internet (the face model downloads once).'); }
+};
+$('#bFlip').onclick = async () => { facing = facing === 'user' ? 'environment' : 'user'; await startCam(); };
+$('#bShot').onclick = () => { if (lastRes) capture(stepNow(), lastRes, true); };
+$('#bSkip').onclick = () => { if (stepNow() === 'smile') { scan.views.smile = null; delete scan.views.smile; skipSmile = true; finishIfDone(); } };
+$('#bReset').onclick = () => { scan = newScan(); skipSmile = false; hist = []; buildThumbs(); markSteps(); disposeFace(); $('#msg').textContent = running ? PROMPT.front : 'Tick consent, then start the camera'; };
+let skipSmile = false, lastRes = null;
+
+async function startCam() {
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1440 } } });
+  vid.srcObject = stream; await vid.play();
+  const mir = facing === 'user';
+  vid.classList.toggle('mir', mir); ov.classList.toggle('mir', mir);
+  $('#bFlip').disabled = $('#bShot').disabled = false;
+  $('#bSkip').disabled = false;
+  if (!running) { running = true; requestAnimationFrame(loop); }
+  markSteps(); $('#msg').textContent = PROMPT[stepNow() || 'front'];
+}
+
+const P = (lm, i) => lm[i];
+const d2 = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+function metrics(lm, W, H) {
+  const px = i => ({ x: lm[i].x * W, y: lm[i].y * H });
+  const nose = px(1), L = px(234), R = px(454);
+  const dl = Math.abs(nose.x - L.x), dr = Math.abs(R.x - nose.x);
+  const yaw = (dl - dr) / (dl + dr + 1e-6);              // -1..1, 0 = straight
+  const fw = d2(L, R);
+  const mouthW = d2(px(61), px(291)) / fw;
+  const gap = d2(px(13), px(14)) / fw;
+  const cx = (L.x + R.x) / 2 / W;
+  return { yaw, fw: fw / W, mouthW, gap, cx };
+}
+
+function loop() {
+  if (!running) return;
+  requestAnimationFrame(loop);
+  if (vid.readyState < 2 || vid.currentTime === lastT || !FL) return;
+  lastT = vid.currentTime;
+  const W = vid.videoWidth, H = vid.videoHeight;
+  let res;
+  try { res = FL.detectForVideo(vid, performance.now()); } catch (e) { return; }
+  ov.width = ov.clientWidth * devicePixelRatio; ov.height = ov.clientHeight * devicePixelRatio;
+  octx.clearRect(0, 0, ov.width, ov.height);
+  const lm = res && res.faceLandmarks && res.faceLandmarks[0];
+  const k = stepNow();
+  if (!lm) { lastRes = null; hist = []; if (k) $('#msg').textContent = 'No face found: ' + PROMPT[k]; return; }
+  lastRes = { lm, W, H };
+  drawDots(lm, W, H);
+  if (!k) return;
+  const m = metrics(lm, W, H);
+  hist.push(m); if (hist.length > 10) hist.shift();
+  const ys = hist.map(h => h.yaw), steady = hist.length >= 8 && Math.max(...ys) - Math.min(...ys) < 0.06;
+  let msg = PROMPT[k], ready = false;
+  if (m.fw < 0.28) msg = 'Move closer';
+  else if (m.fw > 0.85) msg = 'Move back a little';
+  else if (Math.abs(m.cx - 0.5) > 0.18) msg = 'Keep the face in the middle';
+  else if (k === 'front') ready = Math.abs(m.yaw) < 0.08;
+  else if (k === 'side1') { ready = Math.abs(m.yaw) > 0.33 && Math.abs(m.yaw) < 0.7; if (Math.abs(m.yaw) >= 0.7) msg = 'Too far: turn back a little'; }
+  else if (k === 'side2') {
+    const s1 = scan.views.side1.yaw;
+    ready = Math.sign(m.yaw) !== Math.sign(s1) && Math.abs(m.yaw) > 0.33 && Math.abs(m.yaw) < 0.7;
+    if (Math.sign(m.yaw) === Math.sign(s1) && Math.abs(m.yaw) > 0.2) msg = 'That side is done: turn to the other side';
+  }
+  else if (k === 'smile') {
+    const rest = scan.views.front ? scan.views.front.mouthW : 0.38;
+    ready = Math.abs(m.yaw) < 0.1 && m.mouthW > rest * 1.12 && m.gap > 0.015;
+  }
+  if (ready && !steady) msg = 'Hold still…';
+  $('#msg').textContent = msg;
+  if (ready && steady) capture(k, lastRes, false);
+}
+
+function drawDots(lm, W, H) {
+  const sw = ov.width, sh = ov.height, s = Math.max(sw / W, sh / H), ox = (sw - W * s) / 2, oy = (sh - H * s) / 2;
+  octx.fillStyle = 'rgba(46,163,216,.75)';
+  for (let i = 0; i < 468; i += 2) { const p = lm[i]; octx.fillRect(ox + p.x * W * s - 1.5, oy + p.y * H * s - 1.5, 3, 3); }
+}
+
+function capture(k, r, manual) {
+  if (!k || !r) return;
+  const { lm, W, H } = r;
+  const c = document.createElement('canvas');
+  const sc = Math.min(1, 1600 / Math.max(W, H));
+  c.width = Math.round(W * sc); c.height = Math.round(H * sc);
+  c.getContext('2d').drawImage(vid, 0, 0, c.width, c.height);
+  const arr = new Float32Array(lm.length * 3);
+  lm.forEach((p, i) => { arr[i * 3] = p.x; arr[i * 3 + 1] = p.y; arr[i * 3 + 2] = p.z; });
+  const m = metrics(lm, W, H);
+  if (k === 'side2' && !manual && scan.views.side1 && Math.sign(m.yaw) === Math.sign(scan.views.side1.yaw)) return;
+  scan.views[k] = { img: c.toDataURL('image/jpeg', 0.9), W: c.width, H: c.height, lm: Array.from(arr, v => Math.round(v * 1e5) / 1e5), yaw: m.yaw, mouthW: m.mouthW };
+  hist = [];
+  if (navigator.vibrate) navigator.vibrate(60);
+  buildThumbs(); markSteps(); disposeFace();
+  finishIfDone();
+}
+function finishIfDone() {
+  const k = stepNow();
+  if (k === 'smile' && skipSmile) { done(); return; }
+  if (!k) { done(); return; }
+  $('#msg').textContent = PROMPT[k];
+  markSteps();
+}
+function done() {
+  $('#msg').textContent = 'Scan complete: opening the 3D face';
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  running = false; markSteps();
+  setTimeout(() => showTab('face'), 400);
+}
+function markSteps() {
+  const k = stepNow();
+  document.querySelectorAll('#steps span').forEach(s => {
+    s.classList.toggle('ok', !!scan.views[s.dataset.k]);
+    s.classList.toggle('now', s.dataset.k === k && running);
+  });
+}
+function buildThumbs() {
+  $('#thumbs').innerHTML = ORDER.filter(k => scan.views[k]).map(k => `<img alt="${k}" src="${scan.views[k].img}">`).join('');
+}
+
+// ---------------------------------------------------------------- 3D face
+let THREE = null, OC = null, R3 = null, scene, cam, ctl, faceGroup = null, guideGroup = null;
+let mode = 'photo', expr = 'rest', showGuides = true, swing = false, swingT0 = 0;
+async function ensureViewer() {
+  if (!THREE) {
+    try {
+      THREE = await import('three');
+      OC = (await import('three/addons/controls/OrbitControls.js')).OrbitControls;
+    } catch (e) { err('Could not load the 3D viewer. Check the internet connection.'); return; }
+    R3 = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+    R3.setPixelRatio(Math.min(2, devicePixelRatio));
+    $('#view3d').appendChild(R3.domElement);
+    scene = new THREE.Scene();
+    cam = new THREE.PerspectiveCamera(30, 0.75, 0.01, 100);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.1));
+    const dl = new THREE.DirectionalLight(0xffffff, 1.4); dl.position.set(0.6, 0.8, 1.2); scene.add(dl);
+    ctl = new OC(cam, R3.domElement); ctl.enableDamping = true; ctl.enablePan = false;
+    ctl.minDistance = 0.8; ctl.maxDistance = 6;
+    addEventListener('resize', resize3d);
+    const tick = t => {
+      requestAnimationFrame(tick);
+      if (swing && faceGroup) {
+        const a = Math.sin((t - swingT0) / 8000 * Math.PI * 2) * 0.95;
+        const d = cam.position.distanceTo(ctl.target);
+        cam.position.set(Math.sin(a) * d, ctl.target.y + 0.05, Math.cos(a) * d);
+        cam.lookAt(ctl.target);
+      } else ctl.update();
+      R3.render(scene, cam);
+    };
+    requestAnimationFrame(tick);
+  }
+  if (!faceGroup && scan.views.front && scan.views.side1 && scan.views.side2) await buildFace();
+}
+function resize3d() {
+  if (!R3) return;
+  const el = $('#view3d'), w = el.clientWidth, h = el.clientHeight;
+  R3.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+}
+function disposeFace() {
+  if (faceGroup) { scene.remove(faceGroup); faceGroup.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); faceGroup = null; }
+}
+const loadImg = src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
+
+// view k -> 3D positions in a shared frame (x right, y up, z towards viewer), unit = face height-ish
+function positions(v) {
+  const n = v.lm.length / 3, a = v.W / v.H, out = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    out[i * 3] = (v.lm[i * 3] - 0.5) * a;
+    out[i * 3 + 1] = -(v.lm[i * 3 + 1] - 0.5);
+    out[i * 3 + 2] = -v.lm[i * 3 + 2] * a;
+  }
+  return out;
+}
+// how much triangle t faces the camera in view v (pixel space, z towards camera is negative in MediaPipe)
+function facingScore(v, t) {
+  const L = v.lm, W = v.W, H = v.H, p = i => [L[i * 3] * W, L[i * 3 + 1] * H, L[i * 3 + 2] * W];
+  const A = p(t[0]), B = p(t[1]), C = p(t[2]);
+  const u = [B[0] - A[0], B[1] - A[1], B[2] - A[2]], w = [C[0] - A[0], C[1] - A[1], C[2] - A[2]];
+  const nx = u[1] * w[2] - u[2] * w[1], ny = u[2] * w[0] - u[0] * w[2], nz = u[0] * w[1] - u[1] * w[0];
+  const len = Math.hypot(nx, ny, nz) || 1;
+  return -nz / len;
+}
+window.__facingScore = facingScore;
+
+async function buildFace() {
+  if (!TRIS) {
+    try { await loadLandmarker(); } catch (e) { err('Could not load the face model to build the mesh.'); return; }
+  }
+  disposeFace();
+  const V = scan.views, smile = expr === 'smile' && V.smile;
+  const keys = [smile ? 'smile' : 'front', 'side1', 'side2'];
+  const views = keys.map(k => V[k]);
+  // texture atlas 2x2: front, side1, side2, smile
+  const slot = { front: 0, side1: 1, side2: 2, smile: 3 };
+  const CW = 1024, CH = 1366, atlas = document.createElement('canvas');
+  atlas.width = CW * 2; atlas.height = CH * 2;
+  const ac = atlas.getContext('2d');
+  for (const k of ORDER) if (V[k]) { const im = await loadImg(V[k].img); const s = slot[k]; ac.drawImage(im, (s % 2) * CW, (s >> 1) * CH, CW, CH); }
+  const tex = new THREE.CanvasTexture(atlas); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+  const base = views[0], pos = positions(base);
+  // orient every triangle so it faces the camera in the base view
+  const tris = TRIS.map(t => facingScore(base, t) < 0 ? [t[0], t[2], t[1]] : t);
+  const nT = tris.length, P9 = new Float32Array(nT * 9), UV = new Float32Array(nT * 6), idx = [];
+  tris.forEach((t, j) => {
+    let best = 0, bs = -9;
+    views.forEach((v, vi) => {
+      const ok = t.every(i => v.lm[i * 3] > 0.001 && v.lm[i * 3] < 0.999 && v.lm[i * 3 + 1] > 0.001 && v.lm[i * 3 + 1] < 0.999);
+      const sc = ok ? facingScore(v, t) + (vi === 0 ? 0.08 : 0) : -9;
+      if (sc > bs) { bs = sc; best = vi; }
+    });
+    const v = views[best], s = slot[keys[best]], col = s % 2, row = s >> 1;
+    t.forEach((i, q) => {
+      P9[j * 9 + q * 3] = pos[i * 3]; P9[j * 9 + q * 3 + 1] = pos[i * 3 + 1]; P9[j * 9 + q * 3 + 2] = pos[i * 3 + 2];
+      UV[j * 6 + q * 2] = (col + v.lm[i * 3]) / 2;
+      UV[j * 6 + q * 2 + 1] = 1 - (row + v.lm[i * 3 + 1]) / 2;
+    });
+    idx.push(t[0], t[1], t[2]);
+  });
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(P9, 3)); g.setAttribute('uv', new THREE.BufferAttribute(UV, 2));
+  const photo = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide }));
+  const gi = new THREE.BufferGeometry();
+  gi.setAttribute('position', new THREE.BufferAttribute(pos.slice(0, 468 * 3), 3)); gi.setIndex(idx); gi.computeVertexNormals();
+  const clay = new THREE.Mesh(gi, new THREE.MeshStandardMaterial({ color: 0xd9c7b8, roughness: 0.75, metalness: 0, side: THREE.DoubleSide }));
+  const wire = new THREE.Mesh(gi, new THREE.MeshBasicMaterial({ color: 0x66c6ef, wireframe: true }));
+  photo.name = 'photo'; clay.name = 'clay'; wire.name = 'wire';
+  faceGroup = new THREE.Group(); faceGroup.add(photo, clay, wire);
+  guideGroup = makeGuides(pos); faceGroup.add(guideGroup);
+  // centre and frame
+  const box = new THREE.Box3().setFromBufferAttribute(gi.getAttribute('position'));
+  const c = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3());
+  const k = 1 / size.y; faceGroup.scale.setScalar(k); faceGroup.position.copy(c).multiplyScalar(-k);
+  scene.add(faceGroup);
+  ctl.target.set(0, 0, 0); setView('front');
+  applyMode();
+}
+function makeGuides(pos) {
+  const g = new THREE.Group(), v = i => new THREE.Vector3(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2] + 0.004);
+  const line = (pts, col) => g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: col, depthTest: false })));
+  const eL = v(468), eR = v(473), mid = eL.clone().add(eR).multiplyScalar(0.5);
+  const dir = eR.clone().sub(eL).normalize(), perp = new THREE.Vector3(-dir.y, dir.x, 0);
+  const ext = (a, b, k) => [a.clone().sub(b.clone().sub(a).multiplyScalar(k)), b.clone().add(b.clone().sub(a).multiplyScalar(k))];
+  line(ext(eL, eR, 0.35), 0x2ea3d8);
+  const top = v(10), chin = v(152), h = top.distanceTo(chin);
+  line([mid.clone().add(perp.clone().multiplyScalar(h * 0.45)), mid.clone().sub(perp.clone().multiplyScalar(h * 0.85))], 0xf2c94c);
+  line(ext(v(61), v(291), 0.25), 0xff7aa8);
+  g.renderOrder = 10; g.children.forEach(c => c.renderOrder = 10);
+  return g;
+}
+function applyMode() {
+  if (!faceGroup) return;
+  faceGroup.getObjectByName('photo').visible = mode === 'photo';
+  faceGroup.getObjectByName('clay').visible = mode === 'clay';
+  faceGroup.getObjectByName('wire').visible = mode === 'wire';
+  guideGroup.visible = showGuides;
+}
+function setView(v) {
+  swing = false;
+  const d = 2.6, a = { front: 0, left: -1.1, right: 1.1, three: 0.6 }[v] ?? 0;
+  cam.position.set(Math.sin(a) * d, 0.05, Math.cos(a) * d); cam.lookAt(0, 0, 0); ctl.update();
+}
+document.querySelectorAll('#segMode button').forEach(b => b.onclick = () => { mode = b.dataset.m; segOn('#segMode', b); applyMode(); });
+document.querySelectorAll('#segExpr button').forEach(b => b.onclick = async () => {
+  if (b.dataset.e === 'smile' && !scan.views.smile) { err('No smile photo in this scan.'); return; }
+  expr = b.dataset.e; segOn('#segExpr', b); await buildFace();
+});
+document.querySelectorAll('#segView button').forEach(b => b.onclick = () => {
+  const v = b.dataset.v;
+  if (v === 'guides') { showGuides = !showGuides; b.classList.toggle('on', showGuides); applyMode(); return; }
+  if (v === 'spin') { swing = !swing; swingT0 = performance.now(); b.classList.toggle('on', swing); return; }
+  document.querySelector('#segView [data-v=spin]').classList.remove('on');
+  setView(v);
+});
+function segOn(sel, b) { document.querySelectorAll(sel + ' button').forEach(x => x.classList.toggle('on', x === b)); }
+const fname = ext => (($('#pname').value || 'patient').replace(/[^\w-]+/g, '_')) + '-face-' + new Date().toISOString().slice(0, 10) + '.' + ext;
+function download(url, name) { const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+$('#bPng').onclick = () => { if (!R3 || !faceGroup) return err('Build the 3D face first.'); download(R3.domElement.toDataURL('image/png'), fname('png')); };
+$('#bRec').onclick = () => {
+  if (!R3 || !faceGroup) return err('Build the 3D face first.');
+  if (!window.MediaRecorder) return err('This browser cannot record video.');
+  const type = ['video/mp4', 'video/webm;codecs=vp9', 'video/webm'].find(t => MediaRecorder.isTypeSupported(t)) || '';
+  const rec = new MediaRecorder(R3.domElement.captureStream(30), type ? { mimeType: type, videoBitsPerSecond: 6e6 } : {});
+  const chunks = []; rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+  rec.onstop = () => {
+    const blob = new Blob(chunks, { type: type || 'video/webm' }), url = URL.createObjectURL(blob);
+    const ext = (type || 'webm').includes('mp4') ? 'mp4' : 'webm';
+    $('#recOut').innerHTML = `Video ready: <a class="dl" href="${url}" download="${fname(ext)}">download</a>. Before posting, get the patient's written consent and add Instagram's AI info label.`;
+    $('#bRec').disabled = false;
+  };
+  swing = true; swingT0 = performance.now(); document.querySelector('#segView [data-v=spin]').classList.add('on');
+  $('#bRec').disabled = true; $('#recOut').textContent = 'Recording…';
+  rec.start(); setTimeout(() => rec.stop(), 8000);
+};
+
+// ---------------------------------------------------------------- measurements (front + smile photos, 2D)
+function renderMeasurements() {
+  const V = scan.views;
+  if (!V.front) { $('#measOut').textContent = 'Complete the scan first.'; return; }
+  const f = V.front, pt = (v, i) => ({ x: v.lm[i * 3] * v.W, y: v.lm[i * 3 + 1] * v.H });
+  const sub = (a, b) => ({ x: a.x - b.x, y: a.y - b.y }), dot = (a, b) => a.x * b.x + a.y * b.y, len = a => Math.hypot(a.x, a.y);
+  function frame(v) {
+    const eL = pt(v, 468), eR = pt(v, 473), ipd = len(sub(eR, eL));
+    const ex = { x: (eR.x - eL.x) / ipd, y: (eR.y - eL.y) / ipd }, down = { x: -ex.y, y: ex.x };
+    const mid = { x: (eL.x + eR.x) / 2, y: (eL.y + eR.y) / 2 }, mm = 63 / ipd;
+    const across = p => dot(sub(p, mid), ex) * mm, along = p => dot(sub(p, mid), down) * mm;
+    const ang = (a, b) => { const d = sub(pt(v, b), pt(v, a)); return Math.atan2(dot(d, down), dot(d, ex)) * 180 / Math.PI; };
+    return { across, along, ang, mm };
+  }
+  const F = frame(f), rows = [];
+  const row = (name, val, ideal, good) => rows.push(`<tr><td>${name}</td><td class="${good ? 'good' : 'warn'}">${val}</td><td class="muted">${ideal}</td></tr>`);
+  const gl = pt(f, 9), sn = pt(f, 2), me = pt(f, 152), st = { x: (pt(f, 13).x + pt(f, 14).x) / 2, y: (pt(f, 13).y + pt(f, 14).y) / 2 };
+  const mid3 = F.along(sn) - F.along(gl), low3 = F.along(me) - F.along(sn), ul = F.along(st) - F.along(sn), ll = F.along(me) - F.along(st);
+  row('Middle : lower face height', `${(mid3 / low3).toFixed(2)} (${mid3.toFixed(0)} : ${low3.toFixed(0)} mm)`, 'about 1.0', Math.abs(mid3 / low3 - 1) < 0.12);
+  row('Upper lip : lower lip + chin', `1 : ${(ll / ul).toFixed(2)}`, 'about 1 : 2', Math.abs(ll / ul - 2) < 0.35);
+  const lipC = pt(f, 0), noseT = pt(f, 1), chin = pt(f, 152);
+  const dev = p => { const x = F.across(p); return `${Math.abs(x).toFixed(1)} mm ${x > 0.3 ? 'to patient’s left' : x < -0.3 ? 'to patient’s right' : ''}`; };
+  row('Nose tip off facial midline', dev(noseT), 'under 2 mm', Math.abs(F.across(noseT)) < 2);
+  row('Upper lip centre off midline', dev(lipC), 'under 2 mm', Math.abs(F.across(lipC)) < 2);
+  row('Chin off midline', dev(chin), 'under 3 mm', Math.abs(F.across(chin)) < 3);
+  const cantRest = F.ang(61, 291);
+  row('Mouth-corner tilt vs pupil line (lips closed)', `${Math.abs(cantRest).toFixed(1)}°`, 'under 2°', Math.abs(cantRest) < 2);
+  if (V.smile) {
+    const S = frame(V.smile), sw = len(sub(pt(V.smile, 291), pt(V.smile, 61))) * S.mm;
+    const cantS = S.ang(61, 291);
+    row('Mouth-corner tilt vs pupil line (smile)', `${Math.abs(cantS).toFixed(1)}°`, 'under 2°', Math.abs(cantS) < 2);
+    row('Smile width', `${sw.toFixed(0)} mm`, 'for reference', true);
+    const lipUp = len(sub(pt(V.smile, 13), pt(V.smile, 2))) * S.mm, lipRest = len(sub(pt(f, 13), pt(f, 2))) * F.mm;
+    row('Upper lip lift on smiling', `${(lipRest - lipUp).toFixed(1)} mm`, 'for reference', true);
+  }
+  row('Head turn at front photo', `${Math.abs(f.yaw * 90).toFixed(0)}° (approx.)`, 'under 5°', Math.abs(f.yaw * 90) < 5);
+  $('#measOut').innerHTML = `<table><tr><th>Measure</th><th>Value</th><th>Usual</th></tr>${rows.join('')}</table>`;
+}
+
+// ---------------------------------------------------------------- save / open
+$('#bSave').onclick = () => {
+  if (!scan.views.front) return err('Nothing to save yet.');
+  scan.patient = $('#pname').value || '';
+  const url = URL.createObjectURL(new Blob([JSON.stringify(scan)], { type: 'application/json' }));
+  download(url, fname('json')); $('#fileOut').textContent = 'Saved to the phone\'s Downloads.';
+};
+$('#fOpen').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const s = JSON.parse(await f.text());
+    if (!s.views || !s.views.front) throw new Error('not a face scan file');
+    scan = s; $('#pname').value = s.patient || ''; buildThumbs(); markSteps(); disposeFace();
+    $('#fileOut').textContent = 'Opened scan from ' + (s.date || '').slice(0, 10);
+    expr = 'rest'; segOn('#segExpr', document.querySelector('#segExpr [data-e=rest]'));
+    showTab('face');
+  } catch (x) { err('Could not open that file: ' + x.message); }
+};
+window.__face = { get scan() { return scan; }, buildFace, renderMeasurements };
+</script>
+</body>
+</html>
