@@ -325,7 +325,7 @@ p0.then(function(){
 }).then(function(x){
 btn.disabled=false;btn.textContent='Design my smile';
 if(!x.ok||!x.j.analysis){msg.className='muted err';msg.textContent=(x.j&&x.j.error)||'Something went wrong. Please try again.';return}
-msg.textContent='';aiBlend(x.j.analysis,x.j.after,function(u){show(x.j.analysis,u)})}).catch(function(e){btn.disabled=false;btn.textContent='Design my smile';msg.className='muted err';msg.textContent='Could not complete the design ('+((e&&e.message)||e)+'). Please open this page in Chrome and try again, or WhatsApp the clinic.'})});
+msg.textContent='';S.id=x.j.id||null;aiBlend(x.j.analysis,x.j.after,function(u){saveFinal(u,'main');show(x.j.analysis,u)})}).catch(function(e){btn.disabled=false;btn.textContent='Design my smile';msg.className='muted err';msg.textContent='Could not complete the design ('+((e&&e.message)||e)+'). Please open this page in Chrome and try again, or WhatsApp the clinic.'})});
 
 /* ---------- geometry ---------- */
 function teethPx(low){var a=S.a,T={};for(var id in a.teeth){if((id[0]=='L')!=!!low)continue;var b=a.teeth[id].box;T[id]={y0:b[0]*S.H/1000,x0:b[1]*S.W/1000,y1:b[2]*S.H/1000,x1:b[3]*S.W/1000}}return T}
@@ -960,7 +960,7 @@ function shadeLock(g,M,W,H,shade){try{
  g.putImageData(im,0,0);S.lockInfo={from:[mL,mA,mB],to:t}}catch(e){}}
 function aiFor(op){return post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},withOpt(op,aiOpts))).then(function(x){
  if(!x.ok||!x.j.after)throw new Error((x.j&&x.j.error)||'AI photo failed');
- return new Promise(function(res){aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;try{thumbs()}catch(e){}res(u)},op.shade)})})}
+ return new Promise(function(res){aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;saveFinal(u,op.key.toLowerCase());try{thumbs()}catch(e){}res(u)},op.shade)})})}
 // staff: tap a real VITA tab on the Before side to lock the exact shade under this photo's light
 document.addEventListener('click',function(e){var t=e.target;if(t&&t.id=='tabb'){S.tabPick=true;var m=document.getElementById('tabm');if(m)m.textContent='Now tap the middle of the shade tab on the Before side of the photo.';return}
  if(!S.tabPick)return;var ba=t&&t.closest&&t.closest('#cmp .ba');if(!ba)return;var im=ba.querySelector('img');if(!im)return;var R=ba.getBoundingClientRect(),fx=(e.clientX-R.left)/R.width,fy=(e.clientY-R.top)/R.height;S.tabPick=false;
@@ -989,9 +989,9 @@ function animGo(){var b=document.getElementById('ango'),m=document.getElementByI
   out.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:520px;margin-top:8px">'+vid(u[0],'Before')+vid(u[1],'After')+'</div><div class="cta"><button type="button" class="btn" id="anp">Play both</button><a class="btn o2" href="'+u[0]+'" target="_blank" rel="noopener">Open Before</a><a class="btn o2" href="'+u[1]+'" target="_blank" rel="noopener">Open After</a></div><p class="muted">The links work for about an hour. Open a clip, then press and hold or use Download to save it.</p>';
   document.getElementById('anp').addEventListener('click',function(){var vs=out.querySelectorAll('video');[].forEach.call(vs,function(v){v.currentTime=0;v.play().catch(function(){})})})})
  .catch(function(e){b.disabled=false;m.className='muted err';m.textContent=(e&&e.message)||'The clips could not be made.'})}
-var AIC=null;
-function aiBlend(a,after,cb,shade){AIC=null;if(!after||!beforeURL){cb(after);return}
- var P=(LIPS&&LIPS.inner)||(a&&a.mouth_polygon);if(!P||P.length<6){cb(after);return}
+var AIC=null;function saveFinal(u,k){if(!u||!S.id)return;try{post({mode:'final',id:S.id,label:k,name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:u}).catch(function(){})}catch(e){}}
+function aiBlend(a,after,cb,shade){AIC=null;if(!after||!beforeURL){cb(null);return}
+ var P=(LIPS&&LIPS.inner)||(a&&a.mouth_polygon);if(!P||P.length<6){cb(null);return}
  Promise.all([loadImg(beforeURL),loadImg(after)]).then(function(im){var B=im[0],A=im[1],W=B.width,H=B.height;
   var c=document.createElement('canvas');c.width=W;c.height=H;var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(B,0,0,W,H);
   var ra=A.width/A.height,rb=W/H,L=document.createElement('canvas');L.width=W;L.height=H;var lg=L.getContext('2d');lg.imageSmoothingQuality='high';
@@ -999,7 +999,7 @@ function aiBlend(a,after,cb,shade){AIC=null;if(!after||!beforeURL){cb(after);ret
   var M=document.createElement('canvas');M.width=W;M.height=H;var mg=M.getContext('2d');mg.filter='blur('+Math.max(1.5,W*0.003)+'px)';mg.fillStyle='#fff';mg.beginPath();
   P.forEach(function(q,i){var x=q[1]*W/1000,y=q[0]*H/1000;if(i)mg.lineTo(x,y);else mg.moveTo(x,y)});mg.closePath();mg.fill();
   lg.globalCompositeOperation='destination-in';lg.drawImage(M,0,0);g.drawImage(L,0,0);shadeLock(g,M,W,H,shade||S.shade);AIC=c;cb(c.toDataURL('image/jpeg',0.92))
- }).catch(function(){cb(after)})}
+ }).catch(function(){cb(null)})}
 function show(a,after){if(LIPS&&a){a.mouth_polygon=LIPS.inner;a._lower=LIPS.lower;a._ipl=LIPS.ipl;a._comm=LIPS.comm;a._upper=LIPS.upper}S.a=a;S.after=after;S.cache={};var h='<div class="res"><h2>Your smile design</h2>';
  if(!a.photo_ok){h+='<p>'+esc(a.photo_note||'The photo was not clear enough.')+'</p><p>Please retake a front-facing photo with a natural full smile, upper teeth clearly visible, in good daylight, phone at mouth level.</p></div>';out.innerHTML=h;return}
  var im=new Image();im.onload=function(){S.img=im;S.W=im.width;S.H=im.height;try{fixTeeth(S.a)}catch(e){}build()};im.src=beforeURL}
@@ -1050,7 +1050,7 @@ function paint(){var cmp=document.getElementById('cmp');if(!cmp)return;var u=ren
   document.getElementById('rg').addEventListener('click',function(){var b=this,m=document.getElementById('rgm');b.disabled=true;m.className='muted';m.textContent='Making your AI photo with shade '+S.shade+'... about 30 seconds.';
    post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},aiOpts())).then(function(x){
     if(!x.ok||!x.j.after){b.disabled=false;m.className='muted err';m.textContent=(x.j&&x.j.error)||'Could not make the AI photo. Please try again.';return}
-    aiBlend(S.a,x.j.after,function(u){S.after=u;S.cache={};paint()})}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='Could not make the AI photo ('+((e&&e.message)||e)+').'})})}
+    aiBlend(S.a,x.j.after,function(u){if(!u){b.disabled=false;m.className='muted err';m.textContent='Could not place the new teeth on your photo. Please try again.';return}saveFinal(u,'redo');S.after=u;S.cache={};paint()})}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='Could not make the AI photo ('+((e&&e.message)||e)+').'})})}
  if(S.view=='braces'){var D=design(),cur=S.brace;bx.innerHTML='<div class="note"><b>'+BR[cur].n+':</b> '+BR[cur].t+'</div><h3>All options on your smile</h3><div class="bg" id="bg"></div><p><a href="braces-comparison.html">Compare braces and aligners in detail</a></p>';
   var grid=document.getElementById('bg'),fc=S.face,cl0=S.clin;S.face=false;S.clin=false;Object.keys(BR).forEach(function(k){S.brace=k;var uu=render('braces');var fig=document.createElement('figure');fig.innerHTML='<img alt="'+BR[k].n+' preview"><figcaption>'+BR[k].n+'</figcaption>';grid.appendChild(fig);cropURL(uu,D,function(cu){fig.querySelector('img').src=cu});fig.addEventListener('click',function(){S.brace=k;[].forEach.call(document.getElementById('bt').children,function(x){x.className=x.getAttribute('data-b')==k?'on':''});paint()})});S.face=fc;S.clin=cl0;S.brace=cur;u=render('braces')}
  if(S.view=='analysis'){cmp.innerHTML='<div class="ba"><img src="'+u+'" alt="'+esc(S.view)+' view"></div>';return}
