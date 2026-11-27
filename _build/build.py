@@ -63,8 +63,10 @@ def load_images():
 
 IMAGES = load_images()
 doctor_img = next((i for i in IMAGES if i["base"] == "doctor"), None)
-hero_img = next((i for b in ("front", "reception", "treatment-room") for i in IMAGES if i["base"] == b), None)
-CLINIC_IMAGES = [i for i in IMAGES if not i["base"].startswith(("guide-", "ortho-"))]
+hero_img = None   # homepage uses the 3D hero image (images/hero-3d.*), not a clinic photo
+HIDDEN = {"ppe", "treatment-room"}   # old photos kept out of the site until fresh ones are added
+CLINIC_IMAGES = [i for i in IMAGES if not i["base"].startswith(("guide-", "ortho-", "hero-", "brushing-")) and i["base"] not in HIDDEN]
+HERO3D = next((i for i in IMAGES if i["base"] == "hero-3d"), None)
 gallery = [i for i in CLINIC_IMAGES if i is not doctor_img and i is not hero_img]
 
 
@@ -125,17 +127,17 @@ FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox
 CSS = """
 :root{--ink:#1d1a17;--navy:#0b2236;--navy2:#143550;--sand:#e8e0d6;--cream:#faf7f2;--taupe:#b79f8c;--taupe-d:#8a705a;--muted:#6b645c;--line:#e3dbd0;--wa:#1faa59}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
-body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:17px;line-height:1.7;color:var(--ink);background:var(--cream);padding-bottom:62px}
+body{margin:0;font-family:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16.5px;line-height:1.7;color:var(--ink);background:var(--cream);padding-bottom:62px}
 a{color:var(--navy2)}img{max-width:100%;display:block}
-h1,h2,h3.sf,.num,.nm{font-family:ui-serif,Georgia,"Iowan Old Style","Palatino Linotype",Palatino,"Times New Roman",serif;font-weight:400}
-h2{font-size:1.55rem;line-height:1.25;letter-spacing:.05em;text-transform:uppercase;margin:6px 0 18px}
+h1,h2,h3.sf,.num,.nm{font-family:"Cormorant Garamond",ui-serif,Georgia,"Iowan Old Style",Palatino,"Times New Roman",serif;font-weight:500}
+h2{font-size:1.75rem;line-height:1.2;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 18px}
 h3{font-size:1.02rem;line-height:1.4;margin:22px 0 4px}
 .kick{font-size:.76rem;letter-spacing:.24em;text-transform:uppercase;color:var(--taupe-d);margin:0}
 .wrap{max-width:1040px;margin:0 auto;padding:0 20px}.narrow{max-width:780px}
 .muted{color:var(--muted);font-size:.93rem}
 /* top bar + menu */
 .top{position:sticky;top:0;z-index:70;background:#fff;border-bottom:1px solid var(--line);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);font-family:ui-serif,Georgia,serif;font-size:1.02rem;line-height:1.15;letter-spacing:.02em}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);font-family:"Cormorant Garamond",ui-serif,Georgia,serif;font-weight:600;font-size:1.12rem;line-height:1.15;letter-spacing:.02em}
 .brand .mk{flex:none;width:38px;height:38px;background:var(--navy);color:#fff;display:grid;place-items:center}
 .burger{cursor:pointer;width:44px;height:44px;display:grid;place-content:center;gap:6px}.burger i{display:block;width:26px;height:2px;background:var(--ink)}
 .mnc{position:absolute;opacity:0;pointer-events:none}
@@ -163,13 +165,13 @@ h3{font-size:1.02rem;line-height:1.4;margin:22px 0 4px}
 .btn.o{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}.btn.wa{background:var(--wa);border-color:var(--wa);color:#fff}
 /* stats */
 .stats{background:var(--navy);color:#fff}.stats .wrap{display:grid;grid-template-columns:1fr 1fr;gap:26px 14px;padding-top:34px;padding-bottom:34px}
-.stats .num{font-size:2.3rem;line-height:1;color:#fff}.stats span{display:block;margin-top:8px;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;opacity:.8;line-height:1.4}
+.stats .num{font-size:2.6rem;line-height:1;color:#fff}.stats span{display:block;margin-top:8px;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;opacity:.8;line-height:1.4}
 /* sections */
 .sec{padding:52px 0}.sec.alt{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .about{display:grid;gap:26px}.about .dr{aspect-ratio:4/5;background:var(--sand);max-width:340px;overflow:hidden}.about .dr img{width:100%;height:100%;object-fit:cover}
 .tl{border-top:1px solid var(--line)}
 .tl a{display:grid;grid-template-columns:44px 1fr 22px;gap:16px;align-items:center;padding:18px 2px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
-.tl .ic{color:var(--taupe-d)}.tl .nm{font-size:1.22rem;color:var(--navy);line-height:1.25}.tl small{display:block;color:var(--muted);font-size:.9rem;line-height:1.45;margin-top:2px}
+.tl .ic{color:var(--taupe-d)}.tl .nm{font-size:1.38rem;color:var(--navy);line-height:1.25}.tl small{display:block;color:var(--muted);font-size:.9rem;line-height:1.45;margin-top:2px}
 .tl .ar{color:var(--taupe-d);font-size:1.3rem}.tl a:hover .nm{text-decoration:underline}
 .ap{display:grid;gap:26px}.ap .num{font-size:2.6rem;color:var(--taupe);line-height:1}.ap h3{margin:6px 0 6px;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase}
 .gal{display:grid;grid-template-columns:1fr 1fr;gap:12px}.gal figure{margin:0}.gal img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--sand)}
@@ -223,6 +225,30 @@ footer{background:#07151f;color:#aebdc9;font-size:.86rem;padding:22px 0}footer a
 .bar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:1fr 1fr 1fr;height:58px}
 .bar a{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:600;font-size:.93rem;background:var(--navy);color:#fff;border-left:1px solid rgba(255,255,255,.12)}
 .bar a:first-child{border:0}.bar a.dir{background:var(--taupe);color:#1d1a17}
+/* premium 3D hero */
+.hero3d{position:relative;color:#fff;overflow:hidden;background:radial-gradient(120% 70% at 75% 18%,#1d4263 0%,#0f2d47 38%,#0b2236 70%)}
+.hero3d:after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(217,200,184,.45),transparent)}
+.h3g{display:flex;flex-direction:column}
+.h3i{order:-1;margin:0 -20px;position:relative}
+.h3i img{width:100%;aspect-ratio:4/5;max-height:42vh;object-fit:cover;object-position:center 40%;
+ -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%);mask-image:linear-gradient(180deg,#000 62%,transparent 100%);animation:fl 7s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media(prefers-reduced-motion:reduce){.h3i img{animation:none}}
+.h3t{position:relative;margin-top:-34px;padding:0 0 40px}
+.h3t .kick{color:#d9c8b8}
+.h3t h1{font-size:2.45rem;line-height:1.04;margin:10px 0 12px;letter-spacing:.005em;font-weight:500}
+.h3t h1 em{font-style:italic;color:#e6d3c0}
+.h3t p{margin:0;max-width:560px;opacity:.9;font-size:.98rem;line-height:1.6}
+.chip{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 14px;border:1px solid rgba(255,255,255,.22);border-radius:999px;font-size:.86rem;background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+.chip b{color:#f3c76b;letter-spacing:.08em}
+.btn{border-radius:2px;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.18)}
+/* reviews */
+.rv{display:grid;grid-auto-flow:column;grid-auto-columns:86%;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;margin:0 -2px;-webkit-overflow-scrolling:touch}
+.rv figure{scroll-snap-align:start;margin:0;background:#fff;border:1px solid var(--line);padding:22px 20px 18px;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(11,34,54,.05)}
+.rv .st{color:#d4a43c;letter-spacing:.18em;font-size:.95rem}
+.rv blockquote{margin:10px 0 14px;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.28rem;line-height:1.4;color:var(--ink);flex:1}
+.rv figcaption{font-size:.84rem;color:var(--muted)}.rv figcaption b{color:var(--navy);font-weight:600}
+.rvl{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:.92rem}
 @media(min-width:760px){
  body{padding-bottom:0}.bar{display:none}
  .hero h1{font-size:3.2rem}.hero.sm h1{font-size:2.5rem}.hero .wrap{padding-bottom:64px}
@@ -230,12 +256,21 @@ footer{background:#07151f;color:#aebdc9;font-size:.86rem;padding:22px 0}footer a
  .about.has-dr{grid-template-columns:300px 1fr;gap:48px;align-items:start}
  .tl{display:grid;grid-template-columns:1fr 1fr;column-gap:48px}
  .ap{grid-template-columns:repeat(3,1fr);gap:40px}.gal{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr 1.2fr;gap:44px}
- h2{font-size:1.9rem}
+ h2{font-size:2.2rem}
+ .rv{grid-auto-flow:row;grid-template-columns:repeat(3,1fr);overflow:visible}
+}
+@media(min-width:900px){
+ .h3g{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:30px;min-height:620px}
+ .h3i{order:0;margin:0}
+ .h3i img{max-height:600px;-webkit-mask-image:radial-gradient(75% 70% at 50% 45%,#000 55%,transparent 100%);mask-image:radial-gradient(75% 70% at 50% 45%,#000 55%,transparent 100%)}
+ .h3t{margin:0;padding:70px 0}.h3t h1{font-size:3.9rem}
 }
 """
 
 HEAD_COMMON = ('<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n'
                '<meta name="theme-color" content="#0b2236">\n'
+               '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+               '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">\n'
                f'<link rel="icon" href="{FAVICON}">\n')
 
 SCRIPT = ("<script>document.querySelectorAll('.menu a').forEach(function(a){a.addEventListener('click',"
@@ -313,7 +348,7 @@ def tlist(skip=None):
 HOME_FAQS = [
     ("Where is Dr Tejas Pradhan's Dental Clinic?",
      "Shop No. A-19, Aareshwar Society, opposite Dheeraj Darshan, Kokan Nagar Road, near Kokan Hospital, Jogeshwari East, Mumbai 400060."),
-    ("What are the clinic timings?", "Monday to Saturday, 11 am to 2:30 pm and 5:30 pm to 9 pm. Closed on Sunday."),
+    ("What are the clinic timings?", "Monday to Saturday, 12 noon to 2 pm and 6 pm to 9:30 pm. Dr. Pradhan consults 12 to 2 pm and 7:30 to 9:30 pm. Sundays by appointment."),
     ("Do I need an appointment?", "Appointments are recommended. Call or WhatsApp +91 83691 87806 or +91 91675 11565."),
     ("Who is the dentist?", "Dr. Tejas Pradhan, registered with the Maharashtra State Dental Council, Reg. No. A-20222."),
     ("Do you do root canal treatment in Jogeshwari East?",
@@ -332,6 +367,22 @@ WATERMARK = (f'<svg class="wm" viewBox="0 0 24 24" fill="none" stroke="currentCo
              f'aria-hidden="true"><path d="{TOOTH}"/></svg>')
 
 
+# Real Google reviews (quoted as written, shortened with …). Update when new reviews come in.
+REVIEW_QUOTES = [
+    ("Preeti M.", "I always have a great and smooth experience here. The Doctor and staff are friendly, caring and courteous of your time … He explained very well what was going on. Definitely recommend!"),
+    ("Girish R.", "Had visited to get a tooth extracted. A very pleasant & totally painless experience. Clinic was Neat & Tidy."),
+    ("Vivek S.", "First of all thanks to Dr. Tejas who handled my ortho case so gracefully. Very kind and friendly in nature."),
+    ("Pallavi P.", "Great experience. Me and my family know him almost from 7 to 8 years … Friendly nature."),
+    ("Joaquim S.", "Clean and hygienic clinic. Dr. Pradan was very very helpful and knew what he was doing at all times … Absolutely affordable."),
+    ("Nikhil J.", "Visited the clinic for rootcanal. The treatment done was smooth and easy no pain … clean and hygenic clinic! MUST VISIT"),
+]
+
+
+def reviews_html():
+    return "".join(f'<figure><div class="st">★★★★★</div><blockquote>“{e(t)}”</blockquote>'
+                   f'<figcaption><b>{e(n)}</b> · Google review</figcaption></figure>' for n, t in REVIEW_QUOTES)
+
+
 def home():
     dentist = {
         "@context": "https://schema.org", "@type": "Dentist", "@id": f"{BASE}/#clinic",
@@ -347,10 +398,10 @@ def home():
         "openingHoursSpecification": [
             {"@type": "OpeningHoursSpecification",
              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-             "opens": "11:00", "closes": "14:30"},
+             "opens": "12:00", "closes": "14:00"},
             {"@type": "OpeningHoursSpecification",
              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-             "opens": "17:30", "closes": "21:00"}],
+             "opens": "18:00", "closes": "21:30"}],
         "founder": {"@type": "Person", "name": "Dr. Tejas Pradhan", "jobTitle": "Dentist"},
         "availableService": [{"@type": "MedicalProcedure", "name": n} for n in SERVICES_LD],
         "amenityFeature": [
@@ -364,12 +415,13 @@ def home():
     faq = {"@context": "https://schema.org", "@type": "FAQPage",
            "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
                           for q, a in HOME_FAQS]}
-    og_img = f'<meta property="og:image" content="{BASE}/{hero_img["url"]}">\n' if hero_img else ""
+    og_img = f'<meta property="og:image" content="{BASE}/{HERO3D["url"]}">\n' if HERO3D else ""
 
     if hero_img:
         hero_open, hero_bg = '<section class="hero">', img_tag(hero_img, lazy=False, cls="bg")
     else:
         hero_open, hero_bg = '<section class="hero plain">', WATERMARK
+    hero3d_img = (f'<div class="h3i"><img src="{HERO3D["url"]}" alt="3D render of a healthy tooth" fetchpriority="high" width="1080" height="1350"></div>' if HERO3D else "")
     dr_block = f'<div class="dr">{img_tag(doctor_img)}</div>' if doctor_img else ""
     gal = ""
     if gallery:
@@ -394,18 +446,19 @@ def home():
 </head>
 <body>
 {topbar(True)}
-{hero_open}
-  {hero_bg}
-  <div class="wrap">
-    <p class="kick" style="color:#d9c8b8">Family dental clinic · Jogeshwari East, Mumbai</p>
+<section class="hero3d"><div class="wrap h3g">
+  <div class="h3t">
+    <p class="kick">Implant &amp; family dentistry · Jogeshwari East</p>
     <h1>{e(CLINIC)}</h1>
-    <p>Check-ups, root canals, implants, braces and aligners on Kokan Nagar Road, near Kokan Hospital. Clear explanations and costs before any treatment starts.</p>
+    <p>Root canals, implants and All-on-4, braces and aligners, with a visiting team of specialists. Clear explanations and costs before any treatment starts.</p>
     <div class="cta">
       <a class="btn" href="{WA}">Book an appointment</a>
       <a class="btn o" href="tel:+918369187806">Call {PHONE}</a>
     </div>
+    <div class="chip"><b>★★★★★</b> {RATING} on Google · {REVIEWS} reviews</div>
   </div>
-</section>
+  {hero3d_img}
+</div></section>
 
 <div class="stats"><div class="wrap">
   <div><div class="num">{RATING} ★</div><span>Google rating · {REVIEWS} reviews</span></div>
@@ -413,6 +466,12 @@ def home():
   <div><div class="num">{len(PAGES)}</div><span>Treatments offered</span></div>
   <div><div class="num">RVG</div><span>Digital X-ray at the clinic</span></div>
 </div></div>
+
+<section class="sec" id="reviews"><div class="wrap">
+  <p class="kick">Patient reviews</p><h2>What our patients say</h2>
+  <div class="rv">{reviews_html()}</div>
+  <div class="rvl"><a href="https://search.google.com/local/reviews?placeid=ChIJV9kVZNG35zsRmYseOzciSOQ" rel="noopener">Read all {REVIEWS} reviews on Google →</a><a href="https://search.google.com/local/writereview?placeid=ChIJV9kVZNG35zsRmYseOzciSOQ" rel="noopener">Write a review</a></div>
+</div></section>
 
 <section class="sec" id="about"><div class="wrap">
   <div class="about{' has-dr' if doctor_img else ''}">
@@ -449,8 +508,9 @@ def home():
 <section class="sec" id="timings"><div class="wrap narrow">
   <p class="kick">Timings</p><h2>Clinic timings</h2>
   <table>
-    <tr><td>Monday – Saturday</td><td>11:00 am – 2:30 pm<br>5:30 pm – 9:00 pm</td></tr>
-    <tr><td>Sunday</td><td>Closed</td></tr>
+    <tr><td>Monday – Saturday</td><td>12:00 pm – 2:00 pm<br>6:00 pm – 9:30 pm</td></tr>
+    <tr><td>Sunday</td><td>By appointment</td></tr>
+    <tr><td>Doctor's consultation</td><td>12:00 – 2:00 pm<br>7:30 – 9:30 pm</td></tr>
   </table>
   <p class="muted">Appointments recommended. Call or WhatsApp {PHONE} or {PHONE2}.</p>
 </div></section>
@@ -569,7 +629,7 @@ def page(p):
 <section class="sec"><div class="wrap narrow">
 <h2>Visit the clinic</h2>
 <p>{e(ADDR)}</p>
-<p>Monday to Saturday, 11 am – 2:30 pm and 5:30 pm – 9 pm. Closed Sunday. Appointments recommended: call or WhatsApp {PHONE} or {PHONE2}.</p>
+<p>Monday to Saturday, 12 – 2 pm and 6 – 9:30 pm. Sundays by appointment. Appointments recommended: call or WhatsApp {PHONE} or {PHONE2}.</p>
 <p>Dr. Tejas Pradhan, Maharashtra State Dental Council Reg. No. A-20222. <a href="{MAPS}">Open in Google Maps</a></p>
 <p class="muted">This page gives general information. Your treatment is decided after an examination at the clinic.</p>
 </div></section>
@@ -636,7 +696,7 @@ def guide_page(slug, title, h1, kick, desc, body, faqs=None):
 <section class="sec"><div class="wrap narrow">
 <h2>Visit the clinic</h2>
 <p>{e(ADDR)}</p>
-<p>Monday to Saturday, 11 am – 2:30 pm and 5:30 pm – 9 pm. Closed Sunday. Call or WhatsApp {PHONE} or {PHONE2}.</p>
+<p>Monday to Saturday, 12 – 2 pm and 6 – 9:30 pm. Sundays by appointment. Call or WhatsApp {PHONE} or {PHONE2}.</p>
 <p class="muted">General information only. Follow the instructions your own dentist gives you, and treatment is decided after an examination.</p>
 </div></section>
 <section class="sec alt"><div class="wrap"><p class="kick">More</p><h2>Treatments</h2>{tlist()}</div></section>
@@ -860,15 +920,8 @@ BRUSH_FAQS = [
 
 
 def brushing_svg():
-    return ('<svg viewBox="0 0 300 150" role="img" aria-label="Toothbrush held at 45 degrees to the gum line" xmlns="http://www.w3.org/2000/svg">'
-            '<rect width="300" height="150" fill="#f1ece4"/>'
-            '<path d="M40 120V55c0-22 16-38 36-38s36 16 36 38v65z" fill="#fbf8f3" stroke="#cfc4b6" stroke-width="2"/>'
-            '<path d="M20 118c40-14 100-14 140 0v30H20z" fill="#e6a9a0"/>'
-            '<g transform="rotate(-45 150 100)"><rect x="150" y="96" width="120" height="9" rx="4" fill="#143550"/>'
-            '<rect x="108" y="88" width="46" height="9" rx="2" fill="#7fa8d1"/></g>'
-            '<path d="M70 105l-14 22" stroke="#6b645c" stroke-width="1.5" stroke-dasharray="3 2"/>'
-            '<text x="200" y="40" font-size="11" fill="#1d1a17" font-family="system-ui,sans-serif">Bristles at 45°</text>'
-            '<text x="200" y="56" font-size="11" fill="#1d1a17" font-family="system-ui,sans-serif">towards the gum line</text></svg>')
+    return ('<img src="images/brushing-bass-3d.png" alt="Toothbrush on the upper front teeth with the bristles tilted 45 degrees up into the gum line" loading="lazy" width="1200" height="900">'
+            '<img src="images/brushing-bass.svg" alt="Cross-section of an upper front tooth: bristle tips at the gum line, tilted 45 degrees towards the gum" loading="lazy" width="600" height="420" style="border-top:1px solid #e6dfd4">')
 
 
 def brushing_page():
@@ -2255,7 +2308,7 @@ urls = [f"{BASE}/"] + [f'{BASE}/{p["slug"]}.html' for p in PAGES] + [f'{BASE}/{g
 
 llms = [f"# {CLINIC}", "",
         f"> Dental clinic in Jogeshwari East, Mumbai, led by Dr. Tejas Pradhan (Reg. No. A-20222). {ADDR}. "
-        f"Mon–Sat 11:00–14:30 and 17:30–21:00, closed Sunday. Phone/WhatsApp {PHONE} or {PHONE2}.", "",
+        f"Mon–Sat 12:00–14:00 and 18:00–21:30 (doctor 12:00–14:00 and 19:30–21:30), Sundays by appointment. Phone/WhatsApp {PHONE} or {PHONE2}.", "",
         "## Treatments", ""]
 llms += [f'- [{p["name"]}]({BASE}/{p["slug"]}.html): {one_liner(p)}' for p in PAGES]
 llms += ["", "## Patient guides", ""] + [f"- [{n}]({BASE}/{sl}.html): {d}" for sl, n, d, _ in GUIDES]
