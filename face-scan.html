@@ -47,6 +47,37 @@ th{color:var(--mu);font-weight:500}
 .thumbs img{width:100%;border-radius:8px;aspect-ratio:3/4;object-fit:cover;background:#000}
 #err{display:none;background:#3a1d1d;border:1px solid #6b2b2b;color:#ffd6d6;padding:10px;border-radius:10px;margin:10px 12px 0}
 a.dl{color:var(--ac)}
+.cam{position:fixed;inset:0;background:#000;z-index:300;display:flex;flex-direction:column;color:#fff;overflow:auto}
+.cam[hidden]{display:none}
+.camtop{display:flex;align-items:center;gap:10px;padding:8px 12px}
+.camtop b{flex:1;font-size:15px}
+.camtop button{background:none;border:0;color:#fff;font-size:22px;padding:4px 8px}
+.camstage{position:relative;margin:0 auto;width:min(100%,calc(62vh * var(--ar,0.75)));aspect-ratio:var(--ar,0.75);background:#111;overflow:hidden;flex:0 0 auto}
+.camstage video,.camstage canvas{position:absolute;inset:0;width:100%;height:100%}
+.pill{position:absolute;left:50%;top:5%;transform:translateX(-50%);background:rgba(0,0,0,.78);padding:7px 15px;border-radius:20px;font-size:15px;font-weight:600;text-align:center;max-width:92%}
+.count{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:110px;font-weight:800;color:#fff;text-shadow:0 3px 14px #000;pointer-events:none}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .35s}
+.flash.on{opacity:.85;transition:none}
+.saved{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);background:#14532d;color:#bbf7d0;padding:6px 14px;border-radius:18px;font-weight:600;opacity:0;transition:opacity .3s;white-space:nowrap}
+.saved.on{opacity:1}
+.camtxt{padding:10px 16px 0}
+.camtxt h3{margin:0 0 4px;font-size:17px}
+.camtxt p{margin:0 0 8px;color:#bbb;font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{font-size:12.5px;padding:4px 9px;border-radius:14px;background:#333;color:#bbb}
+.chips span.on{background:#14532d;color:#bbf7d0}
+.chips span.on:before{content:"\2713 "}
+.cambar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:12px 18px}
+.cambar .l{justify-self:start}.cambar .r{justify-self:end}
+.cambar button.t{background:#222;border:1px solid #444;color:#fff;border-radius:10px;padding:9px 12px;font:inherit}
+.shot{width:78px;height:78px;border-radius:50%;border:0;background:none;padding:0}
+.shot svg{width:100%;height:100%;transform:rotate(-90deg)}
+.shot .bg{fill:#666;stroke:#ddd;stroke-width:5}
+.shot .pr{fill:none;stroke:#4ade80;stroke-width:6;stroke-linecap:round;stroke-dasharray:213.6;stroke-dashoffset:213.6}
+.dots{display:flex;gap:6px;justify-content:center;padding-top:8px}
+.dots i{width:9px;height:9px;border-radius:50%;background:#444}
+.dots i.ok{background:#4ade80}.dots i.now{background:#2ea3d8}
+
 </style>
 </head>
 <body>
@@ -64,25 +95,17 @@ a.dl{color:var(--ac)}
     <label class="ck"><input type="checkbox" id="consent"> <span>The patient has agreed to face photos for treatment planning. Faces are used in posts only with separate written consent.</span></label>
     <div style="margin-top:10px"><input type="text" id="pname" placeholder="Patient name or file no. (used only in file names)"></div>
   </div>
-  <div class="stage" id="stage">
-    <video id="vid" playsinline muted></video>
-    <canvas id="ov"></canvas>
-    <div class="msg" id="msg">Tick consent, then start the camera</div>
-  </div>
   <div class="steps" id="steps">
-    <span data-k="front">Front, lips closed</span>
-    <span data-k="side1">Turn one way</span>
-    <span data-k="side2">Turn the other way</span>
-    <span data-k="smile">Big smile, teeth showing</span>
+    <span data-k="front">1 Front, lips closed</span>
+    <span data-k="side1">2 Turn to the right</span>
+    <span data-k="side2">3 Turn to the left</span>
+    <span data-k="smile">4 Big smile</span>
   </div>
   <div>
-    <button class="btn" id="bStart">Start camera</button>
-    <button class="btn o" id="bFlip" disabled>Switch camera</button>
-    <button class="btn o" id="bShot" disabled>Capture now</button>
-    <button class="btn o" id="bSkip" disabled>Skip smile</button>
+    <button class="btn" id="bStart">Start guided scan</button>
     <button class="btn o" id="bReset">Start again</button>
   </div>
-  <p class="muted">Hold the phone at face height, about 40 cm away, in even light. Capture is automatic: the patient looks straight, then slowly turns the head about 30° to each side, then smiles. Use the back camera when the dentist holds the phone.</p>
+  <p class="muted">The camera guides each pose with instructions on screen and by voice, then counts 3, 2, 1 and takes the photo by itself. With the back camera the dentist holds the phone and the patient follows the voice. Even light, phone at face height, about 40 cm away.</p>
   <div class="thumbs" id="thumbs"></div>
 </section>
 
@@ -119,6 +142,13 @@ a.dl{color:var(--ac)}
   </div>
 </section>
 
+<div class="cam" id="cam" hidden>
+  <div class="camtop"><b id="camstep">Step 1 of 4</b><button type="button" id="camvoice" aria-label="Voice on or off">🔊</button><button type="button" id="camx" aria-label="Close camera">✕</button></div>
+  <div class="camstage" id="camstage"><video id="vid" playsinline muted autoplay></video><canvas id="ov"></canvas><div class="pill" id="msg">Starting camera…</div><div class="count" id="count"></div><div class="flash" id="flash"></div><div class="saved" id="saved"></div></div>
+  <div class="dots" id="dots"><i></i><i></i><i></i><i></i></div>
+  <div class="camtxt"><h3 id="camh"></h3><p id="camp"></p><div class="chips" id="chips"></div></div>
+  <div class="cambar"><button type="button" class="t l" id="bFlip">⟲ Camera</button><button type="button" class="shot" id="bShot" aria-label="Take photo now"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" class="bg"/><circle cx="40" cy="40" r="34" class="pr" id="ring"/></svg></button><button type="button" class="t r" id="bSkip">Skip smile</button></div>
+</div>
 <script type="module">
 const $ = s => document.querySelector(s);
 const err = m => { const e = $('#err'); e.textContent = m; e.style.display = 'block'; };
@@ -145,7 +175,7 @@ async function loadLandmarker() {
   const FaceLandmarker = m.FaceLandmarker || (m.default && m.default.FaceLandmarker);
   const FilesetResolver = m.FilesetResolver || (m.default && m.default.FilesetResolver);
   const fs = await FilesetResolver.forVisionTasks(WASM);
-  const opts = d => ({ baseOptions: { modelAssetPath: MODEL, delegate: d }, runningMode: 'VIDEO', numFaces: 1 });
+  const opts = d => ({ baseOptions: { modelAssetPath: MODEL, delegate: d }, runningMode: 'VIDEO', numFaces: 1, outputFaceBlendshapes: true });
   try { FL = await FaceLandmarker.createFromOptions(fs, opts('GPU')); }
   catch (e) { FL = await FaceLandmarker.createFromOptions(fs, opts('CPU')); }
   TRIS = trianglesFromEdges(FaceLandmarker.FACE_LANDMARKS_TESSELATION);
@@ -166,141 +196,223 @@ function trianglesFromEdges(edges) {
 }
 window.__trianglesFromEdges = trianglesFromEdges;
 
-// ---------------------------------------------------------------- camera + capture
+// ---------------------------------------------------------------- guided camera + capture (3-2-1 countdown, like the smile check)
 const vid = $('#vid'), ov = $('#ov'), octx = ov.getContext('2d');
-let stream = null, facing = 'user', running = false, lastT = -1;
+let stream = null, facing = 'user', running = false, hold = 0, tPrev = 0, lastNose = null, mv = null, shownCount = '', busy = false, voice = true, lastRes = null, skipSmile = false, raf = 0;
+const HOLD = 3000;
 const ORDER = ['front', 'side1', 'side2', 'smile'];
-const PROMPT = {
-  front: 'Look straight at the camera, lips gently closed',
-  side1: 'Now turn the head slowly to one side (about 30°)',
-  side2: 'Now slowly turn to the other side',
-  smile: 'Face the camera and give a big smile showing the teeth'
-};
-let scan = newScan(), hist = [];
+const NAME = { front: 'Front', side1: 'Turned one side', side2: 'Turned other side', smile: 'Smile' };
+let scan = newScan();
 function newScan() { return { v: 1, patient: '', date: new Date().toISOString(), views: {} }; }
-function stepNow() { return ORDER.find(k => !scan.views[k]); }
-
-$('#bStart').onclick = async () => {
-  if (!$('#consent').checked) { $('#msg').textContent = 'Tick the consent box first'; return; }
-  try { await loadLandmarker(); await startCam(); }
-  catch (e) { err('Could not start: ' + (e && e.message || e) + '. Check camera permission and internet (the face model downloads once).'); }
+function stepNow() { const k = ORDER.find(x => !scan.views[x]); return k === 'smile' && skipSmile ? undefined : k; }
+const turnOf = yaw => yaw > 0 ? 'left' : 'right';              // patient's own left / right
+function wantTurn(k) {
+  if (k === 'side1') return 'right';
+  if (k === 'side2') return scan.views.side1 ? (turnOf(scan.views.side1.yaw) === 'right' ? 'left' : 'right') : 'left';
+  return null;
+}
+function label(k) { const t = wantTurn(k); return t ? (t === 'right' ? 'Right side' : 'Left side') : NAME[k]; }
+function stepText(k) {
+  const t = wantTurn(k);
+  return {
+    front: { h: 'Look straight at the camera', p: 'Face inside the oval, teeth together, lips gently closed.', say: 'Look straight at the camera, and close your lips gently.' },
+    side1: { h: `Turn your head to your ${t}`, p: 'Turn slowly, about 30 degrees. Keep the chin level and both eyes inside the oval.', say: `Now slowly turn your head to your ${t}.` },
+    side2: { h: `Now turn your head to your ${t}`, p: 'Turn slowly, about 30 degrees, the other way. Keep the chin level.', say: `Now slowly turn your head to your ${t}.` },
+    smile: { h: 'Big smile, show your teeth', p: 'Face the camera again and smile widely so the teeth show.', say: 'Look at the camera, and give a big smile showing your teeth.' }
+  }[k];
+}
+const CHECKS = {
+  front: [['oval', 'Face in oval'], ['dist', 'Distance'], ['pose', 'Head straight'], ['expr', 'Lips closed'], ['light', 'Good light'], ['steady', 'Hold still']],
+  side1: [['oval', 'Face in oval'], ['dist', 'Distance'], ['pose', 'Turned ~30°'], ['light', 'Good light'], ['steady', 'Hold still']],
+  side2: [['oval', 'Face in oval'], ['dist', 'Distance'], ['pose', 'Turned ~30°'], ['light', 'Good light'], ['steady', 'Hold still']],
+  smile: [['oval', 'Face in oval'], ['dist', 'Distance'], ['pose', 'Head straight'], ['expr', 'Teeth showing'], ['light', 'Good light'], ['steady', 'Hold still']]
 };
-$('#bFlip').onclick = async () => { facing = facing === 'user' ? 'environment' : 'user'; await startCam(); };
-$('#bShot').onclick = () => { if (lastRes) capture(stepNow(), lastRes, true); };
-$('#bSkip').onclick = () => { if (stepNow() === 'smile') { scan.views.smile = null; delete scan.views.smile; skipSmile = true; finishIfDone(); } };
-$('#bReset').onclick = () => { scan = newScan(); skipSmile = false; hist = []; buildThumbs(); markSteps(); disposeFace(); $('#msg').textContent = running ? PROMPT.front : 'Tick consent, then start the camera'; };
-let skipSmile = false, lastRes = null;
-
-async function startCam() {
-  if (stream) stream.getTracks().forEach(t => t.stop());
-  stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1440 } } });
-  vid.srcObject = stream; await vid.play();
-  const mir = facing === 'user';
-  vid.classList.toggle('mir', mir); ov.classList.toggle('mir', mir);
-  $('#bFlip').disabled = $('#bShot').disabled = false;
-  $('#bSkip').disabled = false;
-  if (!running) { running = true; requestAnimationFrame(loop); }
-  markSteps(); $('#msg').textContent = PROMPT[stepNow() || 'front'];
+function say(t) {
+  if (!voice || !window.speechSynthesis) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'en-IN'; u.rate = 1; speechSynthesis.speak(u); } catch (e) {}
 }
 
-const P = (lm, i) => lm[i];
-const d2 = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+$('#bStart').onclick = async () => {
+  if (!$('#consent').checked) { err('Tick the consent box first.'); return; }
+  $('#err').style.display = 'none';
+  if (!stepNow()) { scan = newScan(); skipSmile = false; buildThumbs(); markSteps(); disposeFace(); }
+  $('#cam').hidden = false; document.body.style.overflow = 'hidden';
+  enterStep();
+  $('#msg').textContent = 'Loading face guide…';
+  try { await loadLandmarker(); await startCam(); }
+  catch (e) { $('#msg').textContent = 'Could not start: ' + (e && e.message || e); err('Could not start the camera or face guide. Allow camera access and check the internet (the face model downloads once).'); }
+};
+$('#camx').onclick = closeCam;
+$('#camvoice').onclick = () => { voice = !voice; $('#camvoice').textContent = voice ? '🔊' : '🔇'; if (!voice && window.speechSynthesis) speechSynthesis.cancel(); };
+$('#bFlip').onclick = async () => { facing = facing === 'user' ? 'environment' : 'user'; try { await startCam(); } catch (e) { $('#msg').textContent = 'Camera switch failed'; } };
+$('#bShot').onclick = () => { const k = stepNow(); if (k && lastRes && !busy) capture(k, lastRes); };
+$('#bSkip').onclick = () => { if (stepNow() === 'smile') { skipSmile = true; afterCapture(); } };
+$('#bReset').onclick = () => { scan = newScan(); skipSmile = false; buildThumbs(); markSteps(); disposeFace(); };
+
+function closeCam() {
+  cancelAnimationFrame(raf); running = false;
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  $('#cam').hidden = true; document.body.style.overflow = '';
+  markSteps();
+}
+async function startCam() {
+  cancelAnimationFrame(raf);
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1920 } } });
+  vid.srcObject = stream;
+  await new Promise(r => { if (vid.readyState >= 1) r(); else vid.onloadedmetadata = r; });
+  await vid.play();
+  vid.style.transform = facing === 'user' ? 'scaleX(-1)' : 'none';
+  $('#camstage').style.setProperty('--ar', vid.videoWidth / vid.videoHeight);
+  ov.width = vid.videoWidth; ov.height = vid.videoHeight;
+  hold = 0; tPrev = 0; lastNose = null; mv = null; running = true;
+  raf = requestAnimationFrame(loop);
+}
+function enterStep() {
+  const k = stepNow(); if (!k) return;
+  const i = ORDER.indexOf(k), txt = stepText(k);
+  $('#camstep').textContent = `Step ${i + 1} of 4 · ${label(k)}`;
+  $('#camh').textContent = txt.h; $('#camp').textContent = txt.p;
+  $('#chips').innerHTML = CHECKS[k].map(c => `<span id="ck_${c[0]}">${c[1]}</span>`).join('');
+  $('#bSkip').style.visibility = k === 'smile' ? 'visible' : 'hidden';
+  document.querySelectorAll('#dots i').forEach((d, j) => { d.className = scan.views[ORDER[j]] ? 'ok' : j === i ? 'now' : ''; });
+  hold = 0; shownCount = ''; $('#count').textContent = '';
+  say(txt.say);
+}
+
+function lumaOf(box) {
+  const c = lumaOf.c || (lumaOf.c = document.createElement('canvas')); c.width = 24; c.height = 24;
+  const g = c.getContext('2d', { willReadFrequently: true });
+  g.drawImage(vid, box[0], box[1], Math.max(1, box[2]), Math.max(1, box[3]), 0, 0, 24, 24);
+  const d = g.getImageData(0, 0, 24, 24).data; let s = 0;
+  for (let i = 0; i < d.length; i += 4) s += 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+  return s / (d.length / 4);
+}
 function metrics(lm, W, H) {
   const px = i => ({ x: lm[i].x * W, y: lm[i].y * H });
   const nose = px(1), L = px(234), R = px(454);
   const dl = Math.abs(nose.x - L.x), dr = Math.abs(R.x - nose.x);
-  const yaw = (dl - dr) / (dl + dr + 1e-6);              // -1..1, 0 = straight
-  const fw = d2(L, R);
-  const mouthW = d2(px(61), px(291)) / fw;
-  const gap = d2(px(13), px(14)) / fw;
-  const cx = (L.x + R.x) / 2 / W;
-  return { yaw, fw: fw / W, mouthW, gap, cx };
+  const fw = Math.hypot(R.x - L.x, R.y - L.y);
+  return { yaw: (dl - dr) / (dl + dr + 1e-6), mouthW: Math.hypot(px(291).x - px(61).x, px(291).y - px(61).y) / fw };
 }
+function geom(W, H) { const rx = Math.min(W, H) * 0.32, ry = rx * 1.36; return { cx: W / 2, cy: Math.max(H * 0.47, ry + H * 0.05), rx, ry }; }
 
-function loop() {
+function loop(t) {
   if (!running) return;
-  requestAnimationFrame(loop);
-  if (vid.readyState < 2 || vid.currentTime === lastT || !FL) return;
-  lastT = vid.currentTime;
-  const W = vid.videoWidth, H = vid.videoHeight;
-  let res;
-  try { res = FL.detectForVideo(vid, performance.now()); } catch (e) { return; }
-  ov.width = ov.clientWidth * devicePixelRatio; ov.height = ov.clientHeight * devicePixelRatio;
-  octx.clearRect(0, 0, ov.width, ov.height);
+  raf = requestAnimationFrame(loop);
+  const dt = tPrev ? Math.min(100, t - tPrev) : 16; tPrev = t;
+  if (!FL || vid.readyState < 2) return;
+  const W = ov.width, H = ov.height, G = geom(W, H), mir = facing === 'user', k = stepNow();
+  let res = null; try { res = FL.detectForVideo(vid, t); } catch (e) {}
   const lm = res && res.faceLandmarks && res.faceLandmarks[0];
-  const k = stepNow();
-  if (!lm) { lastRes = null; hist = []; if (k) $('#msg').textContent = 'No face found: ' + PROMPT[k]; return; }
-  lastRes = { lm, W, H };
-  drawDots(lm, W, H);
-  if (!k) return;
-  const m = metrics(lm, W, H);
-  hist.push(m); if (hist.length > 10) hist.shift();
-  const ys = hist.map(h => h.yaw), steady = hist.length >= 8 && Math.max(...ys) - Math.min(...ys) < 0.06;
-  let msg = PROMPT[k], ready = false;
-  if (m.fw < 0.28) msg = 'Move closer';
-  else if (m.fw > 0.85) msg = 'Move back a little';
-  else if (Math.abs(m.cx - 0.5) > 0.18) msg = 'Keep the face in the middle';
-  else if (k === 'front') ready = Math.abs(m.yaw) < 0.08;
-  else if (k === 'side1') { ready = Math.abs(m.yaw) > 0.33 && Math.abs(m.yaw) < 0.7; if (Math.abs(m.yaw) >= 0.7) msg = 'Too far: turn back a little'; }
-  else if (k === 'side2') {
-    const s1 = scan.views.side1.yaw;
-    ready = Math.sign(m.yaw) !== Math.sign(s1) && Math.abs(m.yaw) > 0.33 && Math.abs(m.yaw) < 0.7;
-    if (Math.sign(m.yaw) === Math.sign(s1) && Math.abs(m.yaw) > 0.2) msg = 'That side is done: turn to the other side';
+  const ok = {}; let msg = '', arrow = 0;
+  if (!k || busy) { draw(G, W, H, false, 0); return; }
+  if (!lm) { lastRes = null; lastNose = null; msg = 'Bring the face into the oval'; }
+  else {
+    lastRes = { lm, W: vid.videoWidth, H: vid.videoHeight };
+    const D = i => [(mir ? 1 - lm[i].x : lm[i].x) * W, lm[i].y * H];
+    const nose = D(1), c1 = D(234), c2 = D(454), fh = D(10), ch = D(152), e1 = D(33), e2 = D(263), ul = D(13), ll = D(14), m1 = D(61), m2 = D(291);
+    const m = metrics(lm, vid.videoWidth, vid.videoHeight), yaw = m.yaw;
+    let roll = Math.atan2(e2[1] - e1[1], e2[0] - e1[0]) * 180 / Math.PI; if (roll > 90) roll -= 180; if (roll < -90) roll += 180;
+    const pitch = (nose[1] - fh[1]) / (ch[1] - fh[1] + 1e-6);
+    const fcx = (c1[0] + c2[0]) / 2, fcy = (fh[1] + ch[1]) / 2, fhgt = Math.hypot(ch[0] - fh[0], ch[1] - fh[1]);
+    const mw = Math.hypot(m2[0] - m1[0], m2[1] - m1[1]), gap = Math.hypot(ll[0] - ul[0], ll[1] - ul[1]) / (mw + 1e-6);
+    const bs = {}; ((res.faceBlendshapes && res.faceBlendshapes[0] && res.faceBlendshapes[0].categories) || []).forEach(c => bs[c.categoryName] = c.score);
+    const smileS = ((bs.mouthSmileLeft || 0) + (bs.mouthSmileRight || 0)) / 2;
+    const size = fhgt / (2 * G.ry);
+    ok.oval = Math.abs(fcx - G.cx) < G.rx * 0.28 && Math.abs(fcy - G.cy) < G.ry * 0.22;
+    ok.dist = size > 0.6 && size < 0.92;
+    const want = wantTurn(k);
+    if (k === 'front' || k === 'smile') ok.pose = Math.abs(yaw) < 0.08 && Math.abs(roll) < 5 && pitch > 0.42 && pitch < 0.66;
+    else ok.pose = Math.abs(yaw) > 0.33 && Math.abs(yaw) < 0.72 && Math.abs(roll) < 8 && (k === 'side1' || turnOf(yaw) === want);
+    if (k === 'front') ok.expr = gap < 0.08 && smileS < 0.5;
+    if (k === 'smile') ok.expr = (smileS > 0.45 || (scan.views.front && m.mouthW > scan.views.front.mouthW * 1.12)) && gap > 0.06;
+    let bx = Math.min(c1[0], c2[0]), bw = Math.abs(c2[0] - c1[0]); if (mir) bx = W - bx - bw;
+    const lu = lumaOf([bx, fh[1], bw, ch[1] - fh[1]]); ok.light = lu > 70 && lu < 215;
+    const mvNow = lastNose ? Math.hypot(nose[0] - lastNose[0], nose[1] - lastNose[1]) / W : 1; lastNose = nose;
+    mv = mv == null ? mvNow : mv * 0.7 + mvNow * 0.3; ok.steady = mv < 0.004;
+    // instruction, most important first
+    if (!ok.oval) msg = fcy < G.cy - G.ry * 0.22 ? 'Move the phone up a little' : fcy > G.cy + G.ry * 0.22 ? 'Move the phone down a little' : 'Keep the face in the middle of the oval';
+    else if (!ok.dist) msg = size <= 0.6 ? 'Move closer' : 'Move back a little';
+    else if (!ok.pose) {
+      if (k === 'front' || k === 'smile') msg = Math.abs(yaw) >= 0.08 ? 'Face the camera straight' : Math.abs(roll) >= 5 ? 'Keep the head level' : pitch <= 0.42 ? 'Lower the chin slightly' : 'Raise the chin slightly';
+      else {
+        const need = k === 'side1' ? 'right' : want;
+        if (k === 'side2' && Math.abs(yaw) > 0.2 && turnOf(yaw) !== want) msg = `That side is done. Turn to your ${want}`;
+        else if (Math.abs(yaw) <= 0.33) msg = `Turn the head slowly to your ${need}`;
+        else if (Math.abs(yaw) >= 0.72) msg = 'Too far. Turn back a little';
+        else msg = 'Keep the head level';
+        // on-screen arrow: patient's right moves the nose to image-left; mirrored preview flips it
+        const imgDir = need === 'right' ? -1 : 1; arrow = mir ? -imgDir : imgDir;
+      }
+    }
+    else if (k === 'front' && !ok.expr) msg = 'Close the lips gently, teeth together';
+    else if (k === 'smile' && !ok.expr) msg = gap <= 0.06 ? 'Smile and show the teeth' : 'Bigger smile';
+    else if (!ok.light) msg = lu <= 70 ? 'Too dark: face a window or switch on a light' : 'Too bright: move away from direct light';
+    else if (!ok.steady) msg = 'Hold still…';
   }
-  else if (k === 'smile') {
-    const rest = scan.views.front ? scan.views.front.mouthW : 0.38;
-    ready = Math.abs(m.yaw) < 0.1 && m.mouthW > rest * 1.12 && m.gap > 0.015;
-  }
-  if (ready && !steady) msg = 'Hold still…';
-  $('#msg').textContent = msg;
-  if (ready && steady) capture(k, lastRes, false);
+  const all = CHECKS[k].every(c => ok[c[0]]);
+  CHECKS[k].forEach(c => { const s = document.getElementById('ck_' + c[0]); if (s) s.className = ok[c[0]] ? 'on' : ''; });
+  hold = all ? hold + dt : 0;
+  const left = Math.ceil((HOLD - hold) / 1000), cnt = all && left > 0 ? String(left) : '';
+  if (cnt !== shownCount) { shownCount = cnt; $('#count').textContent = cnt; if (cnt) say(cnt); }
+  $('#msg').textContent = all ? 'Perfect, hold still' : msg;
+  const ring = $('#ring'), L2 = 2 * Math.PI * 34; ring.style.strokeDasharray = L2; ring.style.strokeDashoffset = L2 * (1 - Math.min(1, hold / HOLD));
+  draw(G, W, H, all, arrow);
+  if (all && hold >= HOLD) capture(k, lastRes);
 }
 
-function drawDots(lm, W, H) {
-  const sw = ov.width, sh = ov.height, s = Math.max(sw / W, sh / H), ox = (sw - W * s) / 2, oy = (sh - H * s) / 2;
-  octx.fillStyle = 'rgba(46,163,216,.75)';
-  for (let i = 0; i < 468; i += 2) { const p = lm[i]; octx.fillRect(ox + p.x * W * s - 1.5, oy + p.y * H * s - 1.5, 3, 3); }
+function draw(G, W, H, allOk, arrow) {
+  const g = octx; g.clearRect(0, 0, W, H);
+  g.save(); g.fillStyle = 'rgba(0,0,0,.5)'; g.fillRect(0, 0, W, H);
+  g.globalCompositeOperation = 'destination-out'; g.beginPath(); g.ellipse(G.cx, G.cy, G.rx, G.ry, 0, 0, Math.PI * 2); g.fill(); g.restore();
+  const lw = Math.max(3, W / 200);
+  g.lineWidth = lw; g.strokeStyle = allOk ? '#4ade80' : 'rgba(255,255,255,.9)';
+  g.beginPath(); g.ellipse(G.cx, G.cy, G.rx, G.ry, 0, 0, Math.PI * 2); g.stroke();
+  g.setLineDash([lw * 2, lw * 2]); g.strokeStyle = 'rgba(255,255,255,.35)'; g.lineWidth = lw * 0.6;
+  g.beginPath(); g.moveTo(G.cx, G.cy - G.ry); g.lineTo(G.cx, G.cy + G.ry); g.moveTo(G.cx - G.rx, G.cy - G.ry * 0.12); g.lineTo(G.cx + G.rx, G.cy - G.ry * 0.12); g.stroke(); g.setLineDash([]);
+  if (arrow) {   // big chevrons outside the oval, pointing the way to turn
+    const s = W * 0.04, x0 = G.cx + arrow * (G.rx + s * 0.9), y = G.cy;
+    g.strokeStyle = '#facc15'; g.lineWidth = lw * 1.6; g.lineCap = 'round'; g.lineJoin = 'round';
+    for (let j = 0; j < 3; j++) {
+      const x = x0 + arrow * j * s * 0.75, a = 0.45 + 0.27 * j;
+      g.globalAlpha = a; g.beginPath(); g.moveTo(x - arrow * s * 0.5, y - s); g.lineTo(x + arrow * s * 0.5, y); g.lineTo(x - arrow * s * 0.5, y + s); g.stroke();
+    }
+    g.globalAlpha = 1;
+  }
 }
 
-function capture(k, r, manual) {
-  if (!k || !r) return;
+function capture(k, r) {
+  if (!k || !r || busy) return;
   const { lm, W, H } = r;
-  const c = document.createElement('canvas');
-  const sc = Math.min(1, 1600 / Math.max(W, H));
+  const c = document.createElement('canvas'), sc = Math.min(1, 1600 / Math.max(W, H));
   c.width = Math.round(W * sc); c.height = Math.round(H * sc);
   c.getContext('2d').drawImage(vid, 0, 0, c.width, c.height);
-  const arr = new Float32Array(lm.length * 3);
-  lm.forEach((p, i) => { arr[i * 3] = p.x; arr[i * 3 + 1] = p.y; arr[i * 3 + 2] = p.z; });
   const m = metrics(lm, W, H);
-  if (k === 'side2' && !manual && scan.views.side1 && Math.sign(m.yaw) === Math.sign(scan.views.side1.yaw)) return;
-  scan.views[k] = { img: c.toDataURL('image/jpeg', 0.9), W: c.width, H: c.height, lm: Array.from(arr, v => Math.round(v * 1e5) / 1e5), yaw: m.yaw, mouthW: m.mouthW };
-  hist = [];
-  if (navigator.vibrate) navigator.vibrate(60);
+  const arr = []; lm.forEach(p => arr.push(Math.round(p.x * 1e5) / 1e5, Math.round(p.y * 1e5) / 1e5, Math.round(p.z * 1e5) / 1e5));
+  scan.views[k] = { img: c.toDataURL('image/jpeg', 0.9), W: c.width, H: c.height, lm: arr, yaw: m.yaw, mouthW: m.mouthW };
+  busy = true; hold = 0; shownCount = ''; $('#count').textContent = '';
+  const f = $('#flash'); f.classList.add('on'); requestAnimationFrame(() => requestAnimationFrame(() => f.classList.remove('on')));
+  const sv = $('#saved'); sv.textContent = '✓ ' + (k.startsWith('side') ? (turnOf(m.yaw) === 'right' ? 'Right' : 'Left') + ' side' : NAME[k]) + ' saved'; sv.classList.add('on');
+  if (navigator.vibrate) navigator.vibrate(80);
   buildThumbs(); markSteps(); disposeFace();
-  finishIfDone();
+  setTimeout(() => { sv.classList.remove('on'); busy = false; afterCapture(); }, 1300);
 }
-function finishIfDone() {
+function afterCapture() {
   const k = stepNow();
-  if (k === 'smile' && skipSmile) { done(); return; }
-  if (!k) { done(); return; }
-  $('#msg').textContent = PROMPT[k];
-  markSteps();
-}
-function done() {
-  $('#msg').textContent = 'Scan complete: opening the 3D face';
-  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
-  running = false; markSteps();
-  setTimeout(() => showTab('face'), 400);
+  if (k) { enterStep(); return; }
+  say('Scan complete.');
+  closeCam();
+  setTimeout(() => showTab('face'), 300);
 }
 function markSteps() {
   const k = stepNow();
-  document.querySelectorAll('#steps span').forEach(s => {
-    s.classList.toggle('ok', !!scan.views[s.dataset.k]);
-    s.classList.toggle('now', s.dataset.k === k && running);
-  });
+  document.querySelectorAll('#steps span').forEach(s => { s.classList.toggle('ok', !!scan.views[s.dataset.k]); s.classList.toggle('now', s.dataset.k === k); });
+  $('#bStart').textContent = Object.keys(scan.views).length && k ? 'Continue guided scan' : 'Start guided scan';
 }
 function buildThumbs() {
-  $('#thumbs').innerHTML = ORDER.filter(k => scan.views[k]).map(k => `<img alt="${k}" src="${scan.views[k].img}">`).join('');
+  $('#thumbs').innerHTML = ORDER.filter(k => scan.views[k]).map(k => `<img alt="${NAME[k]}" src="${scan.views[k].img}">`).join('');
 }
 
 // ---------------------------------------------------------------- 3D face
