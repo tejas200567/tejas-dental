@@ -175,7 +175,7 @@ async function loadLandmarker() {
   const FaceLandmarker = m.FaceLandmarker || (m.default && m.default.FaceLandmarker);
   const FilesetResolver = m.FilesetResolver || (m.default && m.default.FilesetResolver);
   const fs = await FilesetResolver.forVisionTasks(WASM);
-  const opts = d => ({ baseOptions: { modelAssetPath: MODEL, delegate: d }, runningMode: 'VIDEO', numFaces: 1, outputFaceBlendshapes: true });
+  const opts = d => ({ baseOptions: { modelAssetPath: MODEL, delegate: d }, runningMode: 'VIDEO', numFaces: 1 });
   try { FL = await FaceLandmarker.createFromOptions(fs, opts('GPU')); }
   catch (e) { FL = await FaceLandmarker.createFromOptions(fs, opts('CPU')); }
   TRIS = trianglesFromEdges(FaceLandmarker.FACE_LANDMARKS_TESSELATION);
@@ -198,8 +198,9 @@ window.__trianglesFromEdges = trianglesFromEdges;
 
 // ---------------------------------------------------------------- guided camera + capture (3-2-1 countdown, like the smile check)
 const vid = $('#vid'), ov = $('#ov'), octx = ov.getContext('2d');
+let lastDet = 0, frameN = 0, lastLu = 128, bad = 0;
 let stream = null, facing = 'user', running = false, hold = 0, tPrev = 0, lastNose = null, mv = null, shownCount = '', busy = false, voice = true, lastRes = null, skipSmile = false, raf = 0;
-const HOLD = 3000;
+const HOLD = 2400;   // 3-2-1 shown over 2.4 s
 const ORDER = ['front', 'side1', 'side2', 'smile'];
 const NAME = { front: 'Front', side1: 'Turned one side', side2: 'Turned other side', smile: 'Smile' };
 let scan = newScan();
@@ -239,7 +240,7 @@ $('#bStart').onclick = async () => {
   $('#cam').hidden = false; document.body.style.overflow = 'hidden';
   enterStep();
   $('#msg').textContent = 'Loading face guide…';
-  try { await loadLandmarker(); await startCam(); }
+  try { await Promise.all([loadLandmarker(), startCam()]); }
   catch (e) { $('#msg').textContent = 'Could not start: ' + (e && e.message || e); err('Could not start the camera or face guide. Allow camera access and check the internet (the face model downloads once).'); }
 };
 $('#camx').onclick = closeCam;
@@ -259,7 +260,7 @@ function closeCam() {
 async function startCam() {
   cancelAnimationFrame(raf);
   if (stream) stream.getTracks().forEach(t => t.stop());
-  stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: facing, width: { ideal: 1920 }, height: { ideal: 1920 } } });
+  stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: facing, width: { ideal: 1280 }, height: { ideal: 1280 } } });
   vid.srcObject = stream;
   await new Promise(r => { if (vid.readyState >= 1) r(); else vid.onloadedmetadata = r; });
   await vid.play();
@@ -304,6 +305,7 @@ function loop(t) {
   const dt = tPrev ? Math.min(100, t - tPrev) : 16; tPrev = t;
   if (!FL || vid.readyState < 2) return;
   const W = ov.width, H = ov.height, G = geom(W, H), mir = facing === 'user', k = stepNow();
+  if (t - lastDet < 45) return; const dtDet = lastDet ? Math.min(150, t - lastDet) : 45; lastDet = t; frameN++;
   let res = null; try { res = FL.detectForVideo(vid, t); } catch (e) {}
   const lm = res && res.faceLandmarks && res.faceLandmarks[0];
   const ok = {}; let msg = '', arrow = 0;
@@ -321,46 +323,47 @@ function loop(t) {
     const bs = {}; ((res.faceBlendshapes && res.faceBlendshapes[0] && res.faceBlendshapes[0].categories) || []).forEach(c => bs[c.categoryName] = c.score);
     const smileS = ((bs.mouthSmileLeft || 0) + (bs.mouthSmileRight || 0)) / 2;
     const size = fhgt / (2 * G.ry);
-    ok.oval = Math.abs(fcx - G.cx) < G.rx * 0.28 && Math.abs(fcy - G.cy) < G.ry * 0.22;
-    ok.dist = size > 0.6 && size < 0.92;
+    ok.oval = Math.abs(fcx - G.cx) < G.rx * 0.4 && Math.abs(fcy - G.cy) < G.ry * 0.3;
+    ok.dist = size > 0.5 && size < 1.0;
     const want = wantTurn(k);
-    if (k === 'front' || k === 'smile') ok.pose = Math.abs(yaw) < 0.08 && Math.abs(roll) < 5 && pitch > 0.42 && pitch < 0.66;
-    else ok.pose = Math.abs(yaw) > 0.33 && Math.abs(yaw) < 0.72 && Math.abs(roll) < 8 && (k === 'side1' || turnOf(yaw) === want);
-    if (k === 'front') ok.expr = gap < 0.08 && smileS < 0.5;
-    if (k === 'smile') ok.expr = (smileS > 0.45 || (scan.views.front && m.mouthW > scan.views.front.mouthW * 1.12)) && gap > 0.06;
+    if (k === 'front' || k === 'smile') ok.pose = Math.abs(yaw) < 0.13 && Math.abs(roll) < 7 && pitch > 0.36 && pitch < 0.72;
+    else ok.pose = Math.abs(yaw) > 0.25 && Math.abs(yaw) < 0.8 && Math.abs(roll) < 10 && (k === 'side1' || turnOf(yaw) === want);
+    if (k === 'front') ok.expr = gap < 0.12;
+    if (k === 'smile') ok.expr = (scan.views.front ? m.mouthW > scan.views.front.mouthW * 1.08 : m.mouthW > 0.42) && gap > 0.05;
     let bx = Math.min(c1[0], c2[0]), bw = Math.abs(c2[0] - c1[0]); if (mir) bx = W - bx - bw;
-    const lu = lumaOf([bx, fh[1], bw, ch[1] - fh[1]]); ok.light = lu > 70 && lu < 215;
+    if (frameN % 8 === 1) lastLu = lumaOf([bx, fh[1], bw, ch[1] - fh[1]]); const lu = lastLu; ok.light = lu > 55 && lu < 230;
     const mvNow = lastNose ? Math.hypot(nose[0] - lastNose[0], nose[1] - lastNose[1]) / W : 1; lastNose = nose;
-    mv = mv == null ? mvNow : mv * 0.7 + mvNow * 0.3; ok.steady = mv < 0.004;
+    mv = mv == null ? mvNow : mv * 0.7 + mvNow * 0.3; ok.steady = mv < 0.009;
     // instruction, most important first
-    if (!ok.oval) msg = fcy < G.cy - G.ry * 0.22 ? 'Move the phone up a little' : fcy > G.cy + G.ry * 0.22 ? 'Move the phone down a little' : 'Keep the face in the middle of the oval';
-    else if (!ok.dist) msg = size <= 0.6 ? 'Move closer' : 'Move back a little';
+    if (!ok.oval) msg = fcy < G.cy - G.ry * 0.3 ? 'Move the phone up a little' : fcy > G.cy + G.ry * 0.3 ? 'Move the phone down a little' : 'Keep the face in the middle of the oval';
+    else if (!ok.dist) msg = size <= 0.5 ? 'Move closer' : 'Move back a little';
     else if (!ok.pose) {
-      if (k === 'front' || k === 'smile') msg = Math.abs(yaw) >= 0.08 ? 'Face the camera straight' : Math.abs(roll) >= 5 ? 'Keep the head level' : pitch <= 0.42 ? 'Lower the chin slightly' : 'Raise the chin slightly';
+      if (k === 'front' || k === 'smile') msg = Math.abs(yaw) >= 0.13 ? 'Face the camera straight' : Math.abs(roll) >= 7 ? 'Keep the head level' : pitch <= 0.36 ? 'Lower the chin slightly' : 'Raise the chin slightly';
       else {
         const need = k === 'side1' ? 'right' : want;
         if (k === 'side2' && Math.abs(yaw) > 0.2 && turnOf(yaw) !== want) msg = `That side is done. Turn to your ${want}`;
-        else if (Math.abs(yaw) <= 0.33) msg = `Turn the head slowly to your ${need}`;
-        else if (Math.abs(yaw) >= 0.72) msg = 'Too far. Turn back a little';
+        else if (Math.abs(yaw) <= 0.25) msg = `Turn the head slowly to your ${need}`;
+        else if (Math.abs(yaw) >= 0.8) msg = 'Too far. Turn back a little';
         else msg = 'Keep the head level';
         // on-screen arrow: patient's right moves the nose to image-left; mirrored preview flips it
         const imgDir = need === 'right' ? -1 : 1; arrow = mir ? -imgDir : imgDir;
       }
     }
     else if (k === 'front' && !ok.expr) msg = 'Close the lips gently, teeth together';
-    else if (k === 'smile' && !ok.expr) msg = gap <= 0.06 ? 'Smile and show the teeth' : 'Bigger smile';
-    else if (!ok.light) msg = lu <= 70 ? 'Too dark: face a window or switch on a light' : 'Too bright: move away from direct light';
+    else if (k === 'smile' && !ok.expr) msg = gap <= 0.05 ? 'Smile and show the teeth' : 'Bigger smile';
+    else if (!ok.light) msg = lu <= 55 ? 'Too dark: face a window or switch on a light' : 'Too bright: move away from direct light';
     else if (!ok.steady) msg = 'Hold still…';
   }
   const all = CHECKS[k].every(c => ok[c[0]]);
   CHECKS[k].forEach(c => { const s = document.getElementById('ck_' + c[0]); if (s) s.className = ok[c[0]] ? 'on' : ''; });
-  hold = all ? hold + dt : 0;
-  const left = Math.ceil((HOLD - hold) / 1000), cnt = all && left > 0 ? String(left) : '';
+  const dtc = dtDet;
+  if (all) { bad = 0; hold += dtc; } else { bad += dtc; if (bad > 400) hold = 0; }
+  const left = Math.ceil((HOLD - hold) / 1000), cnt = hold > 0 && left > 0 ? String(left) : '';
   if (cnt !== shownCount) { shownCount = cnt; $('#count').textContent = cnt; if (cnt) say(cnt); }
-  $('#msg').textContent = all ? 'Perfect, hold still' : msg;
+  $('#msg').textContent = all || hold > 0 ? 'Perfect, hold still' : msg;
   const ring = $('#ring'), L2 = 2 * Math.PI * 34; ring.style.strokeDasharray = L2; ring.style.strokeDashoffset = L2 * (1 - Math.min(1, hold / HOLD));
   draw(G, W, H, all, arrow);
-  if (all && hold >= HOLD) capture(k, lastRes);
+  if (hold >= HOLD && lastRes) capture(k, lastRes);
 }
 
 function draw(G, W, H, allOk, arrow) {
@@ -646,6 +649,7 @@ $('#fOpen').onchange = async e => {
     showTab('face');
   } catch (x) { err('Could not open that file: ' + x.message); }
 };
+loadLandmarker().catch(() => {});
 window.__face = { get scan() { return scan; }, buildFace, renderMeasurements };
 </script>
 </body>
