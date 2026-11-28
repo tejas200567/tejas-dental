@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b2236">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230b2236' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.3 5 .6 2 .7 4.3 1.2 6 .3 1 1 1.8 1.8 1.8 1.3 0 1.4-2.2 2-4 .3-1 .8-1.5 1.7-1.5s1.4.5 1.7 1.5c.6 1.8.7 4 2 4 .8 0 1.5-.8 1.8-1.8.5-1.7.6-4 1.2-6 .5-1.6 1.3-3 1.3-5C21 4.8 19.2 3 17 3c-1.7 0-2.6.8-5 .8S8.7 3 7 3z'/%3E%3C/svg%3E">
+<title>AI Digital Smile Design: See Your Smile Before and After | Dr Tejas Pradhan&#x27;s Dental Clinic</title>
+<meta name="description" content="Upload a smile photo: AI marks your 8 front teeth, compares them with ideal dimensions and shows a simulated before and after. Not a guarantee of results.">
+<link rel="canonical" href="https://tejas200567.github.io/tejas-dental/smile-design.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "MedicalWebPage", "url": "https://tejas200567.github.io/tejas-dental/smile-design.html", "name": "AI Digital Smile Design: See Your Smile Before and After", "inLanguage": "en-IN", "provider": {"@id": "https://tejas200567.github.io/tejas-dental/#clinic"}, "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://tejas200567.github.io/tejas-dental/"}, {"@type": "ListItem", "position": 2, "name": "AI smile design", "item": "https://tejas200567.github.io/tejas-dental/smile-design.html"}]}}</script><script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is digital smile design?", "acceptedAnswer": {"@type": "Answer", "text": "Digital smile design (DSD) uses photos and measurements of your face and teeth to plan a smile makeover, so you can preview the result before treatment."}}, {"@type": "Question", "name": "Is the AI after picture what I will actually get?", "acceptedAnswer": {"@type": "Answer", "text": "No. It is an AI simulation for ideas only. Your real result depends on your teeth, gums, bite and the treatment chosen after an examination."}}, {"@type": "Question", "name": "What are the ideal dimensions of front teeth?", "acceptedAnswer": {"@type": "Answer", "text": "On average, an upper central incisor is about 8.5–9 mm wide and 10.5–11 mm long, a width-to-height ratio of about 75–80%. Laterals are about 6.5 mm wide and canines about 7.5 mm."}}, {"@type": "Question", "name": "Which treatments can change my smile?", "acceptedAnswer": {"@type": "Answer", "text": "Depending on your teeth: whitening, tooth-coloured bonding, veneers, crowns, aligners or braces, and sometimes gum contouring. The dentist advises after examining you."}}]}</script>
+<style>
+:root{--ink:#1d1a17;--navy:#0b2236;--navy2:#143550;--sand:#e8e0d6;--cream:#faf7f2;--taupe:#b79f8c;--taupe-d:#8a705a;--muted:#6b645c;--line:#e3dbd0;--wa:#1faa59}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:Manrope,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:16.5px;line-height:1.7;color:var(--ink);background:var(--cream);padding-bottom:62px}
+a{color:var(--navy2)}img{max-width:100%;display:block}
+h1,h2,h3.sf,.num,.nm{font-family:"Cormorant Garamond",ui-serif,Georgia,"Iowan Old Style",Palatino,"Times New Roman",serif;font-weight:500}
+h2{font-size:1.75rem;line-height:1.2;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 18px}
+h3{font-size:1.02rem;line-height:1.4;margin:22px 0 4px}
+.kick{font-size:.76rem;letter-spacing:.24em;text-transform:uppercase;color:var(--taupe-d);margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}.narrow{max-width:780px}
+.muted{color:var(--muted);font-size:.93rem}
+/* top bar + menu */
+.top{position:sticky;top:0;z-index:70;background:#fff;border-bottom:1px solid var(--line);height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);font-family:"Cormorant Garamond",ui-serif,Georgia,serif;font-weight:600;font-size:1.12rem;line-height:1.15;letter-spacing:.02em}
+.brand .mk{flex:none;width:38px;height:38px;background:var(--navy);color:#fff;display:grid;place-items:center}
+.burger{cursor:pointer;width:44px;height:44px;display:grid;place-content:center;gap:6px}.burger i{display:block;width:26px;height:2px;background:var(--ink)}
+.mnc{position:absolute;opacity:0;pointer-events:none}
+.menu{display:none;position:fixed;inset:0;z-index:60;background:#fff;overflow:auto;padding-bottom:40px}
+.mnc:checked~.menu{display:block}
+.menu .cl{background:var(--sand);height:76px;display:grid;place-items:center;cursor:pointer;font-size:1.6rem;line-height:1}
+.menu ul{list-style:none;margin:26px 22px;padding:0}
+.menu li a{display:flex;align-items:center;gap:20px;padding:10px 14px;text-decoration:none;color:var(--ink);text-transform:uppercase;letter-spacing:.08em;font-size:1rem}
+.menu li a .bx{flex:none;width:76px;height:46px;border:1px solid var(--line);display:grid;place-items:center;background:#fff;color:#444}
+.menu li a.on{background:var(--navy);color:#fff}.menu li a.on .bx{background:var(--sand);color:var(--navy)}
+.menu .mc{margin:0 22px;padding:16px;background:#f6f1ea;border:1px solid var(--line);text-align:center;font-size:.95rem}
+/* hero */
+.hero{position:relative;background:var(--navy);color:#fff;overflow:hidden;display:flex;align-items:flex-end;min-height:min(80vh,620px)}
+.hero .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,34,54,.35) 0%,rgba(11,34,54,.78) 100%);z-index:1}
+.hero.plain:before{background:radial-gradient(circle at 85% 15%,rgba(183,159,140,.28),transparent 55%),linear-gradient(135deg,#0b2236,#143550)}
+.hero .wm{position:absolute;right:-40px;top:20px;width:340px;height:340px;opacity:.07;color:#fff;z-index:1}
+.hero .wrap{position:relative;z-index:2;padding-top:60px;padding-bottom:44px;width:100%}
+.hero h1{font-size:2.15rem;line-height:1.15;margin:10px 0 14px;letter-spacing:.005em}
+.hero p{margin:0 0 8px;max-width:620px;opacity:.95}
+.hero.sm{min-height:0}.hero.sm .wrap{padding-top:34px;padding-bottom:32px}.hero.sm h1{font-size:1.9rem}
+.crumb{font-size:.86rem;opacity:.85;margin-bottom:6px}.crumb a{color:#fff}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-block;text-decoration:none;padding:13px 24px;font-weight:600;letter-spacing:.04em;font-size:.92rem;background:var(--taupe);color:#1d1a17;border:1px solid var(--taupe)}
+.btn.o{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}.btn.wa{background:var(--wa);border-color:var(--wa);color:#fff}
+/* stats */
+.stats{background:var(--navy);color:#fff}.stats .wrap{display:grid;grid-template-columns:1fr 1fr;gap:26px 14px;padding-top:34px;padding-bottom:34px}
+.stats .num{font-size:2.6rem;line-height:1;color:#fff}.stats span{display:block;margin-top:8px;font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;opacity:.8;line-height:1.4}
+/* sections */
+.sec{padding:52px 0}.sec.alt{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.about{display:grid;gap:26px}.about .dr{aspect-ratio:4/5;background:var(--sand);max-width:340px;overflow:hidden}.about .dr img{width:100%;height:100%;object-fit:cover}
+.tl{border-top:1px solid var(--line)}
+.tl a{display:grid;grid-template-columns:44px 1fr 22px;gap:16px;align-items:center;padding:18px 2px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.tl .ic{color:var(--taupe-d)}.tl .nm{font-size:1.38rem;color:var(--navy);line-height:1.25}.tl small{display:block;color:var(--muted);font-size:.9rem;line-height:1.45;margin-top:2px}
+.tl .ar{color:var(--taupe-d);font-size:1.3rem}.tl a:hover .nm{text-decoration:underline}
+.ap{display:grid;gap:26px}.ap .num{font-size:2.6rem;color:var(--taupe);line-height:1}.ap h3{margin:6px 0 6px;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:12px}.gal figure{margin:0}.gal img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--sand)}
+.gal figcaption{font-size:.82rem;color:var(--muted);padding-top:6px;line-height:1.35}
+table{border-collapse:collapse;width:100%}td{padding:10px 2px;border-bottom:1px solid var(--line);vertical-align:top}
+.two{display:grid;gap:26px}
+.cards{display:grid;gap:18px}@media(min-width:760px){.cards{grid-template-columns:1fr 1fr}}
+.card{background:#fff;border:1px solid var(--line)}.card .ph svg,.card .ph img{width:100%;height:auto;display:block}.card .cb{padding:16px 18px}.card .cb ul{margin:8px 0}
+.dv summary{cursor:pointer;color:var(--navy2);font-weight:600;padding:6px 0}.dv .vid{margin-top:8px}
+.cmpw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0 8px}.cmp{border-collapse:collapse;min-width:820px;width:100%;font-size:.9rem;line-height:1.45}
+.cmp th,.cmp td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top;background:#fff}.cmp th{background:var(--navy);color:#fff;font-weight:400}.cmp td:first-child{font-weight:600;background:var(--cream);position:sticky;left:0}
+.note{background:#fff7e6;border:1px solid #ecd9a8;padding:12px 14px;margin:16px 0;font-size:.95rem}
+.scf label{display:block;margin:14px 0;font-weight:600}.scf input[type=text],.scf input:not([type]),.scf input[name=phone]{display:block;width:100%;font:inherit;padding:12px;border:1px solid var(--line);background:#fff;margin-top:6px}
+.scf input[type=file]{display:block;margin-top:6px;font:inherit;width:100%}.scf .ck{font-weight:400;font-size:.92rem}.scf .ck input{margin-right:8px}.scf button{border:0;cursor:pointer;font:inherit;margin-top:8px}
+.prev{display:flex;gap:8px;flex-wrap:wrap}.prev img{width:30%;max-width:140px;aspect-ratio:1;object-fit:cover;border:1px solid var(--line)}
+.res{margin-top:28px;border-top:2px solid var(--navy);padding-top:8px}.rpt{margin:22px 0;padding:18px 16px;background:linear-gradient(180deg,#0b2236,#143550);color:#fff}.rpt .kick{color:#d9c8b8}.rpt h3{color:#fff}.rpt .muted{color:#c9d3dc}.rpt .btn{margin-top:6px}.rpt .note{color:var(--ink)}.rpt table{color:var(--ink);background:#fff}.rpt #rpo>h3,.rpt #rpo>p{color:#fff}.ss{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0 6px}.sc{flex:1;max-width:190px;text-align:center;border:1px solid rgba(255,255,255,.25);padding:14px 8px}.sc span{display:block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#c9d3dc}.sc b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:3.6rem;line-height:1.05;color:#fff;font-weight:600}.sc i{font-style:normal;color:#d9c8b8;font-size:.9rem}.sc.hi{border-color:#d9b48a;background:rgba(217,180,138,.12)}.sc.hi b{color:#f3c76b}.sa{font-size:2rem;color:#d9c8b8}.psc{float:right;background:var(--navy);color:#f3c76b;font-weight:700;padding:1px 9px;font-size:.9rem}.po details{margin:6px 0;font-size:.9rem}.po summary{cursor:pointer;color:var(--navy2);font-weight:600}.rpt label{color:#fff}.rpt select{display:block;margin:6px 0 4px}.pc{display:grid;gap:14px;margin:14px 0}.po{position:relative;background:#fff;color:var(--ink);padding:14px;border:1px solid var(--line)}.po.rec{border:2px solid #d9b48a;box-shadow:0 10px 28px rgba(0,0,0,.25)}.pb{position:absolute;top:-11px;right:12px;background:#d9b48a;color:#1d1a17;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px}.pi{width:100%;aspect-ratio:2/1;object-fit:cover;background:#111;margin-bottom:10px}.pt{font-size:1.02rem;color:var(--navy)}.ps{font-size:.84rem;color:var(--taupe-d);margin:4px 0 8px}.po .muted{color:var(--muted)}.po .btn.o2{margin-top:6px}@media(min-width:760px){.pc{grid-template-columns:repeat(3,1fr)}}.warn{background:#fdecec;border:1px solid #e59a9a;padding:12px 14px;margin:12px 0}.err{color:#b3261e}
+.prev.one img{width:100%;max-width:420px;aspect-ratio:auto}
+.ba{position:relative;overflow:hidden;border:1px solid var(--line);background:#000}.ba img{width:100%;display:block}.ba .af{position:absolute;inset:0}.ba .af img{width:100%;height:100%;object-fit:cover}
+.arch{border:1px solid #d6cfc4;border-radius:10px;padding:8px 12px;margin:10px 0}.arch legend{font-weight:600;padding:0 6px}.vita{margin:10px 0}.vg{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.vs{border:2px solid #d6cfc4;background:#fff;border-radius:10px;padding:4px 4px 3px;font:600 12px system-ui,sans-serif;color:#0b2236;width:52px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px}.vs i{display:block;width:30px;height:40px;border-radius:12px 12px 15px 15px;box-shadow:inset 0 -3px 6px rgba(120,100,70,.25),0 1px 2px rgba(0,0,0,.2)}.vs.on{border-color:#0b2236;box-shadow:0 0 0 2px #0b2236}
+.ba input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;z-index:3}.ba .hd{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 4px rgba(0,0,0,.6);z-index:2;pointer-events:none}.ba .hd:after{content:'◀ ▶';position:absolute;top:50%;left:50%;width:44px;height:44px;margin:-22px 0 0 -22px;border:3px solid #fff;border-radius:50%;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.2);box-shadow:0 0 6px rgba(0,0,0,.5)}.ba .tg{position:absolute;top:8px;background:rgba(11,34,54,.8);color:#fff;font-size:.8rem;padding:2px 8px}.ba .l{left:8px}.ba .r{right:8px}
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.pg figure{margin:0;background:#fff;border:1px solid var(--line)}.pg svg{width:100%;height:auto;display:block}
+.pg figcaption{padding:8px 10px;font-size:.84rem;line-height:1.4}.pg figure:first-child{grid-column:1/-1}.pg figure:first-child svg{max-width:340px;margin:0 auto;display:block}
+.camb{border:0;cursor:pointer;font:inherit;width:100%;margin-top:14px;padding:14px}
+.cam{position:fixed;inset:0;background:#000;z-index:300;display:flex;flex-direction:column;color:#fff;overflow:auto}
+.cam[hidden],.cam [hidden],.cam.pv .cambar{display:none!important}
+.camtop{display:flex;justify-content:flex-end;padding:8px 12px}.camtop button,#camflip{background:none;border:0;color:#fff;font-size:1.6rem;cursor:pointer;padding:6px 10px}
+.camstage{position:relative;margin:0 auto;width:min(100%,calc(58vh * var(--ar,0.75)));aspect-ratio:var(--ar,0.75);background:#111;overflow:hidden}
+.camstage video,.camstage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.camstage .pill{position:absolute;left:50%;top:6%;transform:translateX(-50%);background:rgba(0,0,0,.75);padding:6px 14px;border-radius:20px;font-size:.9rem;white-space:nowrap;max-width:92%;overflow:hidden;text-overflow:ellipsis}
+.camstage .count{position:absolute;right:6%;bottom:4%;font-size:3.2rem;font-weight:700;text-shadow:0 2px 6px #000}
+.camtxt{padding:10px 18px 0}.camtxt h3{margin:4px 0;font-size:1.25rem}.camtxt p{margin:4px 0 8px;opacity:.85;font-size:.92rem}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips span{font-size:.78rem;padding:4px 9px;border-radius:14px;background:#333;color:#bbb}.chips span.on{background:#14532d;color:#bbf7d0}
+.chips span.on:before{content:"✓ "}
+.cambar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:14px 18px}.cambar #camflip{justify-self:end}
+.shot{width:78px;height:78px;border-radius:50%;border:0;background:none;padding:0;cursor:pointer}.shot svg{width:100%;height:100%;transform:rotate(-90deg)}
+.shot .bg{fill:#666;stroke:#ddd;stroke-width:5}.shot .pr{fill:none;stroke:#4ade80;stroke-width:6;stroke-linecap:round;stroke-dasharray:213.6;stroke-dashoffset:213.6}
+.camprev{padding:10px 18px}.camprev img{width:100%;max-width:520px;display:block;margin:0 auto 12px}.camprev .btn{border:0;cursor:pointer;font:inherit}
+.ok{color:#1f7a4d;font-weight:600}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.seg button{font:inherit;font-size:.88rem;padding:8px 12px;border:1px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}.seg button.on{background:var(--navy);color:#fff}.seg.sm button{font-size:.82rem;padding:6px 10px}
+.bg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.bg figure{margin:0;cursor:pointer;border:1px solid var(--line);background:#fff}.bg img{width:100%;display:block}.bg figcaption{font-size:.82rem;padding:4px 8px;font-weight:600}
+.ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin:12px 0}.ctl label{font-size:.88rem;font-weight:600;display:flex;flex-direction:column;gap:4px}.ctl select{font:inherit;padding:8px;border:1px solid var(--line);background:#fff}
+.ctl .ck2{flex-direction:row;align-items:center;font-weight:400}.btn.o2{background:#fff;color:var(--navy);border:1px solid var(--navy);cursor:pointer;font:inherit;padding:9px 14px}.wn{color:#b3261e;font-weight:600}
+.chart{margin:16px 0}.chart img{width:100%;height:auto;border:1px solid var(--line)}.chart figcaption{margin-top:6px}
+.vid{position:relative;aspect-ratio:16/9;background:#000;margin:6px 0 10px}.vid iframe{position:absolute;inset:0;width:100%;height:100%;margin:0}
+iframe{width:100%;height:300px;border:0;background:var(--sand)}
+ul.b,ol.b{padding-left:20px}ul.b li,ol.b li{margin:7px 0}
+.faq h3{border-top:1px solid var(--line);padding-top:16px;margin-top:16px}.faq h3:first-of-type{border:0;margin-top:0;padding-top:0}
+.contact{background:var(--navy);color:#fff}.contact a{color:#fff}.contact h2{color:#fff}.contact .kick{color:var(--taupe)}
+footer{background:#07151f;color:#aebdc9;font-size:.86rem;padding:22px 0}footer a{color:#fff}
+/* bottom bar */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:1fr 1fr 1fr;height:58px}
+.bar a{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;font-weight:600;font-size:.93rem;background:var(--navy);color:#fff;border-left:1px solid rgba(255,255,255,.12)}
+.bar a:first-child{border:0}.bar a.dir{background:var(--taupe);color:#1d1a17}
+/* premium 3D hero */
+.hero3d{position:relative;color:#fff;overflow:hidden;background:radial-gradient(120% 70% at 75% 18%,#1d4263 0%,#0f2d47 38%,#0b2236 70%)}
+.hero3d:after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:linear-gradient(90deg,transparent,rgba(217,200,184,.45),transparent)}
+.h3g{display:flex;flex-direction:column}
+.h3i{order:-1;margin:0 -20px;position:relative}
+.h3i img{width:100%;height:40vh;max-height:380px;object-fit:contain;mix-blend-mode:lighten;
+ -webkit-mask-image:linear-gradient(180deg,#000 62%,transparent 100%);mask-image:linear-gradient(180deg,#000 62%,transparent 100%);animation:fl 7s ease-in-out infinite}
+@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media(prefers-reduced-motion:reduce){.h3i img{animation:none}}
+.h3t{position:relative;margin-top:4px;padding:0 0 40px}
+.h3t .kick{color:#d9c8b8;letter-spacing:.18em}
+.h3t h1{font-size:2.45rem;line-height:1.04;margin:10px 0 12px;letter-spacing:.005em;font-weight:500}
+.h3t h1 em{font-style:italic;color:#e6d3c0}
+.h3t p{margin:0;max-width:560px;opacity:.9;font-size:.98rem;line-height:1.6}
+.chip{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 14px;border:1px solid rgba(255,255,255,.22);border-radius:999px;font-size:.86rem;background:rgba(255,255,255,.06);backdrop-filter:blur(6px)}
+.chip b{color:#f3c76b;letter-spacing:.08em}
+.btn{border-radius:2px;transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(0,0,0,.18)}
+/* reviews */
+.rv{display:grid;grid-auto-flow:column;grid-auto-columns:86%;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;margin:0 -2px;-webkit-overflow-scrolling:touch}
+.rv figure{scroll-snap-align:start;margin:0;background:#fff;border:1px solid var(--line);padding:22px 20px 18px;display:flex;flex-direction:column;box-shadow:0 10px 30px rgba(11,34,54,.05)}
+.rv .st{color:#d4a43c;letter-spacing:.18em;font-size:.95rem}
+.rv blockquote{margin:10px 0 14px;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.28rem;line-height:1.4;color:var(--ink);flex:1}
+.rv figcaption{font-size:.84rem;color:var(--muted)}.rv figcaption b{color:var(--navy);font-weight:600}
+.rvl{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:.92rem}
+@media(min-width:760px){
+ body{padding-bottom:0}.bar{display:none}
+ .hero h1{font-size:3.2rem}.hero.sm h1{font-size:2.5rem}.hero .wrap{padding-bottom:64px}
+ .stats .wrap{grid-template-columns:repeat(4,1fr)}.sec{padding:76px 0}
+ .about.has-dr{grid-template-columns:300px 1fr;gap:48px;align-items:start}
+ .tl{display:grid;grid-template-columns:1fr 1fr;column-gap:48px}
+ .ap{grid-template-columns:repeat(3,1fr);gap:40px}.gal{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr 1.2fr;gap:44px}
+ h2{font-size:2.2rem}
+ .rv{grid-auto-flow:row;grid-template-columns:repeat(3,1fr);overflow:visible}
+}
+@media(min-width:900px){
+ .h3g{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:30px;min-height:620px}
+ .h3i{order:0;margin:0}
+ .h3i img{height:600px;max-height:72vh;-webkit-mask-image:radial-gradient(closest-side,#000 70%,transparent 100%);mask-image:radial-gradient(closest-side,#000 70%,transparent 100%)}
+ .h3t{margin:0;padding:70px 0}.h3t h1{font-size:3.9rem}
+}
+</style>
+</head>
+<body>
+<header class="top" id="top"><a class="brand" href="index.html"><span class="mk"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.3 5 .6 2 .7 4.3 1.2 6 .3 1 1 1.8 1.8 1.8 1.3 0 1.4-2.2 2-4 .3-1 .8-1.5 1.7-1.5s1.4.5 1.7 1.5c.6 1.8.7 4 2 4 .8 0 1.5-.8 1.8-1.8.5-1.7.6-4 1.2-6 .5-1.6 1.3-3 1.3-5C21 4.8 19.2 3 17 3c-1.7 0-2.6.8-5 .8S8.7 3 7 3z"/></svg></span><span>Dr Tejas Pradhan&#x27;s Dental Clinic</span></a><input type="checkbox" id="mn" class="mnc" aria-label="Menu"><label for="mn" class="burger" aria-label="Open menu"><i></i><i></i><i></i></label><nav class="menu"><label for="mn" class="cl" aria-label="Close menu">×</label><ul><li><a href="index.html"><span class="bx"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></svg></span>Home</a></li><li><a href="index.html#services"><span class="bx"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.3 5 .6 2 .7 4.3 1.2 6 .3 1 1 1.8 1.8 1.8 1.3 0 1.4-2.2 2-4 .3-1 .8-1.5 1.7-1.5s1.4.5 1.7 1.5c.6 1.8.7 4 2 4 .8 0 1.5-.8 1.8-1.8.5-1.7.6-4 1.2-6 .5-1.6 1.3-3 1.3-5C21 4.8 19.2 3 17 3c-1.7 0-2.6.8-5 .8S8.7 3 7 3z"/></svg></span>Treatments</a></li><li><a href="index.html#about"><span class="bx"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>About</a></li><li><a href="index.html#approach"><span class="bx"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></span>Our approach</a></li><li><a href="index.html#guides"><span class="bx"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M9 11h6M9 15h6"/></svg></span>Patient guides</a></li><li><a href="index.html#timings"><span class="bx"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>Timings</a></li><li><a href="index.html#location"><span class="bx"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>Location</a></li><li><a href="index.html#faq"><span class="bx"><svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></svg></span>FAQ</a></li></ul><div class="mc">Call or WhatsApp<br><b>+91 83691 87806</b><br>+91 91675 11565</div></nav></header>
+<section class="hero plain sm">
+  <svg class="wm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width=".6" aria-hidden="true"><path d="M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.3 5 .6 2 .7 4.3 1.2 6 .3 1 1 1.8 1.8 1.8 1.3 0 1.4-2.2 2-4 .3-1 .8-1.5 1.7-1.5s1.4.5 1.7 1.5c.6 1.8.7 4 2 4 .8 0 1.5-.8 1.8-1.8.5-1.7.6-4 1.2-6 .5-1.6 1.3-3 1.3-5C21 4.8 19.2 3 17 3c-1.7 0-2.6.8-5 .8S8.7 3 7 3z"/></svg>
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Home</a> › AI smile design</div>
+    <p class="kick" style="color:#d9c8b8">AI tool</p>
+    <h1>AI Digital Smile Design: See Your Smile Before and After</h1>
+    <p>Dr Tejas Pradhan&#x27;s Dental Clinic, Kokan Nagar Road, Jogeshwari East</p>
+    <div class="cta"><a class="btn" href="https://wa.me/918369187806?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment.">Book an appointment</a><a class="btn o" href="tel:+918369187806">Call +91 83691 87806</a></div>
+  </div>
+</section>
+<section class="sec"><div class="wrap narrow">
+<h2>AI digital smile design</h2><p>Upload one front-facing smile photo. The AI marks your 8 upper front teeth, compares their proportions with ideal smile dimensions, and draws an ideal-proportion design and smile mock-up on your own photo. You can change the proportion and shade, compare before and after, and download the result.</p><div class="note"><b>Please note:</b> the "after" picture is an AI simulation for ideas only. It is not a diagnosis or a guarantee. The real plan is made after an examination, X-rays and a discussion of options like whitening, bonding, veneers, crowns or aligners.</div><h2 style="margin-top:28px">How to take the photo</h2><p class="muted">Drawings for illustration. A good photo gives a much more accurate result.</p><div class="pg"><figure><svg viewBox="0 0 200 200" role="img" xmlns="http://www.w3.org/2000/svg"><defs><filter id="bl"><feGaussianBlur stdDeviation="2"/></filter></defs><rect width="200" height="200" fill="#eaf5ee"/><g><g transform="translate(100 100) scale(2.1) translate(-100 -128)"><ellipse cx="100" cy="100" rx="52" ry="66" fill="#e9c3a3"/><path d="M48 88 Q50 30 100 32 Q150 30 152 88 Q140 50 100 52 Q60 50 48 88Z" fill="#3b2a22"/><ellipse cx="80" cy="92" rx="6" ry="4" fill="#3b2a22"/><ellipse cx="120" cy="92" rx="6" ry="4" fill="#3b2a22"/><path d="M100 96 L94 114 Q100 118 106 114" stroke="#c49a7c" stroke-width="2" fill="none"/><path d="M70 125 Q100 158 130 125 Q100 132 70 125Z" fill="#7a2f34"/><path d="M76 128 Q100 150 124 128 Q100 134 76 128Z" fill="#fff"/><path d="M84 130v5M92 132v6M100 133v6M108 132v6M116 130v5" stroke="#d8d0c4" stroke-width="1"/><path d="M70 125 Q100 120 130 125" stroke="#b8545b" stroke-width="3" fill="none"/><path d="M70 125 Q100 160 130 125" stroke="#b8545b" stroke-width="3" fill="none"/></g></g></svg><figcaption><b><span class="ok">✓</span> Best: close-up smile</b><br>Nose to chin fills the photo, phone 20 to 30 cm away, straight on. Big smile so the upper teeth show. Do not zoom; move closer.</figcaption></figure><figure><svg viewBox="0 0 200 200" role="img" xmlns="http://www.w3.org/2000/svg"><defs><filter id="bl"><feGaussianBlur stdDeviation="2"/></filter></defs><rect width="200" height="200" fill="#eaf5ee"/><g><ellipse cx="100" cy="100" rx="52" ry="66" fill="#e9c3a3"/><path d="M48 88 Q50 30 100 32 Q150 30 152 88 Q140 50 100 52 Q60 50 48 88Z" fill="#3b2a22"/><ellipse cx="80" cy="92" rx="6" ry="4" fill="#3b2a22"/><ellipse cx="120" cy="92" rx="6" ry="4" fill="#3b2a22"/><path d="M100 96 L94 114 Q100 118 106 114" stroke="#c49a7c" stroke-width="2" fill="none"/><path d="M70 125 Q100 158 130 125 Q100 132 70 125Z" fill="#7a2f34"/><path d="M76 128 Q100 150 124 128 Q100 134 76 128Z" fill="#fff"/><path d="M84 130v5M92 132v6M100 133v6M108 132v6M116 130v5" stroke="#d8d0c4" stroke-width="1"/><path d="M70 125 Q100 120 130 125" stroke="#b8545b" stroke-width="3" fill="none"/><path d="M70 125 Q100 160 130 125" stroke="#b8545b" stroke-width="3" fill="none"/><path d="M100 20V190" stroke="#1f7a4d" stroke-width="1.5" stroke-dasharray="4 3"/><path d="M30 130H170" stroke="#1f7a4d" stroke-width="1.5" stroke-dasharray="4 3"/><rect x="6" y="176" width="112" height="16" fill="#fff" opacity=".85"/><text x="10" y="188" font-size="10" fill="#1f7a4d">camera at mouth level</text><rect x="108" y="6" width="88" height="16" fill="#fff" opacity=".85"/><text x="112" y="18" font-size="10" fill="#1f7a4d">face straight on</text></g></svg><figcaption><b><span class="ok">✓</span> Also fine: whole face</b><br>Face straight on, phone at mouth level. The AI zooms in on your smile automatically.</figcaption></figure><figure><svg viewBox="0 0 200 200" role="img" xmlns="http://www.w3.org/2000/svg"><defs><filter id="bl"><feGaussianBlur stdDeviation="2"/></filter></defs><rect width="200" height="200" fill="#fdecec"/><g><g transform="rotate(-18 100 100) translate(10 0) scale(.92 1)"><ellipse cx="100" cy="100" rx="52" ry="66" fill="#e9c3a3"/><path d="M48 88 Q50 30 100 32 Q150 30 152 88 Q140 50 100 52 Q60 50 48 88Z" fill="#3b2a22"/><ellipse cx="80" cy="92" rx="6" ry="4" fill="#3b2a22"/><ellipse cx="120" cy="92" rx="6" ry="4" fill="#3b2a22"/><path d="M100 96 L94 114 Q100 118 106 114" stroke="#c49a7c" stroke-width="2" fill="none"/><path d="M70 125 Q100 158 130 125 Q100 132 70 125Z" fill="#7a2f34"/><path d="M76 128 Q100 150 124 128 Q100 134 76 128Z" fill="#fff"/><path d="M84 130v5M92 132v6M100 133v6M108 132v6M116 130v5" stroke="#d8d0c4" stroke-width="1"/><path d="M70 125 Q100 120 130 125" stroke="#b8545b" stroke-width="3" fill="none"/><path d="M70 125 Q100 160 130 125" stroke="#b8545b" stroke-width="3" fill="none"/></g></g></svg><figcaption><b><span class="wn">✗</span> Avoid: tilted or side angle</b><br>Head turned or tilted makes the teeth look uneven.</figcaption></figure><figure><svg viewBox="0 0 200 200" role="img" xmlns="http://www.w3.org/2000/svg"><defs><filter id="bl"><feGaussianBlur stdDeviation="2"/></filter></defs><rect width="200" height="200" fill="#fdecec"/><g><ellipse cx="100" cy="100" rx="52" ry="66" fill="#e9c3a3"/><path d="M48 88 Q50 30 100 32 Q150 30 152 88 Q140 50 100 52 Q60 50 48 88Z" fill="#3b2a22"/><ellipse cx="80" cy="92" rx="6" ry="4" fill="#3b2a22"/><ellipse cx="120" cy="92" rx="6" ry="4" fill="#3b2a22"/><path d="M100 96 L94 114 Q100 118 106 114" stroke="#c49a7c" stroke-width="2" fill="none"/><path d="M76 130 Q100 142 124 130" stroke="#b8545b" stroke-width="4" fill="none" stroke-linecap="round"/></g></svg><figcaption><b><span class="wn">✗</span> Avoid: teeth hidden</b><br>Lips covering the teeth: the AI cannot see them.</figcaption></figure><figure><svg viewBox="0 0 200 200" role="img" xmlns="http://www.w3.org/2000/svg"><defs><filter id="bl"><feGaussianBlur stdDeviation="2"/></filter></defs><rect width="200" height="200" fill="#fdecec"/><g filter="url(#bl)"><g transform="translate(100 105) scale(.45) translate(-100 -100)"><ellipse cx="100" cy="100" rx="52" ry="66" fill="#e9c3a3"/><path d="M48 88 Q50 30 100 32 Q150 30 152 88 Q140 50 100 52 Q60 50 48 88Z" fill="#3b2a22"/><ellipse cx="80" cy="92" rx="6" ry="4" fill="#3b2a22"/><ellipse cx="120" cy="92" rx="6" ry="4" fill="#3b2a22"/><path d="M100 96 L94 114 Q100 118 106 114" stroke="#c49a7c" stroke-width="2" fill="none"/><path d="M70 125 Q100 158 130 125 Q100 132 70 125Z" fill="#7a2f34"/><path d="M76 128 Q100 150 124 128 Q100 134 76 128Z" fill="#fff"/><path d="M84 130v5M92 132v6M100 133v6M108 132v6M116 130v5" stroke="#d8d0c4" stroke-width="1"/><path d="M70 125 Q100 120 130 125" stroke="#b8545b" stroke-width="3" fill="none"/><path d="M70 125 Q100 160 130 125" stroke="#b8545b" stroke-width="3" fill="none"/></g><rect width="200" height="200" fill="#000" opacity=".55"/><rect width="200" height="200" fill="#fff" opacity=".1" filter="url(#bl)"/></g></svg><figcaption><b><span class="wn">✗</span> Avoid: dark, far or blurry</b><br>Too far away, at night or shaky. Stand facing a window in daylight.</figcaption></figure></div><ol class="b"><li>Ask someone to take the photo, or use the back camera with a timer. A selfie at arm&#x27;s length is fine too.</li><li>Stand facing a window in daylight. Turn off flash, beauty mode, portrait mode and filters.</li><li>Hold the phone straight, at the height of your mouth, not above or below.</li><li>Look straight into the camera, relax, then give a big natural smile showing your upper teeth.</li><li>Check the photo is sharp and your teeth are clearly visible before uploading.</li></ol><form id="ds" class="scf" autocomplete="on"><label>Your name<input name="name" required maxlength="80" autocomplete="name"></label><label>Mobile number<input name="phone" required inputmode="numeric" maxlength="14" autocomplete="tel" placeholder="10-digit number"></label><button type="button" class="btn camb" id="dscam">📷 Open guided camera (recommended)</button><p class="muted" style="margin:6px 0 0">The camera checks your position, smile and light, then takes the photo automatically.</p><details class="note" style="background:#fff;margin:8px 0"><summary><b>Tips for an accurate photo</b></summary><ul style="margin:8px 0 0 18px"><li>Phone straight at mouth level, not held below or above your face.</li><li>Natural smile showing your upper teeth, lips relaxed, teeth slightly apart. Do not clench.</li><li>Eyes open, looking at the camera, head straight.</li><li>Face a window or soft light. No flash and nothing shining from above.</li><li>Use the guided camera, it checks all of this for you.</li><li>For gum-line accuracy, take a second photo with your upper lip gently lifted.</li></ul></details><label>Or upload a smile photo<input id="dsf" type="file" accept="image/*"></label><div id="dsp" class="prev one"></div><fieldset class="arch"><legend>Which teeth should we design?</legend><label class="ck2"><input type="radio" name="arch" value="upper" checked> Upper teeth only</label><label class="ck2"><input type="radio" name="arch" value="both"> Upper and lower teeth</label></fieldset><p class="muted">For best results: face the camera straight, phone at mouth level, a natural smile with your teeth slightly apart so both upper and lower teeth show, good daylight, no filter.</p><input name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true"><label class="ck"><input type="checkbox" name="consent" required> I agree that my photo and details are processed by an AI service (Google Gemini) and stored securely so that Dr. Tejas Pradhan can review them and contact me. I understand the "after" image is a simulation. I can ask the clinic to delete my data at any time.</label><button id="dsb" class="btn" type="submit">Design my smile</button><p id="dsm" class="muted" role="status"></p></form><div id="dso"></div><h2 style="margin-top:40px">Ideal dimensions of the upper front teeth</h2><p>Average crown sizes the design aims for. Every face is different, so the dentist adjusts these to your smile.</p><div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Tooth</th><th>Width</th><th>Height</th><th>Width ÷ height</th></tr></thead><tbody><tr><td>Central incisor</td><td>8.5–9 mm</td><td>10.5–11 mm</td><td>75–80%</td></tr><tr><td>Lateral incisor</td><td>6.5 mm</td><td>9–9.5 mm</td><td>70–75%</td></tr><tr><td>Canine</td><td>7.5 mm</td><td>10 mm</td><td>75–80%</td></tr><tr><td>First premolar</td><td>7 mm</td><td>8–8.5 mm</td><td>80–85%</td></tr></tbody></table></div><ul class="b"><li>The two central incisors match in size and shape and are the most prominent teeth.</li><li>Seen from the front, each tooth looks narrower than the one before it: laterals about 62–75% of the centrals, canines about 62–80% of the laterals.</li><li>The teeth midline lines up with the middle of the face.</li><li>The edges of the upper teeth follow a gentle curve parallel to the lower lip (the smile arc).</li><li>The gum line is even: centrals and canines level, laterals slightly lower.</li><li>A natural shade, not an artificial bright white.</li></ul><p>Related: <a href="smile-check.html">Free AI smile check</a> · <a href="teeth-whitening.html">Teeth whitening</a> · <a href="braces-comparison.html">Braces compared</a></p><script>
+(function(){
+var API="https://arxhbdyciylznmlamvri.supabase.co/functions/v1/smile-design",WA="https://wa.me/918369187806?text=Hello%2C%20I%20tried%20the%20AI%20smile%20design%20on%20your%20website%20and%20would%20like%20a%20smile%20design%20consultation.",CLINIC="Dr Tejas Pradhan's Dental Clinic",PHONE="+91 83691 87806";
+var f=document.getElementById('ds'),btn=document.getElementById('dsb'),msg=document.getElementById('dsm'),out=document.getElementById('dso'),inp=document.getElementById('dsf'),prev=document.getElementById('dsp');
+var ORDER=["UR4","UR3","UR2","UR1","UL1","UL2","UL3","UL4"],LORDER=["LR4","LR3","LR2","LR1","LL1","LL2","LL3","LL4"],NUM={1:"Central incisor",2:"Lateral incisor",3:"Canine",4:"First premolar"};
+var RATIOS={golden:0.618,red70:0.70,red75:0.75,red80:0.80};
+// tooth-form library (visagism): [mesial corner, distal corner, incisal convexity] for centrals and laterals, neck narrowing, canine tip roundness, lateral-width tweak
+var FORMS={oval:{n:'Oval (soft, rounded)',c:[0.16,0.32,0.035],l:[0.28,0.5,0.05],neck:0.04,tip:0.09,dr:0},
+ triangular:{n:'Triangular (dynamic, youthful)',c:[0.07,0.2,0.012],l:[0.14,0.36,0.02],neck:0.13,tip:0.05,dr:-0.03},
+ rectangular:{n:'Rectangular (strong, long)',c:[0.05,0.12,0],l:[0.1,0.24,0.01],neck:0.03,tip:0.04,dr:0},
+ square:{n:'Square (calm, broad)',c:[0.05,0.1,0],l:[0.08,0.18,0],neck:0.01,tip:0.1,dr:0.06}};
+// VITA classical shade guide (approximate on-screen colours), lightest to darkest by value, plus bleach shades
+var SHADE_ORDER=['BL1','BL2','BL3','BL4','B1','A1','B2','D2','A2','C1','C2','D3','A3','D4','B3','A3.5','B4','C3','A4','C4'];
+var SHADE_RGB={BL1:[250,249,244],BL2:[247,245,236],BL3:[244,240,228],BL4:[240,235,220],B1:[238,232,214],A1:[234,224,200],B2:[233,222,190],D2:[226,214,192],A2:[228,214,184],C1:[222,212,190],C2:[214,200,172],D3:[218,204,178],A3:[224,204,166],D4:[210,192,160],B3:[222,202,158],'A3.5':[214,190,150],B4:[216,192,144],C3:[200,184,152],A4:[200,176,138],C4:[184,164,128]};
+var SHADES={};SHADE_ORDER.forEach(function(k,i){var f=1-i/(SHADE_ORDER.length-1);SHADES[k]={c:SHADE_RGB[k],n:k,yr:-0.35+1.3*f,lift:-0.08+0.26*f,gain:0.86+0.4*f}});
+var S={arch:'upper',bg:'black',eyes:'off',clin:false,face:true,form:'oval',wh:0.78,a:null,after:null,img:null,W:0,H:0,ratio:'red70',shade:'A1',view:'mockup',outline:true,brace:'metal',cache:{}};
+var beforeURL=null;
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function avg(a){a=a.filter(function(v){return v!=null&&isFinite(v)});return a.length?a.reduce(function(p,q){return p+q},0)/a.length:null}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function shrink(file){return new Promise(function(res,rej){var r=new FileReader();r.onerror=rej;r.onload=function(){var im=new Image();im.onerror=rej;im.onload=function(){var m=1280,w=im.width,h=im.height,k=Math.min(1,m/Math.max(w,h));var c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(h*k);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',0.88))};im.src=r.result};r.readAsDataURL(file)})}
+if(inp)inp.addEventListener('change',function(){prev.innerHTML='';if(inp.files[0]){prev.innerHTML='<img src="'+URL.createObjectURL(inp.files[0])+'" alt="Selected smile photo">'}});
+function loadFile(file){return new Promise(function(res,rej){var u=URL.createObjectURL(file),im=new Image();im.onload=function(){res(im)};im.onerror=rej;im.src=u})}
+function toURL(im,sx,sy,sw,sh,maxW,q){var k=Math.min(maxW/sw,3);var c=document.createElement('canvas');c.width=Math.round(sw*k);c.height=Math.round(sh*k);var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(im,sx,sy,sw,sh,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q||0.88)}
+var RLBL={red70:'Natural (RED 70%)',red75:'Soft (RED 75%)',red80:'Wide (RED 80%)',golden:'Golden proportion (62%)'};
+var STAFFN=['9167511565','8369187806'];function isStaff(){var p=((f&&f.phone&&f.phone.value)||'').replace(/\D/g,'').slice(-10);return STAFFN.indexOf(p)>=0}
+function aiOpts(){return{shade:S.shade,shade_rgb:(SHADE_RGB[S.shade]||[]).join(','),shape:FORMS[S.form].n,ratio:RLBL[S.ratio]||'',wh:String(Math.round(S.wh*100)),arch:S.arch}}
+function post(body){return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})})}
+/* ---------- guided camera (MediaPipe face landmarks) ---------- */
+var CAM={stream:null,lm:null,raf:0,hold:0,lastT:0,lastNose:null,facing:'user',captured:null,ok:{},res:null,loading:false};
+var MPV='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14';
+var HOLD=3000;
+var CHECKS=[['zone','Smile in the zone'],['dist','Distance'],['straight','Head straight'],['smile','Teeth slightly apart'],['light','Good light'],['steady','Hold still']];
+function el(id){return document.getElementById(id)}
+function camOpen(){
+ if(!el('cam')){var d=document.createElement('div');d.id='cam';d.className='cam';
+  d.innerHTML='<div class="camtop"><button type="button" id="camx" aria-label="Close camera">✕</button></div>'+
+  '<div class="camstage" id="camstage"><video id="camv" playsinline muted autoplay></video><canvas id="camo"></canvas><div class="pill" id="campill">Starting camera…</div><div class="count" id="camcount"></div></div>'+
+  '<div class="camtxt"><h3 id="camh">Smile inside the teeth zone</h3><p id="camp">Hold the phone straight at mouth level, not tilted up or down. Smile naturally with your teeth slightly apart, do not clench. Face a window, no light from above. Fit your smile into the box.</p><div class="chips" id="camchips"></div></div>'+
+  '<div class="cambar"><span></span><button type="button" id="camshot" class="shot" aria-label="Take photo"><svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" class="bg"/><circle cx="40" cy="40" r="34" class="pr" id="camring"/></svg></button><button type="button" id="camflip" aria-label="Switch camera">⟲</button></div>'+
+  '<div class="camprev" id="camprev" hidden><img id="camimg" alt="Captured smile photo"><div class="cta"><button type="button" class="btn" id="camuse">Use this photo</button><button type="button" class="btn o2" id="camretake">Retake</button></div></div>';
+  document.body.appendChild(d);
+  el('camx').onclick=camClose;el('camshot').onclick=function(){camCapture(false)};
+  el('camflip').onclick=function(){CAM.facing=CAM.facing=='user'?'environment':'user';camStart()};
+  el('camretake').onclick=function(){el('camprev').hidden=true;el('cam').classList.remove('pv');el('camstage').hidden=false;camStart()};
+  el('camuse').onclick=camUse}
+ el('cam').hidden=false;el('camprev').hidden=true;el('cam').classList.remove('pv');el('camstage').hidden=false;document.body.style.overflow='hidden';
+ el('camchips').innerHTML=CHECKS.map(function(c){return'<span id="ck_'+c[0]+'">'+c[1]+'</span>'}).join('');
+ camStart();camLoadModel()}
+function camClose(){camStop();el('cam').hidden=true;document.body.style.overflow=''}
+function camStop(){cancelAnimationFrame(CAM.raf);if(CAM.stream){CAM.stream.getTracks().forEach(function(t){t.stop()});CAM.stream=null}}
+function camStart(){camStop();var v=el('camv');el('campill').textContent='Starting camera…';
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){el('campill').textContent='Camera not available. Open this page in Chrome, or upload a photo instead.';return}
+ navigator.mediaDevices.getUserMedia({video:{facingMode:CAM.facing,width:{ideal:1920},height:{ideal:1920}},audio:false}).then(function(s){CAM.stream=s;v.srcObject=s;
+  v.style.transform=CAM.facing=='user'?'scaleX(-1)':'none';
+  v.onloadedmetadata=function(){v.play();var ar=v.videoWidth/v.videoHeight;el('camstage').style.setProperty('--ar',ar);var o=el('camo');o.width=v.videoWidth;o.height=v.videoHeight;CAM.hold=0;CAM.raf=requestAnimationFrame(camLoop)}
+ }).catch(function(e){el('campill').textContent='Camera blocked ('+(e.name||e)+'). Allow camera access, or upload a photo instead.'})}
+function camLoadModel(){if(CAM.lm||CAM.loading)return;CAM.loading=true;
+ import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){
+  function mk(dl){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',delegate:dl},runningMode:'VIDEO',numFaces:1,outputFaceBlendshapes:true})}
+  return mk('GPU').catch(function(){return mk('CPU')})})}).then(function(lm){CAM.lm=lm;CAM.loading=false}).catch(function(){CAM.loading=false;CAM.lm=null;el('campill').textContent='Auto-check unavailable. Line up your smile and tap the button.'})}
+function geom(W,H){var mn=Math.min(W,H),rx=mn*0.34,ry=rx*1.32,cx=W/2,cy=H*0.44;if(cy-ry<H*0.04)cy=ry+H*0.04;
+ var zw=rx*0.95,zh=zw*0.46,zx=cx,zy=cy+ry*0.55;return{cx:cx,cy:cy,rx:rx,ry:ry,zx:zx,zy:zy,zw:zw,zh:zh}}
+function drawGuide(g,W,H,G,allOk,mouth){g.clearRect(0,0,W,H);
+ g.save();g.fillStyle='rgba(0,0,0,.45)';g.fillRect(0,0,W,H);g.globalCompositeOperation='destination-out';g.beginPath();g.ellipse(G.cx,G.cy,G.rx,G.ry,0,0,Math.PI*2);g.fill();g.restore();
+ var col=allOk?'#4ade80':'rgba(255,255,255,.9)',lw=Math.max(3,W/220);
+ g.lineWidth=lw;g.strokeStyle=col;g.beginPath();g.ellipse(G.cx,G.cy,G.rx,G.ry,0,0,Math.PI*2);g.stroke();
+ // teeth zone with ideal 8-tooth template (RED 70%)
+ var x0=G.zx-G.zw/2,y0=G.zy-G.zh/2,r=G.zh*0.35;g.setLineDash([lw*3,lw*2]);g.strokeStyle=allOk?'#4ade80':'#facc15';
+ g.beginPath();g.moveTo(x0+r,y0);g.lineTo(x0+G.zw-r,y0);g.quadraticCurveTo(x0+G.zw,y0,x0+G.zw,y0+r);g.lineTo(x0+G.zw,y0+G.zh-r);g.quadraticCurveTo(x0+G.zw,y0+G.zh,x0+G.zw-r,y0+G.zh);g.lineTo(x0+r,y0+G.zh);g.quadraticCurveTo(x0,y0+G.zh,x0,y0+G.zh-r);g.lineTo(x0,y0+r);g.quadraticCurveTo(x0,y0,x0+r,y0);g.stroke();g.setLineDash([]);
+ var q=0.7,half=G.zw*0.47,wc=half/(1+q+q*q+q*q*q*0.9),ws=[wc,wc*q,wc*q*q,wc*q*q*q*0.9],top=G.zy-G.zh*0.38,hc=wc/0.72;
+ g.strokeStyle='rgba(255,255,255,.75)';g.lineWidth=Math.max(1.5,lw*0.55);
+ [-1,1].forEach(function(s){var x=0;ws.forEach(function(w,i){var a=G.zx+s*x,b=G.zx+s*(x+w),h=hc*[1,0.86,0.94,0.8][i],tp=top+[0,0.06,0,0.1][i]*hc,ar=1-0.06*i*i;var bt=tp+h*ar;
+  g.beginPath();g.moveTo(a,tp+h*0.15);g.quadraticCurveTo((a+b)/2,tp-h*0.04,b,tp+h*0.15);g.lineTo(b,bt-h*0.12);g.quadraticCurveTo(b,bt,(a+b)/2,bt);g.quadraticCurveTo(a,bt,a,bt-h*0.12);g.closePath();g.stroke();x+=w})});
+ g.beginPath();g.moveTo(G.zx,G.cy-G.ry);g.lineTo(G.zx,G.zy+G.zh/2);g.strokeStyle='rgba(255,255,255,.35)';g.setLineDash([lw*2,lw*2]);g.stroke();g.setLineDash([]);
+ if(mouth){g.fillStyle=allOk?'#4ade80':'#f87171';[mouth.l,mouth.r].forEach(function(p){g.beginPath();g.arc(p[0],p[1],lw*1.6,0,Math.PI*2);g.fill()})}}
+function lumaOf(v,box){var c=CAM.tmp||(CAM.tmp=document.createElement('canvas'));c.width=24;c.height=24;var g=c.getContext('2d',{willReadFrequently:true});
+ g.drawImage(v,box[0],box[1],Math.max(1,box[2]),Math.max(1,box[3]),0,0,24,24);var d=g.getImageData(0,0,24,24).data,s=0;for(var i=0;i<d.length;i+=4)s+=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];return s/(d.length/4)}
+function camLoop(t){var v=el('camv'),o=el('camo');if(!v||!CAM.stream)return;var W=o.width,H=o.height,g=o.getContext('2d'),G=geom(W,H),dt=CAM.lastT?t-CAM.lastT:16;CAM.lastT=t;
+ var ok={},msg='',mouth=null,mir=CAM.facing=='user';
+ if(CAM.lm&&v.readyState>=2){var r=null;try{r=CAM.lm.detectForVideo(v,t)}catch(e){}
+  if(r&&r.faceLandmarks&&r.faceLandmarks.length){var L=r.faceLandmarks[0];CAM.res=r;
+   function P(i){var p=L[i];return[(mir?1-p.x:p.x)*W,p.y*H]}
+   var ml=P(61),mr=P(291),mc=[(ml[0]+mr[0])/2,(ml[1]+mr[1])/2],mw=Math.hypot(mr[0]-ml[0],mr[1]-ml[1]);mouth={l:ml,r:mr};
+   var nose=P(1),ck1=P(234),ck2=P(454),e1=P(33),e2=P(263),fh=P(10),ch=P(152),ul=P(13),ll=P(14);
+   var dl=Math.abs(nose[0]-ck1[0]),dr=Math.abs(ck2[0]-nose[0]),yaw=(dl-dr)/(dl+dr+1e-6);
+   var roll=Math.atan2(e2[1]-e1[1],e2[0]-e1[0])*180/Math.PI;if(roll>90)roll-=180;if(roll<-90)roll+=180;
+   var pitch=(nose[1]-fh[1])/(ch[1]-fh[1]+1e-6);
+   var bs={};((r.faceBlendshapes&&r.faceBlendshapes[0]&&r.faceBlendshapes[0].categories)||[]).forEach(function(c){bs[c.categoryName]=c.score});
+   var smile=((bs.mouthSmileLeft||0)+(bs.mouthSmileRight||0))/2,gap=(ll[1]-ul[1])/(mw+1e-6);
+   var ratio=mw/(G.zw*0.86);
+   ok.zone=Math.abs(mc[0]-G.zx)<G.zw*0.18&&Math.abs(mc[1]-G.zy)<G.zh*0.55;
+   ok.dist=ratio>0.82&&ratio<1.2;
+   ok.straight=Math.abs(yaw)<0.12&&Math.abs(roll)<5&&pitch>0.44&&pitch<0.66;
+   ok.smile=smile>0.3&&gap>0.11&&gap<0.42;
+   var bx=Math.min(ck1[0],ck2[0]),by=fh[1],bw=Math.abs(ck2[0]-ck1[0]),bh=ch[1]-fh[1];if(mir)bx=W-bx-bw;
+   var lu=lumaOf(v,[bx,by,bw,bh]);ok.light=lu>70&&lu<215;
+   var mv=CAM.lastNose?Math.hypot(nose[0]-CAM.lastNose[0],nose[1]-CAM.lastNose[1])/W:1;CAM.lastNose=nose;CAM.mv=(CAM.mv==null?mv:CAM.mv*0.7+mv*0.3);ok.steady=CAM.mv<0.004;
+   if(!ok.zone)msg=mc[1]<G.zy-G.zh*0.55?'Move the phone up a little':mc[1]>G.zy+G.zh*0.55?'Move the phone down a little':(mc[0]<G.zx?'Move slightly to your left':'Move slightly to your right');
+   else if(!ok.dist)msg=ratio<0.82?'Move closer':'Move back a little';
+   else if(!ok.straight)msg=Math.abs(yaw)>=0.12?(yaw>0?'Turn your head slightly right':'Turn your head slightly left'):Math.abs(roll)>=5?'Keep your head level':(pitch<=0.44?'Lower your chin slightly':'Raise your chin slightly');
+   else if(!ok.smile)msg=gap>=0.42?'Close your mouth a little, keep smiling':gap<=0.11?'Smile and part your teeth slightly':'Bigger smile, show your teeth';
+   else if(!ok.light)msg=lu<=70?'Too dark. Face a window or turn on a light':'Too bright. Move away from direct light';
+   else if(!ok.steady)msg='Hold still…';
+  }else{msg='Bring your face into the oval';CAM.lastNose=null}
+ }else if(!CAM.lm){msg=CAM.loading?'Loading face guide…':'Line up your smile and tap the button'}
+ var all=CHECKS.every(function(c){return ok[c[0]]});
+ CHECKS.forEach(function(c){var s=el('ck_'+c[0]);if(s)s.className=ok[c[0]]?'on':''});
+ CAM.hold=all?CAM.hold+dt:0;var left=Math.ceil((HOLD-CAM.hold)/1000);
+ el('campill').textContent=all?'Perfect – hold still':msg;el('camh').textContent=all?'Perfect – hold still':(msg||'Smile inside the teeth zone');
+ el('camcount').textContent=all&&left>0?left:'';
+ var ring=el('camring');if(ring){var L2=2*Math.PI*34;ring.style.strokeDasharray=L2;ring.style.strokeDashoffset=L2*(1-Math.min(1,CAM.hold/HOLD))}
+ drawGuide(g,W,H,G,all,mouth);
+ if(all&&CAM.hold>=HOLD){camCapture(true);return}
+ CAM.raf=requestAnimationFrame(camLoop)}
+var FULL=null,FACEB=null;
+var LIP_IN=[78,191,80,81,82,13,312,311,310,415,308,324,318,402,317,14,87,178,88,95],LIP_LO=[78,95,88,178,87,14,317,402,318,324,308],LIPS=null;
+var MODEL='https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',IMLM=null;
+function cropFromL(L,W,H){function P(i){return[L[i].x*W,L[i].y*H]}
+ var ml=P(61),mr=P(291),mw=Math.hypot(mr[0]-ml[0],mr[1]-ml[1]),cx=(ml[0]+mr[0])/2,cy=(ml[1]+mr[1])/2;
+ var cw=Math.min(W,mw*1.6),ch=Math.min(H,cw*0.62),sx=clamp(cx-cw/2,0,W-cw),sy=clamp(cy-ch*0.5,0,H-ch);
+ var mx=(P(168)[0]+P(1)[0]+P(152)[0])/3,fm=Math.round((mx-sx)/cw*1000);if(fm<0||fm>1000)fm=null;
+ function q(i){return[Math.round((L[i].y*H-sy)/ch*1000),Math.round((L[i].x*W-sx)/cw*1000)]}
+ var e1=P(33),e2=P(263),ipl=Math.atan2(e2[1]-e1[1],e2[0]-e1[0]);if(ipl>Math.PI/2)ipl-=Math.PI;if(ipl<-Math.PI/2)ipl+=Math.PI;
+ return{eyes:[e1[0],e1[1],e2[0],e2[1]],crop:[sx,sy,cw,ch],fm:fm,lips:{inner:LIP_IN.map(q),lower:LIP_LO.map(q),ipl:ipl,comm:[q(61),q(291)],upper:[78,191,80,81,82,13,312,311,310,415,308].map(q)}}}
+function imgLandmarks(im){return (IMLM?Promise.resolve(IMLM):import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.FaceLandmarker.createFromOptions(fs,{baseOptions:{modelAssetPath:MODEL,delegate:'CPU'},runningMode:'IMAGE',numFaces:1})})}).then(function(l){IMLM=l;return l})).then(function(l){var r=l.detect(im);return r&&r.faceLandmarks&&r.faceLandmarks.length?r.faceLandmarks[0]:null}).catch(function(){return null})}
+function camCapture(auto){var v=el('camv');if(!v||!v.videoWidth)return;var W=v.videoWidth,H=v.videoHeight,c=document.createElement('canvas');c.width=W;c.height=H;c.getContext('2d').drawImage(v,0,0,W,H);
+ var crop=null,fm=null,r=CAM.res;
+ if(r&&r.faceLandmarks&&r.faceLandmarks.length){var L=r.faceLandmarks[0];S.pose=poseOf(L,W,H);function P(i){return[L[i].x*W,L[i].y*H]}
+  var cr=cropFromL(L,W,H);crop=cr.crop;var lips=cr.lips,eyes=cr.eyes;fm=cr.fm;}
+ camStop();CAM.captured={canvas:c,crop:crop,fm:fm,lips:lips,eyes:eyes};
+ el('camimg').src=toURL(c,0,0,W,H,900,0.88);
+ el('camstage').hidden=true;el('camprev').hidden=false;el('cam').classList.add('pv');el('camh').textContent=auto?'Photo taken automatically':'Photo taken';el('camp').textContent='Check that your teeth are sharp and clearly visible.'}
+function camUse(){camClose();setTimeout(function(){var b=el('dsb');if(b)b.scrollIntoView({behavior:'smooth',block:'center'})},50);var c=CAM.captured;if(!c)return;prev.innerHTML='<img src="'+toURL(c.canvas,0,0,c.canvas.width,c.canvas.height,700,0.85)+'" alt="Your photo">';
+ if(inp)inp.value='';msg.className='muted';msg.textContent='Photo ready. Tap "Design my smile".'}
+
+var cb=document.getElementById('dscam');if(cb)cb.addEventListener('click',camOpen);
+if(inp)inp.addEventListener('change',function(){CAM.captured=null});
+if(f)f.addEventListener('submit',function(ev){ev.preventDefault();out.innerHTML='';msg.className='muted';
+if(!CAM.captured&&!inp.files.length){msg.textContent='Please take a photo with the guided camera or upload one.';return}
+btn.disabled=true;btn.textContent='Finding your smile...';msg.textContent='Step 1 of 2: locating your teeth.';beforeURL=null;S.pose=null;
+var fm=null,p0;LIPS=null;FULL=null;FACEB=null;var ar=document.querySelector('input[name=arch]:checked');S.arch=ar?ar.value:'upper';
+if(CAM.captured){var c=CAM.captured;fm=c.fm;LIPS=c.lips||null;if(c.crop)FULL={img:c.canvas,crop:c.crop,eyes:c.eyes};beforeURL=c.crop?toURL(c.canvas,c.crop[0],c.crop[1],c.crop[2],c.crop[3],1200,0.9):toURL(c.canvas,0,0,c.canvas.width,c.canvas.height,1280,0.88);p0=Promise.resolve()}
+else{var full;p0=loadFile(inp.files[0]).then(function(im){full=im;return imgLandmarks(im)}).then(function(L){var im=full,W=im.naturalWidth,H=im.naturalHeight,k=Math.min(1,1280/Math.max(W,H));
+ if(L){S.pose=poseOf(L,W,H);var cr=cropFromL(L,W,H);fm=cr.fm;LIPS=cr.lips;FULL={img:full,crop:cr.crop,eyes:cr.eyes};beforeURL=toURL(full,cr.crop[0],cr.crop[1],cr.crop[2],cr.crop[3],1200,0.9);return {j:null}}
+ return post({mode:'locate',image:toURL(im,0,0,W,H,Math.round(W*k),0.85)})}).then(function(x){if(beforeURL)return;
+ var W=full.naturalWidth,H=full.naturalHeight;
+ if(x.j&&x.j.ok&&x.j.mouth_box&&x.j.face_ok!==false){var b=x.j.mouth_box,y0=b[0]*H/1000,x0=b[1]*W/1000,y1=b[2]*H/1000,x1=b[3]*W/1000,mw=x1-x0,mh=y1-y0;
+  if(mw>10&&mh>5){var cw=Math.min(W,mw*1.8),ch=Math.min(H,cw*0.75),cx=(x0+x1)/2,cy=(y0+y1)/2-mh*0.05;var sx=clamp(cx-cw/2,0,W-cw),sy=clamp(cy-ch/2,0,H-ch);
+   if(x.j.facial_midline_x!=null){fm=Math.round(((x.j.facial_midline_x*W/1000)-sx)/cw*1000);if(fm<0||fm>1000)fm=null}
+   beforeURL=toURL(full,sx,sy,cw,ch,1200,0.9);FULL={img:full,crop:[sx,sy,cw,ch]}}}
+ if(!beforeURL){var k=Math.min(1,1280/Math.max(W,H));beforeURL=toURL(full,0,0,W,H,Math.round(W*k),0.88)}})}
+p0.then(function(){
+ btn.textContent='Designing your smile...';msg.textContent='Step 2 of 2: measuring your teeth. This takes 15 to 40 seconds.';
+ return post({name:f.name.value,phone:f.phone.value,consent:f.consent.checked,website:f.website.value,image:beforeURL,facial_midline_x:fm,shade:aiOpts().shade,shade_rgb:aiOpts().shade_rgb,shape:aiOpts().shape,ratio:aiOpts().ratio,wh:aiOpts().wh,arch:aiOpts().arch})
+}).then(function(x){
+btn.disabled=false;btn.textContent='Design my smile';
+if(!x.ok||!x.j.analysis){msg.className='muted err';msg.textContent=(x.j&&x.j.error)||'Something went wrong. Please try again.';return}
+msg.textContent='';aiBlend(x.j.analysis,x.j.after,function(u){show(x.j.analysis,u)})}).catch(function(e){btn.disabled=false;btn.textContent='Design my smile';msg.className='muted err';msg.textContent='Could not complete the design ('+((e&&e.message)||e)+'). Please open this page in Chrome and try again, or WhatsApp the clinic.'})});
+
+/* ---------- geometry ---------- */
+function teethPx(low){var a=S.a,T={};for(var id in a.teeth){if((id[0]=='L')!=!!low)continue;var b=a.teeth[id].box;T[id]={y0:b[0]*S.H/1000,x0:b[1]*S.W/1000,y1:b[2]*S.H/1000,x1:b[3]*S.W/1000}}return T}
+function design(){
+ var a=S.a,T=teethPx(),r=clamp(RATIOS[S.ratio]+(FORMS[S.form].dr||0),0.55,0.86);
+ var cen=[T.UR1,T.UL1].filter(Boolean);if(!cen.length)return null;
+ var cwNow=avg(cen.map(function(t){return t.x1-t.x0})),mm=cwNow/8.5;
+ var dmid=T.UR1&&T.UL1?(T.UR1.x1+T.UL1.x0)/2:(a.dental_midline_x!=null?a.dental_midline_x*S.W/1000:avg(cen.map(function(t){return (t.x0+t.x1)/2}))),fmid=a.facial_midline_x!=null?a.facial_midline_x*S.W/1000:dmid;
+ // stay close to where the teeth really are (looks natural on a selfie), correcting the midline only partly towards the face midline
+ var mid=dmid+clamp(fmid-dmid,-1.5*cwNow/8.5,1.5*cwNow/8.5)*0.4;
+ function span(side){var k=T[side<0?'UR3':'UL3'],l=T[side<0?'UR2':'UL2'];
+  if(k)return side<0?mid-k.x0:k.x1-mid;
+  if(l)return (side<0?mid-l.x0:l.x1-mid)*(1+r+r*r)/(1+r);
+  return cwNow*(1+r+r*r)}
+ var hR=span(-1),hL=span(1),half=avg([hR,hL]);
+ var wc=clamp(half/(1+r+r*r),0.88*cwNow,1.15*cwNow),wl=wc*r,wk=wl*r,wp=wk*r*1.05;
+ var incC=avg(cen.map(function(t){return t.y1})),gumNow=avg(cen.map(function(t){return t.y0}));
+ var lipC=a.lower_lip_y_at_center!=null?a.lower_lip_y_at_center*S.H/1000:null,lipK=a.lower_lip_y_at_canines!=null?a.lower_lip_y_at_canines*S.H/1000:null,lowF=null;
+ if(a._lower){var LP=a._lower.map(function(q){return[q[1]*S.W/1000,q[0]*S.H/1000]}).sort(function(p,q){return p[0]-q[0]});
+  lowF=function(x){if(x<=LP[0][0])return LP[0][1];for(var i=1;i<LP.length;i++)if(x<=LP[i][0]){var u=(x-LP[i-1][0])/((LP[i][0]-LP[i-1][0])||1);return LP[i-1][1]+u*(LP[i][1]-LP[i-1][1])}return LP[LP.length-1][1]};
+  lipC=lowF(mid);lipK=avg([lowF(mid-half*0.9),lowF(mid+half*0.9)])}
+ var rise=(lipC!=null&&lipK!=null)?clamp((lipC-lipK)*0.92,0.6*mm,6*mm):1.2*mm;
+ if(lipC!=null){var gap=clamp(lipC-incC,0.4*mm,2*mm);incC=clamp(lipC-gap,incC-1*mm,incC+1.5*mm)}
+ // smile arc: biting edges run parallel to the patient's own lower-lip line (consonant smile arc)
+ function inc(dx){if(lowF){var d=Math.min(dx,half*1.05),lv=avg([lowF(mid-d),lowF(mid+d)]);return incC-clamp((lipC-lv)*0.92,0,7*mm)}var u=dx/half;return incC-rise*u*u}
+ var hcIdeal=wc/S.wh,gumC=Math.min(inc(wc/2)-hcIdeal,gumNow+1.5*mm);
+ var list=[],widths=[wc,wl,wk,wp],gumOff=[0,0.75*mm,0,0.5*mm],incOff=[0,0.8*mm,0,1.6*mm],types=['c','l','k','p'];
+ [-1,1].forEach(function(s){var x=0,hs=s<0?hR:hL,f=clamp((hs-wc)/(wl+wk),0.8,1.25),ws=[wc,wl*f,wk*f,wp*f];for(var i=0;i<4;i++){var xm=mid+s*x,xd=mid+s*(x+ws[i]),cx=x+ws[i]/2;
+   var id=(s<0?'UR':'UL')+(i+1);list.push({id:id,type:types[i],xm:xm,xd:xd,top:gumC+gumOff[i]+(i==3?0.3*mm:0),bot:inc(cx)-incOff[i],w:ws[i],shade:[1,0.97,0.94,0.9][i]});x+=ws[i]}});
+ return {TL:teethPx(true),T:T,list:list,mid:mid,mm:mm,wc:wc,wl:wl,wk:wk,wp:wp,half:half,hc:inc(wc/2)-gumC,gumC:gumC,incC:incC,rise:rise,inc:inc,cwNow:cwNow};
+}
+function mouthPath(g,D){var a=S.a,p=a.mouth_polygon;
+ g.beginPath();
+ if(p&&p.length>=6){p.forEach(function(q,i){var x=q[1]*S.W/1000,y=q[0]*S.H/1000;if(i)g.lineTo(x,y);else g.moveTo(x,y)});g.closePath();return}
+ var xs=[],ys=[];for(var k in D.T){var t=D.T[k];xs.push(t.x0,t.x1);ys.push(t.y0,t.y1)}
+ var x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs),y0=Math.min.apply(0,ys)-2*D.mm,y1=Math.max.apply(0,ys)+3*D.mm,cx=(x0+x1)/2,rx=(x1-x0)/2+D.mm,ry=(y1-y0)/2;
+ g.ellipse(cx,(y0+y1)/2,rx,ry,0,0,Math.PI*2)}
+function toothPath(g,t){var xm=t.xm,xd=t.xd,s=xd>xm?1:-1,w=Math.abs(xd-xm),top=t.top,bot=t.bot,h=bot-top,zen=xm+(xd-xm)*0.58;
+ function X(u){return xm+s*u*w}
+ var F=FORMS[S.form]||FORMS.oval,nk=F.neck,hh=Math.min(h,w*(t.type=='c'?1.3:1.45)),cz=bot-hh*(nk>0.08?0.38:0.55);
+ var ang={c:0.012,l:0.03,k:0.05,p:0.04}[t.type]||0;g.save();g.translate((xm+xd)/2,bot);g.rotate(s*ang);g.translate(-(xm+xd)/2,-bot);
+ g.beginPath();g.moveTo(X(0.02+nk),top+0.04*h);
+ g.bezierCurveTo(X(0.2),top,X(0.45),top,zen,top);g.bezierCurveTo(X(0.75),top,X(0.96-nk),top+0.02*h,X(0.98-nk),top+0.06*h);
+ if(t.type=='k'||t.type=='p'){var tip=t.type=='k'?0.44:0.5,ds=t.type=='k'?0.26:0.2,tr=F.tip;
+  g.bezierCurveTo(X(1),top+(cz-top)*0.5,X(1.01),cz,X(0.99),bot-ds*hh);
+  g.bezierCurveTo(X(0.9),bot-ds*hh*0.7,X(tip+tr*1.6),bot-0.02*hh,X(tip+tr*0.5),bot-0.004*hh);
+  g.quadraticCurveTo(X(tip),bot+0.012*hh,X(tip-tr*0.5),bot-0.004*hh);
+  g.bezierCurveTo(X(tip-tr*1.6),bot-0.02*hh,X(0.1),bot-(ds-0.08)*hh*0.7,X(0.01),bot-(ds-0.08)*hh);
+  g.bezierCurveTo(X(-0.01),cz,X(0),top+(cz-top)*0.5,X(0.02+nk),top+0.04*h)}
+ else{var fp=t.type=='c'?F.c:F.l,rm=fp[0],rd=fp[1],e=fp[2]*w;
+  // gently convex sides (narrower at the neck), rounded incisal angles: mesial tighter, distal rounder
+  g.bezierCurveTo(X(0.99),top+(cz-top)*0.45,X(1.025),cz,X(1),bot-rd*w);
+  g.bezierCurveTo(X(1),bot-rd*w*0.45,X(1-rd*0.45),bot+e*0.3,X(1-rd),bot+e*0.45);
+  var sp=1-rd-rm;g.bezierCurveTo(X(1-rd-sp*0.33),bot+e,X(rm+sp*0.33),bot+e,X(rm),bot+e*0.3);
+  g.bezierCurveTo(X(rm*0.45),bot+e*0.1,X(0),bot-rm*w*0.45,X(0),bot-rm*w);
+  g.bezierCurveTo(X(-0.025),cz,X(0.01),top+(cz-top)*0.45,X(0.02+nk),top+0.04*h)}
+ g.closePath();g.restore()}
+
+/* ---------- pixel work ---------- */
+function baseCanvas(){var c=document.createElement('canvas');c.width=S.W;c.height=S.H;var g=c.getContext('2d');g.drawImage(S.img,0,0);return [c,g]}
+function whiten(c,g,D){var sh=SHADES[S.shade];
+ var m=document.createElement('canvas');m.width=S.W;m.height=S.H;var mg=m.getContext('2d');
+ mg.save();mouthPath(mg,D);mg.clip();mg.fillStyle='#fff';for(var k in D.T){var t=D.T[k];mg.fillRect(t.x0-D.mm,t.y0-D.mm,t.x1-t.x0+2*D.mm,t.y1-t.y0+2*D.mm)}for(var k2 in (D.TL||{})){var t2=D.TL[k2];mg.fillRect(t2.x0-D.mm,t2.y0-D.mm,t2.x1-t2.x0+2*D.mm,t2.y1-t2.y0+2*D.mm)}mg.restore();
+ var m2=document.createElement('canvas');m2.width=S.W;m2.height=S.H;var g2=m2.getContext('2d');g2.filter='blur('+Math.max(2,D.mm*0.6)+'px)';g2.drawImage(m,0,0);
+ var md=g2.getImageData(0,0,S.W,S.H).data,im=g.getImageData(0,0,S.W,S.H),d=im.data;
+ for(var i=0;i<d.length;i+=4){var mw=md[i+3]/255;if(mw<0.02)continue;var r=d[i],gg=d[i+1],b=d[i+2];
+  var mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),lum=(0.299*r+0.587*gg+0.114*b)/255,sat=mx?(mx-mn)/mx:0,red=(r-gg)/255;
+  var w=mw*clamp((0.2-red)/0.1,0,1)*clamp((lum-0.28)/0.17,0,1)*clamp((0.62-sat)/0.15,0,1);if(w<=0)continue;
+  var y=(r+gg)/2;if(sh.yr>=0){b=b+sh.yr*w*Math.max(0,y-b);r=r-sh.yr*w*0.25*(r-gg>0?r-gg:0)}else{b=b+sh.yr*w*0.12*b}
+  d[i]=clamp(r+sh.lift*w*(255-r),0,255);d[i+1]=clamp(gg+sh.lift*w*(255-gg),0,255);d[i+2]=clamp(b+sh.lift*w*(255-b),0,255)}
+ g.putImageData(im,0,0);if(c&&c._final!==false)shadeMatch(g,D)}
+function sampleGum(D){var c=document.createElement('canvas');c.width=S.W;c.height=S.H;var g=c.getContext('2d');g.drawImage(S.img,0,0);
+ var t=D.T.UR1||D.T.UL1,x=Math.round((t.x0+t.x1)/2),y=Math.round(t.y0-0.8*D.mm);if(y<1)y=1;
+ var p=g.getImageData(clamp(x-3,0,S.W-7),clamp(y-2,0,S.H-5),7,5).data,r=0,gg=0,b=0,n=0;for(var i=0;i<p.length;i+=4){r+=p[i];gg+=p[i+1];b+=p[i+2];n++}
+ r/=n;gg/=n;b/=n;if(r-gg<25){r=200;gg=110;b=115}return [r,gg,b]}
+function rgb(c,k,a){return 'rgba('+Math.round(clamp(c[0]*k,0,255))+','+Math.round(clamp(c[1]*k,0,255))+','+Math.round(clamp(c[2]*k,0,255))+','+(a==null?1:a)+')'}
+function sampleTooth(g,D){var r=0,gg=0,b=0,n=0;['UR1','UL1'].forEach(function(id){var t=D.T[id];if(!t)return;var w=t.x1-t.x0,h=t.y1-t.y0,p=g.getImageData(Math.round(t.x0+w*0.3),Math.round(t.y0+h*0.35),Math.max(1,Math.round(w*0.4)),Math.max(1,Math.round(h*0.3))).data;for(var i=0;i<p.length;i+=4){r+=p[i];gg+=p[i+1];b+=p[i+2];n++}});return n?[r/n,gg/n,b/n]:null}
+function sampleOral(g,D){var xs=[],ys=[];for(var k in D.T){var t=D.T[k];xs.push(t.x0,t.x1);ys.push(t.y0,t.y1)}
+ var x0=Math.max(0,Math.round(Math.min.apply(0,xs))),x1=Math.min(S.W,Math.round(Math.max.apply(0,xs))),y0=Math.max(0,Math.round(Math.min.apply(0,ys))),y1=Math.min(S.H,Math.round(Math.max.apply(0,ys)+2*D.mm));
+ if(x1-x0<4||y1-y0<4)return[50,28,30];var p=g.getImageData(x0,y0,x1-x0,y1-y0).data,a=[];for(var i=0;i<p.length;i+=16)a.push([p[i]+p[i+1]+p[i+2],p[i],p[i+1],p[i+2]]);
+ a.sort(function(u,v){return u[0]-v[0]});var n=Math.max(1,Math.round(a.length*0.06)),r=0,gg=0,b=0;for(var j=0;j<n;j++){r+=a[j][1];gg+=a[j][2];b+=a[j][3]}
+ return[clamp(r/n,25,90),clamp(gg/n,12,60),clamp(b/n,14,60)]}
+function srcFor(id,D){var T=D.T,o=T[id],m=false;if(!o){o=T[(id[1]=='R'?'UL':'UR')+id[2]];m=!!o}if(!o)return null;
+ var w=o.x1-o.x0,h=o.y1-o.y0;return{x:o.x0+w*0.18,y:o.y0+h*0.2,w:w*0.64,h:h*0.55,flip:m}}
+function lipMask(D,blur){var m=document.createElement('canvas');m.width=S.W;m.height=S.H;var g=m.getContext('2d');g.filter='blur('+blur+'px)';g.fillStyle='#fff';mouthPath(g,D);g.fill();return m}
+// final pass: every visible tooth (new and existing, upper and lower) is graded to the chosen VITA shade, keeping its own light and shadow
+function shadeMatch(g,D){var tc=SHADES[S.shade].c,Lc=(tc[0]*0.3+tc[1]*0.59+tc[2]*0.11);
+ var m=document.createElement('canvas');m.width=S.W;m.height=S.H;var mg=m.getContext('2d');mg.filter='blur('+Math.max(0.8,D.mm*0.25)+'px)';mg.fillStyle='#fff';mouthPath(mg,D);mg.fill();
+ var md=mg.getImageData(0,0,S.W,S.H).data,im=g.getImageData(0,0,S.W,S.H),d=im.data,W=new Float32Array(S.W*S.H),sL=0,sw=0;
+ for(var i=0,j=0;i<d.length;i+=4,j++){var mk=md[i+3]/255;if(mk<0.05)continue;var r=d[i],gg=d[i+1],b=d[i+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),L=r*0.3+gg*0.59+b*0.11,sat=mx?(mx-mn)/mx:0,red=(r-gg)/255;
+  var w=mk*clamp((0.16-red)/0.08,0,1)*clamp((L/255-0.32)/0.15,0,1)*clamp((0.5-sat)/0.15,0,1);W[j]=w;if(w>0.5){sL+=L*w;sw+=w}}
+ if(sw<20)return;var cr=tc[0]/Lc,cg=tc[1]/Lc,cb=tc[2]/Lc;
+ for(var i=0,j=0;i<d.length;i+=4,j++){var w=W[j];if(w<=0)continue;var L=d[i]*0.3+d[i+1]*0.59+d[i+2]*0.11,a=w*0.7;
+  d[i]=clamp(d[i]*(1-a)+L*cr*a,0,255);d[i+1]=clamp(d[i+1]*(1-a)+L*cg*a,0,255);d[i+2]=clamp(d[i+2]*(1-a)+L*cb*a,0,255)}
+ g.putImageData(im,0,0)}
+function mockup(c,g,D){var sh=SHADES[S.shade],st=sampleTooth(g,D),base=sh.c,mm=D.mm;
+ // tone-match: brighten the patient's own (already whitened) tooth colour so the new teeth sit in the photo's light
+ if(st){var gain=sh.gain||1.1,y=(st[0]+st[1])/2;base=[st[0]*gain,st[1]*gain,(sh.yr>=0?st[2]+sh.yr*0.6*Math.max(0,y-st[2]):st[2]*(1+sh.yr*0.12))*gain].map(function(v){return clamp(v,0,250)});
+  var Lb=(base[0]+base[1]+base[2])/3;if(Lb<150){var f=150/Lb;base=base.map(function(v){return clamp(v*f,0,250)})}
+  var vc=sh.c,Lv=(vc[0]+vc[1]+vc[2])/3,Lb2=(base[0]+base[1]+base[2])/3;base=base.map(function(v,i){return clamp(v*0.45+vc[i]*Lb2/Lv*0.55,0,250)})}
+ var orig=document.createElement('canvas');orig.width=S.W;orig.height=S.H;orig.getContext('2d').drawImage(c,0,0);
+ var oral=sampleOral(orig.getContext('2d'),D);
+ var Ly=document.createElement('canvas');Ly.width=S.W;Ly.height=S.H;var lg=Ly.getContext('2d');
+ // natural mode: teeth run up under the upper lip; never shorter than the current edge by more than the design asks
+ var L2=D.list.map(function(t){var x0=Math.min(t.xm,t.xd),x1=Math.max(t.xm,t.xd),ot=null;for(var k in D.T){var o=D.T[k];if(o.x1>x0&&o.x0<x1)ot=ot==null?o.y0:Math.min(ot,o.y0)}
+  var n={};for(var q in t)n[q]=t[q];n.top=Math.min(t.top,(ot==null?t.top:ot))-3*mm;var sg=t.xd>t.xm?1:-1,ww=Math.abs(t.xd-t.xm);n.xm=t.xm-sg*0.03*ww;n.xd=t.xd+sg*0.04*ww;return n});
+ // 1. dark mouth background behind the new teeth (replaces the old teeth), darker toward the corners
+ var bx0=Math.min.apply(0,L2.map(function(t){return Math.min(t.xm,t.xd)}))-1.5*mm,bx1=Math.max.apply(0,L2.map(function(t){return Math.max(t.xm,t.xd)}))+1.5*mm;
+ var by0=Math.min.apply(0,L2.map(function(t){return t.top})),by1=Math.max.apply(0,L2.map(function(t){return t.bot}))+0.6*mm;
+ for(var k in D.T){var o=D.T[k];bx0=Math.min(bx0,o.x0-mm);bx1=Math.max(bx1,o.x1+mm)}
+ // only where the old teeth were (so they don't show through), soft-edged and properly dark like the inside of a mouth
+ var oL=(oral[0]+oral[1]+oral[2])/3;if(oL>38)oral=oral.map(function(v){return v*38/oL});
+ lg.save();lg.filter='blur('+Math.max(1.5,mm*0.8)+'px)';lg.fillStyle=rgb(oral,1);for(var k in D.T){var o=D.T[k];rrect(lg,o.x0-0.6*mm,o.y0-0.8*mm,o.x1-o.x0+1.2*mm,o.y1-o.y0+1.2*mm,mm);lg.fill()}lg.restore();
+ // 2. teeth: back to front, textured from the patient's own enamel
+ L2.slice().sort(function(p,q){return p.w-q.w}).forEach(function(t){var dx=Math.min(t.xm,t.xd),dw=Math.abs(t.xd-t.xm),dy=t.top,dh=t.bot-t.top,s=t.xd>t.xm?1:-1;
+  lg.save();toothPath(lg,t);lg.clip();
+  var vg=lg.createLinearGradient(0,dy,0,t.bot);vg.addColorStop(0,rgb(base,0.9));vg.addColorStop(0.6,rgb(base,1));vg.addColorStop(1,rgb(base,0.96));lg.fillStyle=vg;lg.fillRect(dx,dy,dw,dh);
+  var sr=srcFor(t.id,D);
+  if(sr){lg.save();lg.globalAlpha=0.85;if(sr.flip){lg.translate(dx+dw,0);lg.scale(-1,1);lg.drawImage(orig,sr.x,sr.y,sr.w,sr.h,0,dy,dw,dh)}else lg.drawImage(orig,sr.x,sr.y,sr.w,sr.h,dx,dy,dw,dh);lg.restore();
+   lg.globalCompositeOperation='color';lg.globalAlpha=0.45;lg.fillStyle=rgb(base);lg.fillRect(dx,dy,dw,dh);lg.globalCompositeOperation='source-over';lg.globalAlpha=1}
+  // cervical warmth and incisal translucency
+  var hz=t.bot-Math.min(dh,dw*1.35),cg=lg.createLinearGradient(0,hz,0,t.bot);
+  cg.addColorStop(0,'rgba(190,150,105,.1)');cg.addColorStop(0.35,'rgba(190,150,105,0)');cg.addColorStop(0.82,'rgba(140,150,170,0)');cg.addColorStop(1,'rgba(120,130,155,'+(t.type=='c'||t.type=='l'?0.38:0.18)+')');lg.fillStyle=cg;lg.fillRect(dx,dy,dw,dh);
+  // curvature: edges roll away; distal side darker on canines and premolars (they turn away from camera)
+  var mi=s>0?dx:dx+dw,di=s>0?dx+dw:dx,hg=lg.createLinearGradient(mi,0,di,0),dd=t.type=='c'?0.16:t.type=='l'?0.22:t.type=='k'?0.3:0.34;
+  hg.addColorStop(0,'rgba(60,40,35,.24)');hg.addColorStop(0.16,'rgba(60,40,35,0)');hg.addColorStop(t.type=='k'||t.type=='p'?0.5:0.8,'rgba(60,40,35,0)');hg.addColorStop(1,'rgba(60,40,35,'+dd+')');lg.fillStyle=hg;lg.fillRect(dx,dy,dw,dh);
+  var hx=dx+dw*(s>0?0.4:0.6),rg=lg.createRadialGradient(hx,t.bot-dh*0.45,1,hx,t.bot-dh*0.45,dw*0.5);rg.addColorStop(0,'rgba(255,255,255,'+(t.type=='c'?0.16:0.1)+')');rg.addColorStop(1,'rgba(255,255,255,0)');lg.fillStyle=rg;lg.fillRect(dx,dy,dw,dh);
+  if(t.shade<1){lg.fillStyle='rgba(30,15,15,'+(1-t.shade)+')';lg.fillRect(dx,dy,dw,dh)}
+  lg.restore();
+  lg.save();lg.filter='blur('+Math.max(0.6,mm*0.07)+'px)';toothPath(lg,t);lg.lineWidth=Math.max(1,mm*0.12);lg.strokeStyle='rgba(80,50,45,.35)';lg.stroke();lg.restore()});
+ // 3. upper-lip shadow on the teeth, then keep only what is inside the lips (soft edge)
+ lg.save();lg.globalCompositeOperation='source-atop';lg.filter='blur('+Math.max(1,mm*0.7)+'px)';mouthPath(lg,D);lg.lineWidth=mm*1.3;lg.strokeStyle='rgba(40,18,18,.38)';lg.stroke();lg.restore();
+ lg.globalCompositeOperation='destination-in';lg.drawImage(lipMask(D,Math.max(0.8,mm*0.3)),0,0);lg.globalCompositeOperation='source-over';
+ // 4. match the photo's grain so the teeth don't look painted
+ var id=lg.getImageData(0,0,S.W,S.H),d=id.data,amp=12;for(var i=0;i<d.length;i+=4){if(d[i+3]<8)continue;var n=(Math.random()-0.5)*amp;d[i]=clamp(d[i]+n,0,255);d[i+1]=clamp(d[i+1]+n,0,255);d[i+2]=clamp(d[i+2]+n,0,255)}lg.putImageData(id,0,0);
+ g.drawImage(Ly,0,0);shadeMatch(g,D)}
+function lines(g,D,opt){var lw=Math.max(1.5,S.W/450);g.lineWidth=lw;g.font='600 '+Math.round(S.W/42)+'px system-ui,sans-serif';g.textAlign='center';
+ if(opt.boxes){ORDER.forEach(function(id){var t=D.T[id];if(!t)return;g.strokeStyle='rgba(255,214,0,.95)';g.strokeRect(t.x0,t.y0,t.x1-t.x0,t.y1-t.y0);g.fillStyle='rgba(255,214,0,.95)';g.fillText(id.slice(2),(t.x0+t.x1)/2,t.y0-lw*2)})}
+ var a=S.a;
+ if(opt.mid){if(a.facial_midline_x!=null){var fx=a.facial_midline_x*S.W/1000;g.strokeStyle='rgba(0,200,255,.95)';g.setLineDash([lw*4,lw*3]);g.beginPath();g.moveTo(fx,0);g.lineTo(fx,S.H);g.stroke();g.setLineDash([])}
+  if(a.dental_midline_x!=null&&opt.boxes){var dx=a.dental_midline_x*S.W/1000;g.strokeStyle='rgba(255,60,60,.95)';g.beginPath();g.moveTo(dx,D.gumC-4*D.mm);g.lineTo(dx,D.incC+4*D.mm);g.stroke()}}
+ if(opt.lip&&a.lower_lip_y_at_center!=null&&a.lower_lip_y_at_canines!=null){var yc=a.lower_lip_y_at_center*S.H/1000,ys=a.lower_lip_y_at_canines*S.H/1000;g.strokeStyle='rgba(120,255,120,.95)';g.beginPath();g.moveTo(D.mid-D.half,ys);g.quadraticCurveTo(D.mid,2*yc-ys,D.mid+D.half,ys);g.stroke()}
+ if(opt.design){g.setLineDash([]);D.list.forEach(function(t){toothPath(g,t);g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=lw*1.1;g.stroke()});
+  g.strokeStyle='rgba(255,170,60,.9)';g.setLineDash([lw*3,lw*2]);g.beginPath();for(var x=D.mid-D.half;x<=D.mid+D.half;x+=3){var y=D.inc(Math.abs(x-D.mid));if(x==D.mid-D.half)g.moveTo(x,y);else g.lineTo(x,y)}g.stroke();
+  g.beginPath();g.moveTo(D.mid-D.half,D.gumC);g.lineTo(D.mid+D.half,D.gumC);g.stroke();g.setLineDash([]);
+  g.fillStyle='#fff';g.strokeStyle='rgba(0,0,0,.6)';g.lineWidth=lw*1.5;g.font='600 '+Math.round(Math.max(10,D.mm*1.6))+'px system-ui,sans-serif';
+  D.list.forEach(function(t){if(t.type=='p')return;var x=(t.xm+t.xd)/2,y=t.bot+2.6*D.mm,s=(8.5*t.w/D.cwNow).toFixed(1);g.strokeText(s,x,y);g.fillText(s,x,y)})}}
+function poly(g,pts,close){g.beginPath();pts.forEach(function(p,i){var x=p[1]*S.W/1000,y=p[0]*S.H/1000;if(i)g.lineTo(x,y);else g.moveTo(x,y)});if(close)g.closePath()}
+function dsdLines(g,D){var a=S.a,lw=Math.max(1.5,S.W/420),mm=D.mm,ang=a._ipl||0,cs=Math.cos(ang),sn=Math.sin(ang),fs=Math.round(Math.max(11,mm*1.45));
+ g.save();g.fillStyle='rgba(0,0,0,.18)';g.fillRect(0,0,S.W,S.H);g.restore();
+ function line(x,y,dx,dy,col,dash,w){g.save();g.strokeStyle=col;g.lineWidth=w||lw;if(dash)g.setLineDash(dash);g.beginPath();g.moveTo(x-dx*S.W*2,y-dy*S.W*2);g.lineTo(x+dx*S.W*2,y+dy*S.W*2);g.stroke();g.restore()}
+ function tag(txt,x,y,col){g.save();g.font='700 '+fs+'px system-ui,sans-serif';var w=g.measureText(txt).width+fs*0.6;g.fillStyle='rgba(0,0,0,.6)';g.fillRect(x,y-fs*0.95,w,fs*1.3);g.fillStyle=col;g.fillText(txt,x+fs*0.3,y);g.restore()}
+ var cy=(D.gumC+D.incC)/2;
+ // 1. facial cross: midline perpendicular to the eye line, horizontal reference parallel to it
+ line(D.mid,cy,-sn,cs,'rgba(0,210,255,.95)',[lw*5,lw*3]);
+ line(D.mid,D.gumC-5*mm,cs,sn,'rgba(255,230,0,.9)',[lw*5,lw*3]);
+ // 2. commissure line
+ if(a._comm){var c1=a._comm[0],c2=a._comm[1];g.save();g.strokeStyle='rgba(255,90,200,.95)';g.lineWidth=lw;g.beginPath();g.moveTo(c1[1]*S.W/1000,c1[0]*S.H/1000);g.lineTo(c2[1]*S.W/1000,c2[0]*S.H/1000);g.stroke();g.restore()}
+ // 3. lip lines
+ if(a._upper){g.save();g.strokeStyle='rgba(255,150,150,.95)';g.lineWidth=lw;poly(g,a._upper);g.stroke();g.restore()}
+ if(a._lower){g.save();g.strokeStyle='rgba(120,255,120,.95)';g.lineWidth=lw;poly(g,a._lower);g.stroke();g.restore()}
+ else if(a.lower_lip_y_at_center!=null&&a.lower_lip_y_at_canines!=null){var yc=a.lower_lip_y_at_center*S.H/1000,ys=a.lower_lip_y_at_canines*S.H/1000;g.save();g.strokeStyle='rgba(120,255,120,.95)';g.lineWidth=lw;g.beginPath();g.moveTo(D.mid-D.half,ys);g.quadraticCurveTo(D.mid,2*yc-ys,D.mid+D.half,ys);g.stroke();g.restore()}
+ // 4. tooth outlines
+ D.list.forEach(function(t){toothPath(g,t);g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=lw*1.1;g.stroke()});
+ var Ls=D.list.slice().sort(function(p,q){return Math.min(p.xm,p.xd)-Math.min(q.xm,q.xd)});
+ // 5. gingival zenith line, contact-point line, incisal line (smile arc)
+ g.save();g.lineWidth=lw;g.strokeStyle='rgba(255,140,40,.95)';g.beginPath();Ls.forEach(function(t,i){var x=t.xm+(t.xd-t.xm)*0.58,y=t.top;if(i)g.lineTo(x,y);else g.moveTo(x,y)});g.stroke();
+ Ls.forEach(function(t){var x=t.xm+(t.xd-t.xm)*0.58;g.fillStyle='rgba(255,140,40,1)';g.beginPath();g.arc(x,t.top,lw*1.8,0,7);g.fill()});
+ g.strokeStyle='rgba(190,120,255,.95)';g.setLineDash([lw*2,lw*2]);g.beginPath();var first=true;
+ for(var i=0;i<Ls.length-1;i++){var p=Ls[i],q=Ls[i+1],x=Math.max(p.xm,p.xd),hc=D.hc,y=Math.min(p.bot,q.bot)-hc*(p.type=='c'&&q.type=='c'?0.25:(p.type=='l'||q.type=='l')&&(p.type=='c'||q.type=='c')?0.33:0.45);if(first){g.moveTo(x,y);first=false}else g.lineTo(x,y)}
+ g.stroke();g.setLineDash([lw*4,lw*2]);g.strokeStyle='rgba(255,215,120,.95)';g.beginPath();for(var x2=D.mid-D.half;x2<=D.mid+D.half;x2+=3){var y2=D.inc(Math.abs(x2-D.mid));if(x2==D.mid-D.half)g.moveTo(x2,y2);else g.lineTo(x2,y2)}g.stroke();g.restore();
+ // 6. proportions: W/H on centrals, width % on the others
+ g.save();g.textAlign='center';g.font='700 '+fs+'px system-ui,sans-serif';g.lineWidth=lw*1.6;g.strokeStyle='rgba(0,0,0,.7)';g.fillStyle='#fff';
+ D.list.forEach(function(t){var x=(t.xm+t.xd)/2,y=t.bot+fs*1.25,txt;
+  if(t.type=='c')txt=Math.round(t.w/D.hc*100)+'%';else if(t.type=='p')return;else{var prev=t.type=='l'?D.wc:D.wl;txt=Math.round(t.w/prev*100)+'%'}
+  g.strokeText(txt,x,y);g.fillText(txt,x,y)});g.restore();
+ // 7. 10 mm ruler
+ var rx=S.W*0.04,ry=S.H*0.94;g.save();g.strokeStyle='#fff';g.lineWidth=lw*1.4;g.beginPath();g.moveTo(rx,ry);g.lineTo(rx+10*mm,ry);for(var j=0;j<=10;j++){var tx=rx+j*mm,th=j%5?fs*0.25:fs*0.5;g.moveTo(tx,ry);g.lineTo(tx,ry-th)}g.stroke();g.restore();tag('10 mm',rx+10*mm+fs*0.4,ry,'#fff');
+ // legend
+ var lg=[['Face midline','rgba(0,210,255,1)'],[a._ipl!=null?'Eye-line reference':'Horizontal reference','rgba(255,230,0,1)'],['Gum zeniths','rgba(255,140,40,1)'],['Contact points','rgba(190,120,255,1)'],['Edge curve','rgba(255,215,120,1)'],['Lower lip','rgba(120,255,120,1)']];
+ if(a._upper)lg.push(['Upper lip','rgba(255,150,150,1)']);if(a._comm)lg.push(['Mouth corners','rgba(255,90,200,1)']);
+ lg.forEach(function(l,i){tag(l[0],S.W*0.02,S.H*0.05+i*fs*1.45,l[1])})}
+function cleanDesign(g,D){var lw=Math.max(1.4,S.W/600),mm=D.mm,Ls=D.list.slice().sort(function(p,q){return Math.min(p.xm,p.xd)-Math.min(q.xm,q.xd)});
+ function smooth(pts){g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length-1;i++){var mx=(pts[i][0]+pts[i+1][0])/2,my=(pts[i][1]+pts[i+1][1])/2;g.quadraticCurveTo(pts[i][0],pts[i][1],mx,my)}var l=pts[pts.length-1];g.lineTo(l[0],l[1])}
+ g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=lw*2;g.strokeStyle='rgba(255,255,255,.95)';g.lineWidth=lw;g.lineJoin='round';
+ // gingival curve through the zeniths and incisal curve, extended past the last teeth
+ var zp=Ls.map(function(t){return[t.xm+(t.xd-t.xm)*0.58,t.top]}),ext=D.half*0.12;
+ zp.unshift([zp[0][0]-ext,zp[0][1]+(zp[0][1]-zp[1][1])*0.6]);zp.push([zp[zp.length-1][0]+ext,zp[zp.length-1][1]+(zp[zp.length-1][1]-zp[zp.length-2][1])*0.6]);smooth(zp);g.stroke();
+ g.beginPath();for(var x=D.mid-D.half*1.12;x<=D.mid+D.half*1.12;x+=2){var y=D.inc(Math.min(Math.abs(x-D.mid),D.half*1.12));if(x<=D.mid-D.half*1.12+1)g.moveTo(x,y);else g.lineTo(x,y)}g.stroke();
+ D.list.forEach(function(t){toothPath(g,t);g.stroke()});g.restore();
+ // midline and incisal reference: fine gold dotted lines
+ g.save();g.strokeStyle='rgba(232,196,106,.95)';g.lineWidth=Math.max(1,lw*0.7);g.setLineDash([lw*1.2,lw*1.6]);
+ var a=S.a,ang=a._ipl||0;g.beginPath();g.moveTo(D.mid+Math.sin(ang)*S.H,-S.H*0+0);g.moveTo(D.mid-Math.sin(ang)*(D.incC),0);g.lineTo(D.mid+Math.sin(ang)*(S.H-D.incC),S.H);g.stroke();
+ g.beginPath();g.moveTo(0,D.incC-Math.tan(ang)*D.mid);g.lineTo(S.W,D.incC+Math.tan(ang)*(S.W-D.mid));g.stroke();g.restore()}
+// "Clinical photo" style: mimics a retracted photo with a black contrastor behind the upper teeth
+function clinical(c,D){var a=S.a,mm=D.mm,W=S.W,H=S.H,g=c.getContext('2d');
+ var m=document.createElement('canvas');m.width=W;m.height=H;var mg=m.getContext('2d');mg.filter='blur('+Math.max(1,mm*0.25)+'px)';mg.fillStyle='#fff';mouthPath(mg,D);mg.fill();
+ var md=mg.getImageData(0,0,W,H).data,im=g.getImageData(0,0,W,H),d=im.data,rs=0,gs=0,bs=0,n=0;
+ var lim=new Float32Array(W);for(var x=0;x<W;x++){var dx=Math.min(Math.abs(x-D.mid),D.half*1.15);lim[x]=D.inc(dx)+0.5*mm}
+ for(var y=0;y<H;y++)for(var x2=0;x2<W;x2++){var i=(y*W+x2)*4,mk=md[i+3]/255;if(mk<0.02)continue;
+  var r=d[i],gg=d[i+1],b=d[i+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),lum=(0.299*r+0.587*gg+0.114*b)/255,sat=mx?(mx-mn)/mx:0,red=(r-gg)/255;
+  var keep;
+  if(y>lim[x2])keep=0; // contrastor hides the lower arch
+  else{var tooth=clamp((0.2-red)/0.1,0,1)*clamp((lum-0.3)/0.15,0,1)*clamp((0.6-sat)/0.15,0,1),gum=clamp((red-0.12)/0.1,0,1)*clamp((lum-0.22)/0.12,0,1);keep=clamp(Math.max(tooth,gum)*1.4,0,1);
+   if(tooth>0.6){rs+=r;gs+=gg;bs+=b;n++}}
+  var k=1-mk*(1-keep);d[i]=r*k;d[i+1]=gg*k;d[i+2]=b*k}
+ // white balance on the teeth + gentle contrast, like a flash photo
+ var fr=1,fg=1,fb=1;if(n>50){var ar=rs/n,ag=gs/n,ab=bs/n,L=(ar+ag+ab)/3,tl=clamp(L*1.12,150,235);fr=clamp(tl*1.02/ar,0.85,1.35);fg=clamp(tl*0.99/ag,0.85,1.35);fb=clamp(tl*0.94/ab,0.85,1.35)}
+ for(var j=0;j<d.length;j+=4){d[j]=clamp((d[j]*fr-128)*1.08+128,0,255);d[j+1]=clamp((d[j+1]*fg-128)*1.08+128,0,255);d[j+2]=clamp((d[j+2]*fb-128)*1.08+128,0,255)}
+ g.putImageData(im,0,0);
+ // crop to the smile, 16:9
+ var p=a.mouth_polygon,xs=[],ys=[];if(p&&p.length){p.forEach(function(q){xs.push(q[1]*W/1000);ys.push(q[0]*H/1000)})}else{for(var k2 in D.T){var t=D.T[k2];xs.push(t.x0,t.x1);ys.push(t.y0,t.y1)}}
+ var x0=Math.min.apply(0,xs)-2*mm,x1=Math.max.apply(0,xs)+2*mm,y0=Math.min.apply(0,ys)-5*mm,y1=Math.max.apply(0,ys)+3*mm,cw=x1-x0,ch=Math.max(y1-y0,cw*9/16),cy=(y0+y1)/2;
+ x0=clamp(x0,0,W-1);cw=Math.min(cw,W-x0);var sy=clamp(cy-ch/2,0,H-1);ch=Math.min(ch,H-sy);
+ var o=document.createElement('canvas'),k3=Math.min(3,1400/cw);o.width=Math.round(cw*k3);o.height=Math.round(ch*k3);var og=o.getContext('2d');og.imageSmoothingQuality='high';og.drawImage(c,x0,sy,cw,ch,0,0,o.width,o.height);o._t=[x0,sy,k3];return o}
+function render(view){var k=view+'|'+S.ratio+'|'+S.shade+'|'+S.outline+'|'+S.brace+'|'+S.form+'|'+S.wh+'|'+(S.face&&FULL?1:0)+'|'+(S.clin?1:0)+'|'+S.eyes+'|'+S.bg+S.arch+(FULL&&FULL.mask?'m':'');if(S.cache[k])return S.cache[k];
+ if(view=='ai'){if(!AIC||!S.face||!FULL||!FULL.crop)return S.after;var ua=faceWrap(AIC).toDataURL('image/jpeg',0.92);S.cache[k]=ua;return ua}
+ var D=design(),cg=baseCanvas(),c=cg[0],g=cg[1];
+ if(!D)return beforeURL;
+ if(S.clin&&(view=='design'||view=='dsd'||view=='analysis')){var o=clinical(c,D),og=o.getContext('2d'),t=o._t;og.setTransform(t[2],0,0,t[2],-t[0]*t[2],-t[1]*t[2]);og.lineWidth=1;
+  if(view=='design')cleanDesign(og,D);else if(view=='dsd')dsdLines(og,D);else lines(og,D,{boxes:1,mid:1,lip:1});var u0=o.toDataURL('image/jpeg',0.9);S.cache[k]=u0;return u0}
+ if(view=='analysis')lines(g,D,{boxes:1,mid:1,lip:1});
+ else if(view=='white')whiten(c,g,D);
+ else if(view=='design'){cleanDesign(g,D)}
+ else if(view=='dsd'){dsdLines(g,D)}
+ else if(view=='mockup'){whiten(c,g,D);mockup(c,g,D);if(S.outline)lines(g,D,{mid:1})}
+ else if(view=='braces'){braces(c,g,D,S.brace)}
+ var u=(S.clin?clinical(c,D):faceWrap(c)).toDataURL('image/jpeg',0.9);S.cache[k]=u;return u}
+function faceWrap(c){if(!S.face||!FULL||!FULL.crop)return c;var I=FULL.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height,k=Math.min(1,1400/Math.max(W,H)),cr=FULL.crop;
+ var o=document.createElement('canvas');o.width=Math.round(W*k);o.height=Math.round(H*k);var og=o.getContext('2d');og.imageSmoothingQuality='high';og.drawImage(I,0,0,o.width,o.height);og.drawImage(c,0,0,c.width,c.height,cr[0]*k,cr[1]*k,cr[2]*k,cr[3]*k);o=bgWrap(o);maskEyes(o,k);return o}
+function maskEyes(o,k){var e=FULL&&FULL.eyes;if(S.eyes=='off'||!e)return;var g=o.getContext('2d'),x1=e[0]*k,y1=e[1]*k,x2=e[2]*k,y2=e[3]*k,d=Math.hypot(x2-x1,y2-y1),a=Math.atan2(y2-y1,x2-x1),cx=(x1+x2)/2,cy=(y1+y2)/2,w=d*1.55,h=d*0.42;
+ g.save();g.translate(cx,cy);g.rotate(a);g.beginPath();rrect(g,-w/2,-h*0.55,w,h,h*0.18);
+ if(S.eyes=='bar'){g.fillStyle='#111';g.fill()}
+ else{g.clip();g.rotate(-a);g.translate(-cx,-cy);var t=document.createElement('canvas');t.width=o.width;t.height=o.height;t.getContext('2d').drawImage(o,0,0);g.filter='blur('+Math.max(8,d*0.12)+'px)';g.drawImage(t,0,0);g.filter='none';g.drawImage(t,0,0,0,0);var t2=g.globalAlpha;g.globalAlpha=0.5;g.filter='blur('+Math.max(12,d*0.2)+'px)';g.drawImage(t,0,0);g.filter='none';g.globalAlpha=t2}
+ g.restore()}
+function beforeShown(){if(S.clin){var D0=design();if(D0){if(!S.cache.cb)S.cache.cb=clinical(baseCanvas()[0],D0).toDataURL('image/jpeg',0.9);return S.cache.cb}}if(!S.face||!FULL)return beforeURL;if(!FACEB||FACEB.k!=S.eyes+S.bg)FACEB={k:S.eyes+S.bg,u:faceWrap(baseCanvas()[0]).toDataURL('image/jpeg',0.9)};return FACEB.u}
+
+/* ---------- reel maker: animated before/after video (9:16) ---------- */
+function loadImg(u){return new Promise(function(res,rej){var i=new Image();i.onload=function(){res(i)};i.onerror=rej;i.src=u})}
+function reelMime(){var c=['video/mp4;codecs=avc1.42E01E','video/mp4','video/webm;codecs=vp9','video/webm'];for(var i=0;i<c.length;i++)if(window.MediaRecorder&&MediaRecorder.isTypeSupported(c[i]))return c[i];return ''}
+function makeReel(bu,au,tpl,label,cb,prog,lu){Promise.all([loadImg(bu),loadImg(au),lu?loadImg(lu):null]).then(function(im){var B=im[0],A=im[1],LY=im[2];
+ var W=1080,H=1920,cv=document.createElement('canvas');cv.width=W;cv.height=H;var g=cv.getContext('2d');
+ var px=60,py=330,pw=W-120,ph=1240,k=Math.min(pw/B.width,ph/B.height),iw=B.width*k,ih=B.height*k,ix=px+(pw-iw)/2,iy=py+(ph-ih)/2;
+ var DUR=tpl=='split'?6000:tpl=='fly'?7000:9000;
+ function txt(t,x,y,sz,col,al,wt){g.font=(wt||'700')+' '+sz+'px system-ui,sans-serif';g.fillStyle=col;g.textAlign=al||'center';g.fillText(t,x,y)}
+ function frame(t){var u=t/DUR;g.fillStyle='#0b2236';g.fillRect(0,0,W,H);
+  txt('SMILE DESIGN',W/2,150,64,'#ffffff');txt(label,W/2,225,40,'#d8c3a5','center','500');
+  g.save();g.beginPath();g.rect(ix,iy,iw,ih);g.clip();
+  if(tpl=='toggle'){var on=(u>0.22&&u<0.55)||u>0.78,sw=Math.min(1,Math.max(0,u<0.55?(u-0.22)/0.04:(u-0.78)/0.04));if(u>=0.55&&u<0.78)sw=Math.max(0,1-(u-0.55)/0.04);
+   g.drawImage(B,ix,iy,iw,ih);g.globalAlpha=sw;g.drawImage(A,ix,iy,iw,ih);g.globalAlpha=1;
+   if(sw>0&&sw<1){g.fillStyle='rgba(255,255,255,'+(0.5*(1-Math.abs(sw*2-1)))+')';g.fillRect(ix,iy,iw,ih)}
+   g.restore();var tx=ix+50,ty=iy+50,tw=190,th=96;g.save();g.shadowColor='rgba(255,255,255,'+(0.4+0.5*sw)+')';g.shadowBlur=30;rrect(g,tx,ty,tw,th,th/2);g.fillStyle=sw>0.5?'#ffffff':'rgba(255,255,255,.35)';g.fill();g.restore();
+   g.beginPath();g.arc(tx+th/2+(tw-th)*sw,ty+th/2,th/2-8,0,7);g.fillStyle=sw>0.5?'#e9eef2':'#ffffff';g.fill();
+   txt(sw>0.5?'AFTER':'BEFORE',ix+iw-40,iy+ih-40,48,'#ffffff','right')}
+  else if(tpl=='fly'&&LY){var e0=clamp((u-0.12)/0.33,0,1),e=1-Math.pow(1-e0,3),sc=1+0.35*(1-e),cx=ix+iw/2,cy=iy+ih*0.45;
+   g.drawImage(B,ix,iy,iw,ih);g.save();g.globalAlpha=Math.min(1,e0*2);g.translate(cx,cy-(1-e)*ih*0.3);g.scale(sc,sc);g.translate(-cx,-cy);g.drawImage(LY,ix,iy,iw,ih);g.restore();g.restore();
+   if(e0>=1){var fl=clamp(1-(u-0.45)/0.06,0,1);if(fl>0){g.fillStyle='rgba(255,255,255,'+(fl*0.35)+')';g.fillRect(ix,iy,iw,ih)}txt(label,ix+iw-40,iy+ih-40,44,'#ffffff','right')}}
+  else if(tpl=='swipe'){var p=u<0.15?0:u<0.5?(u-0.15)/0.35:u<0.62?1:u<0.85?1-(u-0.62)/0.23*0.5:0.5,ease=p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2,sx=ix+iw*ease;
+   g.drawImage(B,ix,iy,iw,ih);g.beginPath();g.rect(ix,iy,sx-ix,ih);g.save();g.clip();g.drawImage(A,ix,iy,iw,ih);g.restore();g.restore();
+   g.fillStyle='#fff';g.fillRect(sx-3,iy,6,ih);g.beginPath();g.arc(sx,iy+ih/2,56,0,7);g.lineWidth=8;g.strokeStyle='#fff';g.stroke();txt('◀ ▶',sx,iy+ih/2+14,36,'#fff');
+   txt('AFTER',ix+40,iy+ih-40,44,'#ffffff','left');txt('BEFORE',ix+iw-40,iy+ih-40,44,'#ffffff','right')}
+  else{g.restore();var hh=(ph-30)/2,k2=Math.min(pw/B.width,hh/B.height),w2=B.width*k2,h2=B.height*k2,x2=px+(pw-w2)/2,fa=Math.min(1,u*3),fb=Math.min(1,Math.max(0,(u-0.25)*3));
+   g.globalAlpha=fa;g.drawImage(B,x2,py,w2,h2);g.globalAlpha=fb;g.drawImage(A,x2,py+hh+30,w2,h2);g.globalAlpha=1;txt('BEFORE',x2+30,py+70,44,'#fff','left');if(fb>0)txt('AFTER',x2+30,py+hh+100,44,'#fff','left')}
+  g.restore&&0;
+  txt(CLINIC,W/2,H-250,46,'#ffffff');txt(PHONE+'  ·  Jogeshwari East, Mumbai',W/2,H-185,34,'#d8c3a5','center','500');
+  txt('Computer simulation for illustration. Results vary.',W/2,H-110,28,'rgba(255,255,255,.6)','center','400')}
+ if(prog=='snap'){cb([0.1,0.3,0.5,0.9].map(function(f){frame(f*DUR);return cv.toDataURL('image/jpeg',0.7)}));return}
+ var mime=reelMime();if(!mime||!cv.captureStream){cb(null,'Video recording is not supported in this browser. Please use Chrome.');return}
+ var st=cv.captureStream(30),rec=new MediaRecorder(st,{mimeType:mime,videoBitsPerSecond:6000000}),ch=[];rec.ondataavailable=function(e){if(e.data&&e.data.size)ch.push(e.data)};
+ rec.onstop=function(){cb(new Blob(ch,{type:mime.split(';')[0]}))};
+ frame(0);rec.start(250);var t0=performance.now();
+ (function loop(){var t=performance.now()-t0;frame(Math.min(t,DUR));prog&&prog(Math.min(1,t/DUR));if(t<DUR+150)requestAnimationFrame(loop);else rec.stop()})()}).catch(function(e){cb(null,'Could not prepare the images ('+e+').')})}
+function bracesLayer(){var D=design();if(!D||!FULL||!FULL.crop)return null;var c=document.createElement('canvas');c.width=S.W;c.height=S.H;var g=c.getContext('2d');braces(c,g,D,S.brace);
+ var I=FULL.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height,k=Math.min(1,1400/Math.max(W,H)),cr=FULL.crop,o=document.createElement('canvas');o.width=Math.round(W*k);o.height=Math.round(H*k);o.getContext('2d').drawImage(c,0,0,c.width,c.height,cr[0]*k,cr[1]*k,cr[2]*k,cr[3]*k);return o.toDataURL('image/png')}
+function reelUI(){var box=document.getElementById('reel');if(!box)return;if(!isStaff()){box.style.display='none';box.innerHTML='';return}box.style.display='';
+ box.innerHTML='<h3>Make a before/after reel</h3><p class="muted">A 9:16 video for Instagram Reels, WhatsApp status or Google. Uses the view selected above.</p><div class="ctl"><label>Style<select id="rtp"><option value="toggle">Toggle switch</option><option value="swipe">Swipe reveal</option><option value="split">Before above, after below</option><option value="fly">Braces fly-in (metal / self-ligating)</option></select></label><button type="button" class="btn" id="rgo">Create video</button></div><p class="muted" id="rmsg"></p><div id="rout"></div>';
+ document.getElementById('rgo').addEventListener('click',function(){var b=this,msg=document.getElementById('rmsg'),out=document.getElementById('rout'),v=S.view=='analysis'||S.view=='dsd'?'mockup':S.view;
+  var au=render(v),bu=beforeShown(),lbl=v=='braces'?BR[S.brace].n+' braces preview':v=='white'?'Teeth whitening preview':v=='design'?'Smile design plan':'Smile makeover preview';
+  b.disabled=true;out.innerHTML='';msg.className='muted';msg.textContent='Recording the video… 0%';
+  var tp=document.getElementById('rtp').value,lu=null;if(tp=='fly'){if(!(S.brace=='metal'||S.brace=='self')||!S.face||S.clin||!FULL){b.disabled=false;msg.className='muted err';msg.textContent='For the fly-in reel: open Braces preview, pick Metal or Self-ligating, tick Show full face and untick Clinical style.';return}lu=bracesLayer();bu=beforeShown();lbl=BR[S.brace].n+' braces'}
+  makeReel(bu,au,tp,lbl,function(blob,err){b.disabled=false;if(!blob){msg.className='muted err';msg.textContent=err;return}
+   var ext=blob.type.indexOf('mp4')>=0?'mp4':'webm',url=URL.createObjectURL(blob),name='smile-reel.'+ext;msg.textContent='Video ready ('+ext.toUpperCase()+').'+(ext=='webm'?' If Instagram does not accept it, send it to yourself on WhatsApp first, or update Chrome.':'');
+   out.innerHTML='<video src="'+url+'" controls playsinline loop style="width:100%;max-width:320px;display:block;margin:8px 0"></video><div class="cta"><a class="btn" href="'+url+'" download="'+name+'">Download video</a> <button type="button" class="btn o2" id="rsh">Share</button></div><p class="muted">Only post a patient’s face with their written consent.</p>';
+   var sh=document.getElementById('rsh'),f=new File([blob],name,{type:blob.type});if(!(navigator.canShare&&navigator.canShare({files:[f]})))sh.style.display='none';
+   sh.addEventListener('click',function(){navigator.share({files:[f],title:'Smile design'}).catch(function(){})})},function(p){msg.textContent='Recording the video… '+Math.round(p*100)+'%'},lu)})}
+/* ---------- studio background: person segmentation (MediaPipe selfie segmenter, runs on the phone) ---------- */
+var SEGM='https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_segmenter/float16/latest/selfie_segmenter.tflite',SEG=null;
+function segmentFull(){if(!FULL||FULL.mask||FULL.segBusy)return;FULL.segBusy=true;var F=FULL;
+ (SEG?Promise.resolve(SEG):import(MPV+'/vision_bundle.mjs').then(function(m){return m.FilesetResolver.forVisionTasks(MPV+'/wasm').then(function(fs){return m.ImageSegmenter.createFromOptions(fs,{baseOptions:{modelAssetPath:SEGM,delegate:'CPU'},runningMode:'IMAGE',outputConfidenceMasks:true,outputCategoryMask:false})})}).then(function(s){SEG=s;return s}))
+ .then(function(s){var I=F.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height,k=Math.min(1,1024/Math.max(W,H)),c=document.createElement('canvas');c.width=Math.round(W*k);c.height=Math.round(H*k);c.getContext('2d').drawImage(I,0,0,c.width,c.height);
+  var r=s.segment(c),cm=r.confidenceMasks&&r.confidenceMasks[r.confidenceMasks.length-1];if(!cm)throw 0;var a=cm.getAsFloat32Array(),mw=cm.width,mh=cm.height;
+  var mc=document.createElement('canvas');mc.width=mw;mc.height=mh;var mg=mc.getContext('2d'),id=mg.createImageData(mw,mh);
+  for(var i=0;i<a.length;i++){var v=a[i];v=clamp((v-0.45)/0.35,0,1);id.data[i*4]=255;id.data[i*4+1]=255;id.data[i*4+2]=255;id.data[i*4+3]=v*255}
+  mg.putImageData(id,0,0);r.close&&r.close();if(FULL!==F)return;F.mask=mc;FACEB=null;S.cache={};paint()})
+ .catch(function(){F.segFail=true})}
+function bgWrap(o){if(S.bg=='photo'||!FULL||!FULL.mask)return o;var W=o.width,H=o.height,n=document.createElement('canvas');n.width=W;n.height=H;var g=n.getContext('2d');
+ var col={black:['#1a1a1a','#000'],grey:['#5a5d60','#2c2e30'],white:['#ffffff','#e4e4e4']}[S.bg]||['#111','#000'],rg=g.createRadialGradient(W/2,H*0.42,W*0.1,W/2,H*0.5,Math.max(W,H)*0.75);rg.addColorStop(0,col[0]);rg.addColorStop(1,col[1]);g.fillStyle=rg;g.fillRect(0,0,W,H);
+ var p=document.createElement('canvas');p.width=W;p.height=H;var pg=p.getContext('2d');pg.drawImage(o,0,0);pg.globalCompositeOperation='destination-in';pg.filter='blur('+Math.max(2,W/160)+'px)';pg.drawImage(FULL.mask,0,0,W,H);
+ g.drawImage(p,0,0);
+ // studio fall-off: an oval around the face stays clear; hair, ears and shoulders melt into the background
+ var I=FULL.img,iw=I.naturalWidth||I.width,k=W/iw,cr=FULL.crop,e=FULL.eyes,bc=S.bg=='white'?'255,255,255':S.bg=='grey'?'44,46,48':'0,0,0';
+ var mx=(cr[0]+cr[2]/2)*k,my=(cr[1]+cr[3]/2)*k,d=e?Math.hypot(e[2]-e[0],e[3]-e[1])*k:cr[2]*k*0.9,ex=e?(e[0]+e[2])/2*k:mx,ey=e?(e[1]+e[3])/2*k:my-d;
+ var cx=(ex+mx)/2,cy=ey+(my-ey)*0.32,rx=d*0.92,ry=d*1.5;
+ g.save();g.translate(cx,cy);g.scale(1,ry/rx);var vg=g.createRadialGradient(0,0,rx*0.78,0,0,rx*1.18);vg.addColorStop(0,'rgba('+bc+',0)');vg.addColorStop(0.6,'rgba('+bc+',0.75)');vg.addColorStop(1,'rgba('+bc+',1)');
+ g.fillStyle=vg;g.fillRect(-W*2,-H*2,W*4,H*4);g.restore();return n}
+/* ---------- 3D bracket sprites ---------- */
+var SPR={};
+function bracketSprite(kind){if(SPR[kind])return SPR[kind];var W=220,H=200,c=document.createElement('canvas');c.width=W;c.height=H;var g=c.getContext('2d');
+ function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+ function steel(x0,y0,x1,y1,stops){var gr=g.createLinearGradient(x0,y0,x1,y1);stops.forEach(function(s){gr.addColorStop(s[0],s[1])});return gr}
+ // base pad (mesh) with soft shadow
+ g.save();g.shadowColor='rgba(0,0,0,.55)';g.shadowBlur=14;g.shadowOffsetY=6;rr(18,22,184,156,26);g.fillStyle=steel(0,22,0,178,[[0,'#7d858c'],[0.5,'#4d555c'],[1,'#2b3136']]);g.fill();g.restore();
+ // body
+ rr(46,40,128,120,14);g.fillStyle=steel(46,40,174,160,[[0,'#cfd5da'],[0.35,'#8e979f'],[0.7,'#59626a'],[1,'#3a4147']]);g.fill();
+ // vertical channel
+ g.fillStyle=steel(100,0,120,0,[[0,'#2a3035'],[0.5,'#11151a'],[1,'#2a3035']]);g.fillRect(101,30,18,140);
+ // four tie wings: bright bevelled tops
+ [[30,20],[126,20],[30,118],[126,118]].forEach(function(q,i){var x=q[0],y=q[1],w=64,h=62;g.save();g.shadowColor='rgba(0,0,0,.45)';g.shadowBlur=6;g.shadowOffsetY=3;rr(x,y,w,h,12);
+  g.fillStyle=steel(x,y,x,y+h,i<2?[[0,'#ffffff'],[0.22,'#e3e8ec'],[0.55,'#9aa3ab'],[1,'#4f575e']]:[[0,'#e9edf0'],[0.3,'#b3bbc2'],[0.7,'#6c757c'],[1,'#3a4147']]);g.fill();g.restore();
+  rr(x,y,w,h,12);g.lineWidth=2.5;g.strokeStyle='rgba(20,24,28,.85)';g.stroke();
+  g.fillStyle='rgba(255,255,255,.9)';rr(x+10,y+7,w*0.45,8,4);g.fill();
+  g.fillStyle='rgba(255,255,255,.35)';rr(x+w-18,y+12,7,h-26,3);g.fill()});
+ // archwire slot
+ g.fillStyle=steel(0,88,0,112,[[0,'#0d1013'],[0.5,'#23292e'],[1,'#0d1013']]);g.fillRect(16,90,188,20);
+ if(kind=='self'){rr(40,58,140,84,14);g.fillStyle=steel(0,58,0,142,[[0,'#ffffff'],[0.3,'#d5dbe0'],[0.65,'#8f98a0'],[1,'#4a5259']]);g.fill();g.lineWidth=3;g.strokeStyle='rgba(15,18,22,.9)';g.stroke();g.fillStyle='rgba(255,255,255,.95)';rr(52,66,80,9,4);g.fill();g.fillStyle='rgba(30,35,40,.7)';g.fillRect(44,96,132,4)}
+ SPR[kind]=c;return c}
+/* ---------- braces preview ---------- */
+var BR={metal:{n:'Metal',t:'Most visible. Strong and reliable for every case. Lowest cost.'},
+ ceramic:{n:'Ceramic',t:'Tooth-coloured brackets, much less noticeable. Costs more; ties can stain.'},
+ self:{n:'Self-ligating',t:'Built-in clip instead of elastic ties. Easier cleaning, shorter visits. Costs more.'},
+ lingual:{n:'Lingual',t:'Fixed behind the teeth, so nothing shows from the front. Harder to clean, highest cost.'},
+ aligner:{n:'Aligners',t:'Clear removable trays, almost invisible. Wear 20–22 hours a day. Best for mild to moderate cases.'}};
+function toothColour(g,t){var x=Math.round((t.x0+t.x1)/2),y=Math.round(t.y0+(t.y1-t.y0)*0.55);var p=g.getImageData(clamp(x-2,0,S.W-5),clamp(y-2,0,S.H-5),5,5).data,r=0,gg=0,b=0,n=0;for(var i=0;i<p.length;i+=4){r+=p[i];gg+=p[i+1];b+=p[i+2];n++}return[r/n,gg/n,b/n]}
+function rrect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.lineTo(x+w-r,y);g.quadraticCurveTo(x+w,y,x+w,y+r);g.lineTo(x+w,y+h-r);g.quadraticCurveTo(x+w,y+h,x+w-r,y+h);g.lineTo(x+r,y+h);g.quadraticCurveTo(x,y+h,x,y+h-r);g.lineTo(x,y+r);g.quadraticCurveTo(x,y,x+r,y);g.closePath()}
+function braces(c,g,D,kind){var T=D.T,mm=D.mm,ids=ORDER.filter(function(id){return T[id]});if(ids.length<3)return;
+ g.save();mouthPath(g,D);g.clip();
+ if(kind=='lingual'){g.restore();return}
+ if(kind=='aligner'){
+  var pad=0.5*mm,sid=ids.slice().sort(function(a,b){return T[a].x0-T[b].x0});
+  function tray(){g.beginPath();var f=T[sid[0]];g.moveTo(f.x0-pad*0.6,f.y0+pad);sid.forEach(function(id){var t=T[id],w=t.x1-t.x0;g.lineTo(t.x0+w*0.1,t.y0-pad*0.8);g.quadraticCurveTo(t.x0+w*0.5,t.y0-pad*1.6,t.x1-w*0.1,t.y0-pad*0.8)});var l2=T[sid[sid.length-1]];g.lineTo(l2.x1+pad*0.6,l2.y0+pad);
+   for(var i=sid.length-1;i>=0;i--){var t=T[sid[i]],w=t.x1-t.x0,r=Math.min(w*0.3,(t.y1-t.y0)*0.3),xa=i==sid.length-1?t.x1+pad*0.6:t.x1,xb=i==0?t.x0-pad*0.6:t.x0,yb=t.y1+pad;
+    g.lineTo(xa,yb-r);g.quadraticCurveTo(xa,yb,xa-r,yb);g.lineTo(xb+r,yb);g.quadraticCurveTo(xb,yb,xb,yb-r)}
+   g.closePath()}
+  var y0=Math.min.apply(0,ids.map(function(id){return T[id].y0})),y1=Math.max.apply(0,ids.map(function(id){return T[id].y1}));
+  g.save();tray();g.clip();
+  var lg=g.createLinearGradient(0,y0-pad,0,y1+pad);lg.addColorStop(0,'rgba(255,255,255,.45)');lg.addColorStop(0.3,'rgba(235,245,255,.2)');lg.addColorStop(0.75,'rgba(230,242,255,.22)');lg.addColorStop(1,'rgba(255,255,255,.55)');g.fillStyle=lg;g.fillRect(0,0,S.W,S.H);
+  // glossy reflection band across the arch, and a shine on each tooth
+  g.save();g.filter='blur('+Math.max(1,mm*0.35)+'px)';g.strokeStyle='rgba(255,255,255,.65)';g.lineWidth=mm*0.7;g.beginPath();sid.forEach(function(id,i){var t=T[id],x=(t.x0+t.x1)/2,y=t.y0+(t.y1-t.y0)*0.32;if(i)g.lineTo(x,y);else g.moveTo(x,y)});g.stroke();g.restore();
+  sid.forEach(function(id){var t=T[id],w=t.x1-t.x0,h=t.y1-t.y0,hl=g.createLinearGradient(t.x0,0,t.x1,0);hl.addColorStop(0.15,'rgba(255,255,255,0)');hl.addColorStop(0.27,'rgba(255,255,255,.38)');hl.addColorStop(0.36,'rgba(255,255,255,0)');g.fillStyle=hl;g.fillRect(t.x0,t.y0+h*0.15,w,h*0.6);
+   g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=Math.max(1,mm*0.15);g.beginPath();g.moveTo(t.x1,t.y0);g.lineTo(t.x1,t.y1-h*0.2);g.stroke()});
+  g.restore();
+  g.save();g.shadowColor='rgba(0,0,0,.4)';g.shadowBlur=mm*0.4;tray();g.lineWidth=Math.max(1.4,mm*0.25);g.strokeStyle='rgba(255,255,255,.92)';g.stroke();g.restore();
+  // attachments (tooth-coloured bumps)
+  ['UR3','UL3','UR4','UL4','UR2','UL2'].forEach(function(id){var t=T[id];if(!t)return;var col=toothColour(g,t),w=Math.min((t.x1-t.x0)*0.5,3*mm),h=w*0.6,x=(t.x0+t.x1)/2-w/2,y=t.y0+(t.y1-t.y0)*0.45;
+   g.save();g.shadowColor='rgba(60,40,30,.45)';g.shadowBlur=mm*0.35;g.shadowOffsetY=mm*0.12;rrect(g,x,y,w,h,h*0.35);var ag=g.createLinearGradient(0,y,0,y+h);ag.addColorStop(0,rgb(col,1.15,1));ag.addColorStop(1,rgb(col,0.92,1));g.fillStyle=ag;g.fill();g.restore();
+   g.fillStyle='rgba(255,255,255,.7)';g.fillRect(x+w*0.15,y+h*0.15,w*0.5,h*0.18)});
+  g.restore();return}
+ function arch(ids,LOW){if(ids.length<3)return;
+ var pts=ids.map(function(id){var t=T[id],w=t.x1-t.x0,h=t.y1-t.y0,bw=clamp(w*0.78,3.4*mm,(id[2]=='3'?5.2:4.8)*mm),bh=bw*0.9;bw=Math.min(bw,w*0.9);if(LOW){bw*=0.85;bh*=0.85}return{id:id,t:t,cx:(t.x0+t.x1)/2,cy:LOW?t.y0+h*0.45:(t.y0+t.y1)/2,bw:bw,bh:bh}});
+ // smooth the bracket line (brackets sit along an even arch, like a real bonding)
+
+ var MET=kind!='ceramic';
+ function wire(){var ww=Math.max(1.6,0.5*mm);g.save();g.lineCap='round';g.lineJoin='round';
+  // wire passes exactly through every bracket slot (smooth Catmull-Rom curve)
+  var f0=pts[0],fl=pts[pts.length-1],W=[{cx:f0.cx-f0.bw*1.3,cy:f0.cy+(pts.length>1?(f0.cy-pts[1].cy)*0.5:0)}].concat(pts,[{cx:fl.cx+fl.bw*1.3,cy:fl.cy+(pts.length>1?(fl.cy-pts[pts.length-2].cy)*0.5:0)}]);
+  g.beginPath();g.moveTo(W[0].cx,W[0].cy);for(var i=0;i<W.length-1;i++){var p0=W[Math.max(0,i-1)],p1=W[i],p2=W[i+1],p3=W[Math.min(W.length-1,i+2)];g.bezierCurveTo(p1.cx+(p2.cx-p0.cx)/6,p1.cy+(p2.cy-p0.cy)/6,p2.cx-(p3.cx-p1.cx)/6,p2.cy-(p3.cy-p1.cy)/6,p2.cx,p2.cy)}
+  g.shadowColor='rgba(0,0,0,.5)';g.shadowBlur=mm*0.3;g.shadowOffsetY=mm*0.15;g.strokeStyle='#2c3135';g.lineWidth=ww;g.stroke();g.shadowColor='transparent';
+  g.strokeStyle='#8a9298';g.lineWidth=ww*0.6;g.stroke();g.translate(0,-ww*0.16);g.strokeStyle='rgba(235,240,243,.85)';g.lineWidth=ww*0.18;g.stroke();g.restore()}
+ function bracket(p){var x=p.cx-p.bw/2,y=p.cy-p.bh/2,w=p.bw,h=p.bh,col=MET?null:toothColour(g,p.t);
+  // shadow + base pad
+  g.save();g.shadowColor='rgba(40,25,20,.5)';g.shadowBlur=mm*0.5;g.shadowOffsetY=mm*0.2;rrect(g,x,y,w,h,h*0.18);
+  var bg=g.createLinearGradient(x,y,x+w,y+h);if(MET){bg.addColorStop(0,'#8e969d');bg.addColorStop(0.45,'#4a5157');bg.addColorStop(1,'#25292d')}else{bg.addColorStop(0,rgb(col,1.1,1));bg.addColorStop(1,rgb(col,0.88,1))}g.fillStyle=bg;g.fill();g.restore();
+  // four tie wings
+  var ww=w*0.36,wh=h*0.36,cs=[[x+w*0.06,y+h*0.05],[x+w*0.58,y+h*0.05],[x+w*0.06,y+h*0.59],[x+w*0.58,y+h*0.59]];
+  cs.forEach(function(q){rrect(g,q[0],q[1],ww,wh,wh*0.3);var wg=g.createLinearGradient(q[0],q[1],q[0],q[1]+wh);
+   if(MET){wg.addColorStop(0,'#c9cfd4');wg.addColorStop(0.25,'#8b939a');wg.addColorStop(0.7,'#555c62');wg.addColorStop(1,'#2f3438')}else{wg.addColorStop(0,'rgba(255,255,255,.95)');wg.addColorStop(1,rgb(col,0.95,1))}
+   g.fillStyle=wg;g.fill();g.lineWidth=Math.max(0.8,mm*0.07);g.strokeStyle=MET?'rgba(15,18,20,.9)':'rgba(150,140,130,.6)';g.stroke();
+   g.fillStyle='rgba(255,255,255,'+(MET?0.95:0.7)+')';g.fillRect(q[0]+ww*0.18,q[1]+wh*0.14,ww*0.28,wh*0.12)});
+  // slot
+  g.fillStyle=MET?'rgba(12,14,16,.92)':'rgba(120,110,100,.5)';g.fillRect(x+w*0.02,p.cy-h*0.07,w*0.96,h*0.14);if(MET){g.fillStyle='rgba(12,14,16,.75)';g.fillRect(p.cx-w*0.05,y+h*0.05,w*0.1,h*0.9)}}
+ if(kind=='metal'||kind=='self'){var spr=bracketSprite(kind);
+  pts.forEach(function(p,i){var d=Math.abs(p.cx-D.mid)/Math.max(1,D.half),pf=clamp(1-0.35*d*d,0.65,1),sl=0;if(i>0&&i<pts.length-1)sl=Math.atan2(pts[i+1].cy-pts[i-1].cy,pts[i+1].cx-pts[i-1].cx);
+   var w=p.bw*1.15*pf,h=p.bh*1.15;g.save();g.translate(p.cx,p.cy);g.rotate(sl*0.8);g.drawImage(spr,-w/2,-h/2,w,h);g.restore()});
+  wire();
+  if(kind=='metal')pts.forEach(function(p){var d=Math.abs(p.cx-D.mid)/Math.max(1,D.half),pf=clamp(1-0.35*d*d,0.65,1),w=p.bw*1.15*pf,h=p.bh*1.15;g.save();g.beginPath();g.ellipse(p.cx,p.cy,w*0.36,h*0.34,0,0,Math.PI*2);g.lineWidth=Math.max(0.8,h*0.07);g.strokeStyle='rgba(45,50,56,.75)';g.stroke();g.restore()});
+  return}
+ pts.forEach(bracket);wire();
+ pts.forEach(function(p){var x=p.cx-p.bw/2,y=p.cy-p.bh/2,w=p.bw,h=p.bh;
+  if(kind=='metal'){g.save();g.beginPath();g.ellipse(p.cx,p.cy,w*0.4,h*0.4,0,0,Math.PI*2);g.lineWidth=Math.max(1.4,h*0.17);g.strokeStyle='rgba(70,76,82,.95)';g.stroke();g.lineWidth=Math.max(0.6,h*0.05);g.strokeStyle='rgba(200,206,210,.6)';g.stroke();g.restore()}
+  else if(kind=='ceramic'){g.save();g.beginPath();g.ellipse(p.cx,p.cy,w*0.4,h*0.4,0,0,Math.PI*2);g.lineWidth=Math.max(1,h*0.15);g.strokeStyle='rgba(248,246,240,.85)';g.stroke();g.restore()}
+  else if(kind=='self'){g.save();rrect(g,x+w*0.12,y+h*0.2,w*0.76,h*0.6,h*0.12);var dg=g.createLinearGradient(0,y,0,y+h);dg.addColorStop(0,'#c4cace');dg.addColorStop(0.4,'#7c848b');dg.addColorStop(1,'#33393e');g.fillStyle=dg;g.fill();g.strokeStyle='rgba(12,14,16,.85)';g.lineWidth=Math.max(0.8,mm*0.07);g.stroke();g.fillStyle='rgba(255,255,255,.85)';g.fillRect(x+w*0.2,y+h*0.26,w*0.5,h*0.1);g.restore()}});
+ }
+ arch(ids,false);if(D.TL&&Object.keys(D.TL).length>=3){var lids=LORDER.filter(function(id){return D.TL[id]}),TU=T;T=D.TL;arch(lids,true);T=TU}
+ g.restore()}
+function mouthBox(D){var xs=[],ys=[];for(var k in D.T){var t=D.T[k];xs.push(t.x0,t.x1);ys.push(t.y0,t.y1)}var x0=Math.min.apply(0,xs),x1=Math.max.apply(0,xs),y0=Math.min.apply(0,ys),y1=Math.max.apply(0,ys),w=x1-x0,h=y1-y0;
+ x0=clamp(x0-w*0.18,0,S.W);x1=clamp(x1+w*0.18,0,S.W);y0=clamp(y0-h*0.6,0,S.H);y1=clamp(y1+h*0.9,0,S.H);return[x0,y0,x1-x0,y1-y0]}
+function cropURL(u,D,cb){var im=new Image();im.onload=function(){var b=mouthBox(D),c=document.createElement('canvas');c.width=Math.round(b[2]);c.height=Math.round(b[3]);c.getContext('2d').drawImage(im,b[0],b[1],b[2],b[3],0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.9))};im.src=u}
+
+/* ---------- report ---------- */
+function metrics(D){var T=D.T,mm=D.mm,R=[];
+ function wmm(t){return t?8.5*(t.x1-t.x0)/D.cwNow:null}function hmm(t){return t?8.5*(t.y1-t.y0)/D.cwNow:null}
+ var cwh=avg([T.UR1&&(T.UR1.x1-T.UR1.x0)/(T.UR1.y1-T.UR1.y0),T.UL1&&(T.UL1.x1-T.UL1.x0)/(T.UL1.y1-T.UL1.y0)]);
+ function rat(a,b){return a&&b?(a.x1-a.x0)/(b.x1-b.x0):null}
+ var lc=avg([rat(T.UR2,T.UR1),rat(T.UL2,T.UL1)]),kl=avg([rat(T.UR3,T.UR2),rat(T.UL3,T.UL2)]);
+ var sym=T.UR1&&T.UL1?Math.min(T.UR1.x1-T.UR1.x0,T.UL1.x1-T.UL1.x0)/Math.max(T.UR1.x1-T.UR1.x0,T.UL1.x1-T.UL1.x0):null;
+ var a=S.a,ms=a.facial_midline_x!=null&&a.dental_midline_x!=null?Math.abs(a.facial_midline_x-a.dental_midline_x)*S.W/1000/mm:null;
+ var tilt=T.UR3&&T.UL3?Math.abs((Math.atan2(T.UL3.y1-T.UR3.y1,((T.UL3.x0+T.UL3.x1)-(T.UR3.x0+T.UR3.x1))/2)-(a._ipl||0)*(S.H/S.W>0?1:1))*180/Math.PI):null;
+ var arc=T.UR3&&T.UL3&&(T.UR1||T.UL1)?(avg([T.UR1&&T.UR1.y1,T.UL1&&T.UL1.y1])-avg([T.UR3.y1,T.UL3.y1]))/mm:null;
+ var gum=T.UR1&&T.UL1?Math.abs(T.UR1.y0-T.UL1.y0)/mm:null;
+ var lenC=avg([hmm(T.UR1),hmm(T.UL1)]);
+ function p(v){return v==null?null:Math.round(v*100)+'%'}function m(v){return v==null?null:v.toFixed(1)+' mm'}
+ R.push(['Central incisor width ÷ height',p(cwh),'75–80%',cwh!=null&&cwh>=0.72&&cwh<=0.84]);
+ R.push(['Central incisor length (est.)',m(lenC),'10.5–11 mm',lenC!=null&&lenC>=9.8&&lenC<=11.8]);
+ R.push(['Lateral ÷ central (front view)',p(lc),'62–75%',lc!=null&&lc>=0.6&&lc<=0.78]);
+ R.push(['Canine ÷ lateral (front view)',p(kl),'62–80%',kl!=null&&kl>=0.6&&kl<=0.82]);
+ R.push(['Central incisors match',p(sym),'95–100%',sym!=null&&sym>=0.93]);
+ R.push(['Midline shift',m(ms),'under 1.5 mm',ms!=null&&ms<1.5]);
+ R.push([a._ipl!=null?'Tilt of the smile vs eye line':'Tilt of the smile (canine to canine)',tilt==null?null:tilt.toFixed(1)+'°','under 2°',tilt!=null&&tilt<2]);
+ R.push(['Smile arc (centrals lower than canines)',m(arc),'0.5–2 mm',arc!=null&&arc>=0.4&&arc<=2.5]);
+ R.push(['Gum line of the two centrals',m(gum),'level (under 0.5 mm)',gum!=null&&gum<0.6]);
+ return R}
+function toothTable(D){var rows='';[1,2,3].forEach(function(n){var r=D.T['UR'+n],l=D.T['UL'+n],cur=avg([r&&8.5*(r.x1-r.x0)/D.cwNow,l&&8.5*(l.x1-l.x0)/D.cwNow]);
+ var des=8.5*[D.wc,D.wl,D.wk][n-1]/D.cwNow;rows+='<tr><td>'+NUM[n]+'</td><td>'+(cur==null?'–':cur.toFixed(1)+' mm')+'</td><td>'+des.toFixed(1)+' mm</td></tr>'});return rows}
+
+
+/* ---------- AI personalised smile design report (facially driven DSD): smile score, 3 designs, recommendation, PDF, share card ---------- */
+var PLAN=null,FN={oval:'Oval',triangular:'Triangular',rectangular:'Rectangular',square:'Square'},MN={square:'Square',ovoid:'Ovoid',tapering:'Tapering','square-tapering':'Square-tapering',natural:'Natural (individual)'};
+var CRIT=[['facial','Facial harmony',25],['proportion','Tooth proportions',20],['curve','Smile curve and lips',15],['morphology','Tooth shape',15],['gingival','Gum line',10],['colour','Natural colour',10],['preference','Your preference',5]];
+var SITE='tejas200567.github.io/tejas-dental/smile-design.html';
+function lvl(n){return n==null?'':n>=90?'Outstanding':n>=80?'Great':n>=70?'Good':n>=60?'Fair':'Room to shine'}
+var SHRANK=['BL1','BL2','BL3','BL4','B1','A1','B2','D2','A2','C1','C2','D3','A3'];
+/* shade by age: young teeth are naturally brighter, so the design never goes darker than the age limit */
+function shadeAge(P){var ag=document.getElementById('rpage'),pf=document.getElementById('rppref'),cap={u30:4,u45:5,u60:6,o60:8}[ag?ag.value:'u45'];if(cap==null)cap=5;var wh=pf&&pf.value=='white';
+ P.options.forEach(function(o,i){var c=Math.max(2,cap-(i==2?1:0)-(wh?1:0)),r=SHRANK.indexOf(o.shade);if(r<0||r>c)o.shade=SHRANK[c]})}
+/* when tooth size, shape and smile line are already good, say a full design is not needed */
+/* photo pose from face landmarks: flags tilted, turned, from-below/above and clenched photos */
+function poseOf(L,W,H){try{function pt(i){return[L[i].x*W,L[i].y*H]}
+ var e1=pt(33),e2=pt(263),nose=pt(1),c1=pt(234),c2=pt(454),fh=pt(10),ch=pt(152),ul=pt(13),ll=pt(14),m1=pt(61),m2=pt(291);
+ var roll=Math.atan2(e2[1]-e1[1],e2[0]-e1[0])*180/Math.PI;if(roll>90)roll-=180;if(roll<-90)roll+=180;
+ var dl=Math.abs(nose[0]-c1[0]),dr=Math.abs(c2[0]-nose[0]),yaw=(dl-dr)/(dl+dr+1e-6),pitch=(nose[1]-fh[1])/(ch[1]-fh[1]+1e-6),mw=Math.hypot(m2[0]-m1[0],m2[1]-m1[1]),gap=(ll[1]-ul[1])/(mw+1e-6),is=[];
+ if(Math.abs(roll)>6)is.push('the head is tilted sideways');
+ if(Math.abs(yaw)>0.15)is.push('the face is turned to one side');
+ if(pitch<0.42)is.push('the phone was below the face, looking up');
+ if(pitch>0.68)is.push('the phone was above the face, looking down');
+ if(gap<0.07)is.push('the teeth look clenched');
+ return{roll:roll,yaw:yaw,pitch:pitch,gap:gap,issues:is}}catch(e){return null}}
+/* honesty layer: only judge proportion when the gum line and tooth edges are really visible */
+function visOK(){var v=S.a&&S.a.vis,po=S.pose&&S.pose.issues&&S.pose.issues.length;return!!(v&&v.gum_margin_visible&&v.incisal_edges_visible&&!v.camera_angle_poor&&!po)}
+function visLimited(){var v=S.a&&S.a.vis,po=S.pose&&S.pose.issues&&S.pose.issues.length;return!!(po||(v&&(!v.gum_margin_visible||!v.incisal_edges_visible||v.camera_angle_poor||v.teeth_clenched)))}
+function visWhy(){var v=S.a&&S.a.vis,r=[];if(S.pose&&S.pose.issues)S.pose.issues.forEach(function(x){r.push(x)});if(!v)return r.join(', ');if(!v.gum_margin_visible)r.push('the gum line is covered by the lip');if(!v.incisal_edges_visible)r.push('the biting edges of the front teeth are hidden');if(v.teeth_clenched&&!(S.pose&&S.pose.issues&&S.pose.issues.join().indexOf('clenched')>=0))r.push('the teeth are clenched');if(v.camera_angle_poor&&!(S.pose&&S.pose.issues&&S.pose.issues.length))r.push('the camera angle is tilted or too close');return r.join(', ')}
+function dsdNotNeeded(P){try{var sc=P.current.score,s=sc.parts||{};function ok(k){return s[k]==null||s[k]>=7}
+ if(!visOK())return false;return s.proportion!=null&&s.curve!=null&&s.morphology!=null&&ok('proportion')&&ok('curve')&&ok('morphology')&&ok('gingival')&&ok('facial')&&sc.total>=72}catch(e){return false}}
+function recOpt(){return PLAN.options.filter(function(q){return q.key==PLAN.recommended})[0]||PLAN.options[0]}
+function optTxt(o){return 'Shape: '+(MN[o.morphology]||FN[o.form])+' · Proportion reference: '+(RLBL[o.ratio]||o.ratio).replace(/.*\((.*)\)/,'$1')+' · Width : length '+Math.round(o.wh*100)+'% · Shade VITA '+o.shade+' (provisional)'}
+function withOpt(o,fn){var k={form:S.form,ratio:S.ratio,wh:S.wh,shade:S.shade};S.form=o.form;S.ratio=o.ratio;S.wh=o.wh;S.shade=o.shade;try{return fn()}finally{S.form=k.form;S.ratio=k.ratio;S.wh=k.wh;S.shade=k.shade}}
+function planImage(){try{if(FULL&&FULL.img){var I=FULL.img,W=I.naturalWidth||I.width,H=I.naturalHeight||I.height;return toURL(I,0,0,W,H,900,0.85)}}catch(e){}return beforeURL}
+function optImg(o){return (PLAN.ai&&PLAN.ai[o.key])||withOpt(o,function(){return render('mockup')})}
+function optImgCrop(o){var f0=S.face;S.face=false;try{return optImg(o)}finally{S.face=f0}}
+function fullFaceAI(R){return new Promise(function(res){var f0=S.face;
+ function done(u){S.face=f0;res(u)}
+ try{if(!(FULL&&FULL.crop)){res(optImg(R));return}
+  if(PLAN.ai&&PLAN.ai[R.key]){loadImg(PLAN.ai[R.key]).then(function(I){var u=null;S.face=true;try{u=faceWrap(I).toDataURL('image/jpeg',0.92)}catch(e){}S.face=f0;res(u||optImg(R))}).catch(function(){res(optImg(R))});return}
+  S.face=true;var u2=optImg(R);done(u2)}catch(e){S.face=f0;res(optImg(R))}})}
+function applyOpt(o){S.form=o.form;S.ratio=o.ratio;S.wh=o.wh;S.shade=o.shade;S.cache={};
+ var q=function(id,v){var e=document.getElementById(id);if(e)e.value=v};q('fm',o.form);q('rt',o.ratio);q('wh',String(o.wh));
+ document.querySelectorAll('.vs').forEach(function(b){b.classList.toggle('on',b.dataset.s==o.shade)});var tt=document.getElementById('tt');if(tt)tt.innerHTML=toothTable(design());
+ if(S.view=='ai'||S.view=='analysis'||S.view=='white'||S.view=='braces'){S.view='mockup';[].forEach.call(document.getElementById('vw').children,function(x){x.className=x.getAttribute('data-v')=='mockup'?'on':''})}
+ paint();document.getElementById('cmp').scrollIntoView({behavior:'smooth',block:'center'})}
+function rptUI(){var box=document.getElementById('rpt');if(!box)return;PLAN=null;
+ box.innerHTML='<p class="kick">AI personalised smile design report</p><h3 style="margin-top:4px">Get your Smile Score and 3 smile designs</h3><p class="muted">Our AI looks at your face first, then your smile: the facial midline, the smile curve against your lower lip, tooth proportions, the gum line and how the tooth shape suits your face. It gives your current Smile Score, designs 3 different smiles (Natural Harmony, Soft Aesthetic, Confident Aesthetic), scores each one and recommends the most harmonious. Download it all as a PDF report.</p>'
+  +'<label>What kind of smile do you like?<select id="rppref"><option value="">No preference</option><option value="natural">Natural</option><option value="soft">Soft and gentle</option><option value="bold">Confident and defined</option><option value="white">Whiter teeth</option></select></label>'
+  +'<label>Age group<select id="rpage"><option value="u30">Under 30</option><option value="u45" selected>30 to 45</option><option value="u60">45 to 60</option><option value="o60">Over 60</option></select></label>'
+  +'<button type="button" class="btn" id="rpgo">Get my Smile Score</button><p class="muted" id="rpm"></p><div id="rpo"></div>';
+ document.getElementById('rpgo').addEventListener('click',function(){var b=this,m=document.getElementById('rpm');b.disabled=true;m.className='muted';m.textContent='Studying your face and smile… about 30–60 seconds.';
+  var mt=metrics(design()).map(function(r){return r[0]+': '+(r[1]==null?'n/a':r[1])+' (reference '+r[2]+')'});
+  post({mode:'plan',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,preference:document.getElementById('rppref').value,image:planImage(),metrics:mt,findings:(S.a&&S.a.findings)||[]}).then(function(x){b.disabled=false;
+   if(!x.ok||!x.j.plan){m.className='muted err';m.textContent=(x.j&&x.j.error)||'Could not make the report. Please try again.';return}
+   m.textContent='';PLAN=x.j.plan;PLAN.ai={};try{shadeAge(PLAN)}catch(e){}PLAN.pref=document.getElementById('rppref').selectedOptions[0].text;showPlan()}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='Could not make the report ('+((e&&e.message)||e)+').'})})}
+function countUp(el,to){if(to==null){el.textContent='–';return}var t0=performance.now();(function f2(t){var k=Math.min(1,(t-t0)/1200);el.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f2)})(t0)}
+function showPlan(){var P=PLAN,o=document.getElementById('rpo'),D=design();if(!P||!o)return;var R=recOpt(),cs=P.current.score.total,rs=R.score.total;
+ var h='<div class="ss"><div class="sc"><span>Your Smile Score now</span><b id="ss0">0</b><i>'+lvl(cs)+'</i></div><div class="sa">→</div><div class="sc hi"><span>With design '+R.key+'</span><b id="ss1">0</b><i>'+esc(R.style)+'</i></div></div>';
+ h+='<p class="muted">The Smile Score rates facial harmony, proportions, smile curve, tooth shape, gum line and colour'+(P.pref&&P.pref!='No preference'?' plus your preference':'')+', using only what one photo can show. It is a fun guide to aesthetics, not a health check.</p>';
+ h+='<div class="cta"><button type="button" class="btn" id="shb">Share my Smile Score</button><label class="ck2" style="color:#fff"><input type="checkbox" id="shp"> Include my smile photos</label></div>';
+ h+='<div class="pc">'+P.options.map(function(op){var rec=op.key==P.recommended;
+  return '<div class="po'+(rec?' rec':'')+'">'+(rec?'<span class="pb">AI recommended</span>':'')+'<img class="pi" data-k="'+op.key+'" alt="Design '+op.key+' preview"><div class="pt"><b>'+op.key+' · '+esc(op.style)+'</b><span class="psc">'+(op.score.total==null?'':op.score.total)+'</span></div><p class="ps">'+esc(optTxt(op))+'</p><p>'+esc(op.look)+'</p><p class="muted"><b>How it differs:</b> '+esc(op.differs)+'</p>'
+   +'<details><summary>Why this design</summary><p><b>Shape:</b> '+esc(op.morphology_why)+'</p><p><b>Proportion:</b> '+esc(op.proportion_why)+'</p><p><b>Shade:</b> '+esc(op.shade_why)+'</p><p><b>Strengths:</b> '+esc(op.strengths.join('; '))+'</p><p><b>Limitations:</b> '+esc(op.limitations.join('; '))+'</p><p><b>Who may prefer it:</b> '+esc(op.suits)+'</p><p class="muted"><b>Dentist to confirm:</b> '+esc(op.clinical)+'</p></details>'
+   +'<button type="button" class="btn o2 pa" data-k="'+op.key+'">Show on my photo</button></div>'}).join('')+'</div>';
+ if(dsdNotNeeded(P))h+='<div class="note" style="background:#eef6ee"><b>Looks well balanced in this photo.</b> Tooth size, shape and smile line look good here, so a full smile design may not be needed. Whitening alone (see Whitening only) can brighten the colour. Please confirm with a clinical exam.</div>';
+ else if(visLimited())h+='<div class="note" style="background:#fff6e5"><b>Proportions cannot be fully judged from this photo.</b> Reason: '+esc(visWhy())+'. For a more reliable report, take a wider natural smile with the phone at eye level, teeth slightly apart, or lift the upper lip gently for a gum-line photo. The scores below are estimates only.<br><button type="button" class="btn" style="margin-top:8px" onclick="camOpen()">Retake with the guided camera</button> <span class="muted">then tap Design my smile again.</span></div>';
+ h+='<div class="note" style="background:#fff"><b>Why design '+P.recommended+' is recommended:</b> '+esc(P.why)+' <span class="muted">The dentist makes the final decision.</span></div>';
+ h+='<h3>Compare the 3 designs</h3><div class="cmpw"><table class="cmp" style="min-width:560px"><thead><tr><th></th><th>Now</th>'+P.options.map(function(q){return'<th>'+q.key+' '+esc(q.style)+'</th>'}).join('')+'</tr></thead><tbody>'
+   +CRIT.map(function(c){return'<tr><td>'+c[1]+' ('+c[2]+')</td><td>'+sv(P.current.score.parts[c[0]])+'</td>'+P.options.map(function(q){return'<td>'+sv(q.score.parts[c[0]])+'</td>'}).join('')+'</tr>'}).join('')
+   +'<tr><td><b>Smile Score</b></td><td><b>'+(cs==null?'–':cs)+'</b></td>'+P.options.map(function(q){return'<td><b>'+(q.score.total==null?'–':q.score.total)+'</b></td>'}).join('')+'</tr></tbody></table></div><p class="muted">Each criterion is out of 10. “Not assessed” items are left out and the score is rescaled to 100.</p>';
+ h+='<h3>Your current smile</h3><p>'+esc(P.current.summary)+'</p><ul class="b">'+P.current.observations.map(function(t){return'<li>'+esc(t)+'</li>'}).join('')+'</ul>';
+ if(P.current.improve.length)h+='<p><b>May benefit from:</b> '+esc(P.current.improve.join('; '))+'</p>';
+ if(P.checklist.length)h+='<div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Smile frame check</th><th></th><th>Note</th></tr></thead><tbody>'+P.checklist.map(function(c){return'<tr><td>'+esc(c.item)+'</td><td>'+(c.status=='good'?'<span class="ok">Good</span>':c.status=='improve'?'<span class="wn">Improve</span>':'<span class="muted">Not assessed</span>')+'</td><td>'+esc(c.note)+'</td></tr>'}).join('')+'</tbody></table></div>';
+ if(P.limitations.length)h+='<p class="muted"><b>What one photo cannot show:</b> '+esc(P.limitations.join('; '))+'. Shades are provisional until checked with a shade guide in the clinic.</p>';
+ if(isStaff())h+='<div class="note" style="background:#fff"><b>Clinic staff:</b> after you approve the designs, make realistic AI photos of all 3 (about 1–2 minutes, uses AI credit). They replace the drawings in the cards and the PDF.<br><button type="button" class="btn" id="aib" style="margin-top:8px">Make AI photos of the 3 designs</button><p class="muted" id="aim"></p></div>';
+ h+='<div class="cta"><button type="button" class="btn" id="pdfb">Download my smile design report (PDF)</button></div><p class="muted" id="pdfm"></p>';h+=animHTML();
+ o.innerHTML=h;countUp(document.getElementById('ss0'),cs);setTimeout(function(){countUp(document.getElementById('ss1'),rs)},500);
+ thumbs();
+ o.querySelectorAll('.pa').forEach(function(b){b.addEventListener('click',function(){applyOpt(P.options.filter(function(q){return q.key==b.dataset.k})[0])})});
+ document.getElementById('pdfb').addEventListener('click',makePDF);animWire();document.getElementById('shb').addEventListener('click',shareScore);
+ var ab=document.getElementById('aib');if(ab)ab.addEventListener('click',aiPhotos)}
+function sv(v){return v==null?'<span class="muted">Not assessed</span>':String(Math.round(v*10)/10)}
+function thumbs(){var D=design(),o=document.getElementById('rpo');PLAN.options.forEach(function(op){cropURL(optImgCrop(op),D,function(cu){var im=o.querySelector('img.pi[data-k="'+op.key+'"]');if(im)im.src=cu})})}
+function aiPhotos(){var b=document.getElementById('aib'),m=document.getElementById('aim'),i=0;b.disabled=true;
+ (function next(){if(i>=3){b.disabled=false;m.textContent='AI photos ready. They are now used in the cards and the PDF.';thumbs();return}var op=PLAN.options[i];m.className='muted';m.textContent='Making AI photo '+(i+1)+' of 3 ('+op.style+')…';
+  post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},withOpt(op,aiOpts))).then(function(x){
+   if(!x.ok||!x.j.after){m.className='muted err';m.textContent=(x.j&&x.j.error)||'AI photo failed.';b.disabled=false;return}
+   aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;i++;next()},op.shade)}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='AI photo failed ('+((e&&e.message)||e)+').'})})()}
+function rr(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+function ring(g,cx,cy,r,v,col){g.lineWidth=22;g.strokeStyle='rgba(255,255,255,.12)';g.beginPath();g.arc(cx,cy,r,0,Math.PI*2);g.stroke();if(v!=null){g.strokeStyle=col;g.lineCap='round';g.beginPath();g.arc(cx,cy,r,-Math.PI/2,-Math.PI/2+Math.PI*2*v/100);g.stroke()}}
+function shareScore(){var P=PLAN,R=recOpt(),cs=P.current.score.total,rs=R.score.total,inc=document.getElementById('shp').checked,D=design();
+ var c=document.createElement('canvas');c.width=1080;c.height=1350;var g=c.getContext('2d'),gr=g.createLinearGradient(0,0,0,1350);gr.addColorStop(0,'#0b2236');gr.addColorStop(1,'#163a5a');g.fillStyle=gr;g.fillRect(0,0,1080,1350);
+ function T(t,x,y,sz,col,w,al){g.font=(w||'600')+' '+sz+'px Manrope,system-ui,sans-serif';g.fillStyle=col;g.textAlign=al||'center';g.fillText(t,x,y)}
+ T('MY SMILE SCORE',540,130,44,'#d9c8b8','700');
+ ring(g,300,420,170,cs,'#b79f8c');ring(g,780,420,170,rs,'#f3c76b');
+ T(cs==null?'–':String(cs),300,455,120,'#ffffff','700');T(rs==null?'–':String(rs),780,455,120,'#ffffff','700');T('→',540,440,90,'#d9c8b8','400');
+ T('Now · '+lvl(cs),300,650,36,'#c9d3dc','600');T('After · '+lvl(rs),780,650,36,'#f3c76b','600');
+ T('AI design: '+R.style,540,740,42,'#ffffff','600');
+ var done=function(){T('Dr Tejas Pradhan’s Dental Clinic',540,1190,40,'#ffffff','700');T('Get your free Smile Score',540,1245,34,'#d9c8b8','600');T(SITE,540,1292,28,'#c9d3dc','500');
+  c.toBlob(function(bl){var fl=new File([bl],'my-smile-score.jpg',{type:'image/jpeg'});
+   if(navigator.canShare&&navigator.canShare({files:[fl]}))navigator.share({files:[fl],title:'My Smile Score',text:'My Smile Score is '+cs+' → '+rs+' with an AI smile design. Get yours free: https://'+SITE}).catch(function(){});
+   else{var a2=document.createElement('a');a2.href=URL.createObjectURL(bl);a2.download='my-smile-score.jpg';document.body.appendChild(a2);a2.click();a2.remove()}},'image/jpeg',0.9)};
+ if(!inc){g.globalAlpha=.08;g.font='700 260px Manrope,system-ui';g.fillStyle='#fff';g.textAlign='center';g.fillText('✦',540,1050);g.globalAlpha=1;done();return}
+ Promise.all([cropP(beforeURL,D),cropP(optImg(R),D)]).then(function(u){return Promise.all(u.map(loadImg))}).then(function(im){var y=780,w=470,h=280;
+  [[im[0],55,'Before'],[im[1],555,'AI design']].forEach(function(q){g.save();rr(g,q[1],y,w,h,24);g.clip();var k=Math.max(w/q[0].width,h/q[0].height);g.drawImage(q[0],q[1]+(w-q[0].width*k)/2,y+(h-q[0].height*k)/2,q[0].width*k,q[0].height*k);g.restore();T(q[2],q[1]+w/2,y+h+40,28,'#c9d3dc','600')});done()}).catch(done)}
+function A(s){return String(s==null?'':s).replace(/÷/g,'/').replace(/[≈~]/g,'about ').replace(/[→]/g,'->').replace(/[^\x20-\x7E -ÿ–—‘’“”•…]/g,'')}
+function jspdf(){return window.jspdf?Promise.resolve(window.jspdf):new Promise(function(res,rej){var sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';sc.onload=function(){res(window.jspdf)};sc.onerror=function(){rej(new Error('PDF library did not load'))};document.head.appendChild(sc)})}
+function dims(u){return loadImg(u).then(function(i){return{u:u,w:i.width,h:i.height}})}
+function cropP(u,D){return new Promise(function(r){cropURL(u,D,r)})}
+function makePDF(){var P=PLAN,m=document.getElementById('pdfm'),b=document.getElementById('pdfb');if(!P)return;var R0=recOpt(),ord=[R0].concat(P.options.filter(function(q){return q.key!=R0.key})),miss=ord.filter(function(q){return!P.ai[q.key]})[0],nm=ord.filter(function(q){return!P.ai[q.key]}).length;if(isStaff()&&miss&&!P.noai){b.disabled=true;m.className='muted';m.textContent='Making the realistic AI photo of design '+miss.key+' (shade '+miss.shade+') for the report, '+(ord.length-nm+1)+' of '+ord.length+', about 30 to 90 seconds each. Please keep this page open...';aiFor(miss).then(function(){b.disabled=false;makePDF()}).catch(function(e){P.noai=true;b.disabled=false;m.className='muted err';m.textContent='AI photo failed ('+((e&&e.message)||e)+'), using the drawing instead.';makePDF()});return}b.disabled=true;m.className='muted';m.textContent='Preparing your PDF…';
+ var D=design(),R=recOpt(),cl=S.clin;S.clin=false;
+ var bFull=beforeShown(),full=P.options.map(optImgCrop);S.clin=cl;var aFull=fullFaceAI(R);
+ Promise.all([jspdf(),dims(bFull),aFull.then(dims),cropP(beforeURL,D)].concat(full.map(function(u){return cropP(u,D).then(dims)}))).then(function(r){
+  var J=r[0].jsPDF,bi=r[1],ai=r[2],th=r.slice(4);var doc=new J({unit:'mm',format:'a4'});
+  var NV=[11,34,54],GD=[183,159,140],IN=[29,26,23],MU=[107,100,92],GR=[31,140,80],OR=[184,98,30],IV=[250,247,242],L=16,Wd=178,pg=0;
+  var name=A(f.name.value||''),dt=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  function fmt(u){return u.indexOf('image/png')>0?'PNG':'JPEG'}
+  function fit(im,x,y,w,hmax){var h=w*im.h/im.w;if(h>hmax){h=hmax;var w2=h*im.w/im.h;x+=(w-w2)/2;w=w2}doc.addImage(im.u,fmt(im.u),x,y,w,h);return h}
+  function page(t){if(pg)doc.addPage();pg++;doc.setFillColor.apply(doc,IV);doc.rect(0,0,210,297,'F');doc.setFillColor.apply(doc,NV);doc.rect(0,0,210,22,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.text(A(CLINIC),L,10);
+   doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor.apply(doc,GD);doc.text('PERSONALISED DIGITAL SMILE DESIGN REPORT',L,16);doc.setTextColor(255,255,255);doc.text(name+'  ·  '+dt,194,13,{align:'right'});
+   doc.setTextColor.apply(doc,NV);doc.setFont('times','normal');doc.setFontSize(20);doc.text(A(t),L,38);doc.setDrawColor.apply(doc,GD);doc.setLineWidth(0.6);doc.line(L,41.5,L+28,41.5);doc.setLineWidth(0.2);foot();return 50}
+  function foot(){doc.setDrawColor(227,219,208);doc.line(L,281,194,281);doc.setFont('helvetica','normal');doc.setFontSize(6.8);doc.setTextColor.apply(doc,MU);
+   doc.text(doc.splitTextToSize('AI-assisted aesthetic visualisation and communication tool. Simulations are illustrative only and do not guarantee the final clinical outcome. Final smile design, shade, tooth dimensions, treatment suitability and restorative decisions are confirmed by the treating dentist after a complete clinical examination and diagnostic records.',160),L,285);
+   doc.text(A(PHONE)+'  ·  Kokan Nagar Road, Jogeshwari East, Mumbai  ·  Reg. No. A-20222',L,293.5);doc.text(String(pg),194,293.5,{align:'right'})}
+  function hd(t,y){doc.setFont('helvetica','bold');doc.setFontSize(10.5);doc.setTextColor.apply(doc,NV);doc.text(A(t),L,y);doc.setFont('helvetica','normal');return y+5.5}
+  function para(t,y,sz,col,w,x){doc.setFontSize(sz||9.3);doc.setTextColor.apply(doc,col||IN);var ln=doc.splitTextToSize(A(t),w||Wd);doc.text(ln,x||L,y);return y+ln.length*(sz||9.3)*0.42+2.2}
+  function bullets(a,y,w){a.forEach(function(t){y=para('•  '+t,y,9,IN,w||Wd)});return y}
+  function scorePill(x,y,v,lab,hi){doc.setFillColor.apply(doc,hi?NV:[255,255,255]);doc.setDrawColor.apply(doc,GD);doc.roundedRect(x,y,52,30,3,3,'FD');doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor.apply(doc,hi?[243,199,107]:NV);doc.text(v==null?'-':String(v),x+26,y+16,{align:'center'});doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor.apply(doc,hi?[255,255,255]:MU);doc.text(A(lab),x+26,y+24,{align:'center'})}
+  // 1 cover
+  pg++;doc.setFillColor.apply(doc,NV);doc.rect(0,0,210,297,'F');doc.setTextColor.apply(doc,GD);doc.setFontSize(9);doc.text('PERSONALISED DIGITAL SMILE DESIGN REPORT',105,30,{align:'center'});
+  doc.setTextColor(255,255,255);doc.setFont('times','normal');doc.setFontSize(30);doc.text('Your Smile,',105,52,{align:'center'});doc.text('Designed Around You',105,66,{align:'center'});
+  var hc=fit(bi,40,80,130,140);doc.setFont('helvetica','bold');doc.setFontSize(14);doc.text(name||'Patient',105,80+hc+16,{align:'center'});doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor.apply(doc,GD);doc.text(dt,105,80+hc+24,{align:'center'});
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.text(A(CLINIC),105,270,{align:'center'});doc.setFont('helvetica','normal');doc.setFontSize(8.5);doc.setTextColor.apply(doc,GD);doc.text('Kokan Nagar Road, Jogeshwari East, Mumbai  ·  '+A(PHONE),105,277,{align:'center'});
+  // 2 current smile
+  var y=page('Your current smile');var hb=fit(bi,L,y,80,95);scorePill(L+92,y+4,P.current.score.total,'Smile Score now · '+lvl(P.current.score.total),false);
+  var yy=y+42;doc.setFontSize(8.5);doc.setTextColor.apply(doc,MU);para(P.current.summary,yy,9,IN,84,L+92);y=Math.max(y+hb,yy+30)+6;
+  y=hd('Observations',y);y=bullets(P.current.observations,y);y=hd('Areas that may benefit',y+2);y=bullets(P.current.improve,y);
+  y=hd('Smile frame check',y+2);P.checklist.forEach(function(c){doc.setFontSize(8.6);doc.setTextColor.apply(doc,IN);doc.text(A(c.item),L,y);doc.setFont('helvetica','bold');doc.setTextColor.apply(doc,c.status=='good'?GR:c.status=='improve'?OR:MU);doc.text(c.status=='good'?'Good':c.status=='improve'?'Improve':'Not assessed',L+55,y);doc.setFont('helvetica','normal');doc.setTextColor.apply(doc,MU);doc.text(doc.splitTextToSize(A(c.note),100)[0]||'',L+80,y);y+=5.4});
+  if(P.limitations.length){y=hd('What one photo cannot show',y+3);y=para(P.limitations.join('; ')+'. All shades are provisional until checked with a shade guide in the clinic.',y,8.6,MU)}
+  // 3 possibilities
+  y=page('Three smile possibilities');var cw=56;P.options.forEach(function(op,i){var x=L+i*(cw+5),t=y;if(op.key==P.recommended){doc.setDrawColor.apply(doc,GD);doc.setLineWidth(0.9);doc.rect(x-1.5,t-1.5,cw+3,203);doc.setLineWidth(0.2)}
+   var h2=fit(th[i],x,t,cw,34);t+=h2+6;doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor.apply(doc,NV);doc.text(op.key+'  '+A(op.style),x,t);t+=4.6;doc.setFontSize(8.4);doc.setTextColor.apply(doc,GD);doc.text(doc.splitTextToSize(A(op.title),cw),x,t);t+=6;
+   [['Tooth shape',MN[op.morphology]],['Proportion reference',RLBL[op.ratio]],['Width : length',Math.round(op.wh*100)+'%'],['Shade (provisional)','VITA '+op.shade],['Smile Score',op.score.total==null?'-':String(op.score.total)]].forEach(function(q){doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor.apply(doc,MU);doc.text(q[0].toUpperCase(),x,t);doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor.apply(doc,NV);doc.text(A(q[1]),x,t+4);t+=9.5});
+   doc.setFont('helvetica','normal');t=para(op.look,t+1,8.3,IN,cw,x);t=para('Differs: '+op.differs,t,8,MU,cw,x);para('Shape: '+op.morphology_why,t,7.8,MU,cw,x)});
+  // 4 comparison
+  y=page('Comparison');var cx=[L,L+62,L+91,L+120,L+149];doc.setFillColor.apply(doc,NV);doc.rect(L,y-5,Wd,9,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(8.2);
+  ['','Now'].concat(P.options.map(function(q){return q.key+' '+q.style.split(' ')[0]})).forEach(function(t,i){doc.text(A(t),cx[i]+1.5,y+1)});y+=10;
+  var rows=[['Tooth shape','-'].concat(P.options.map(function(q){return MN[q.morphology]})),['Proportion','-'].concat(P.options.map(function(q){return(RLBL[q.ratio]||'').replace(/.*\((.*)\)/,'$1')})),['Width : length','-'].concat(P.options.map(function(q){return Math.round(q.wh*100)+'%'})),['Shade','-'].concat(P.options.map(function(q){return 'VITA '+q.shade}))]
+   .concat(CRIT.map(function(c){return[c[1]+' /10',P.current.score.parts[c[0]]].concat(P.options.map(function(q){return q.score.parts[c[0]]})).map(function(v,i){return i==0?v:(v==null?'n/a':String(Math.round(v*10)/10))})}));
+  rows.forEach(function(rw,ri){if(ri%2==0){doc.setFillColor(255,255,255);doc.rect(L,y-4.2,Wd,7,'F')}doc.setFont('helvetica','normal');doc.setFontSize(8.4);rw.forEach(function(t,i){doc.setTextColor.apply(doc,i==0?IN:NV);doc.text(A(t),cx[i]+1.5,y)});y+=7});
+  doc.setFillColor.apply(doc,GD);doc.rect(L,y-4.2,Wd,8,'F');doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor.apply(doc,NV);['Smile Score',P.current.score.total].concat(P.options.map(function(q){return q.score.total})).forEach(function(t,i){doc.text(A(t==null?'-':String(t)),cx[i]+1.5,y+0.5)});y+=12;
+  y=para('Weights: facial harmony 25, tooth proportions 20, smile curve and lips 15, tooth shape 15, gum line 10, natural colour 10, your preference 5. Items that one photo cannot assess are left out and the score is rescaled to 100.',y,8,MU);
+  y=hd('What each design offers',y+3);P.options.forEach(function(op){y=para(op.key+' '+op.style+': strengths: '+op.strengths.join('; ')+'. Limitations: '+op.limitations.join('; ')+'. Who may prefer it: '+op.suits,y,8.4)});
+  // 5 recommendation
+  y=page('AI recommended smile design');var hr=fit(ai,L,y,108,120);scorePill(L+116,y+2,R.score.total,'Smile Score with this design',true);scorePill(L+116,y+36,P.current.score.total,'Smile Score now',false);
+  doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor.apply(doc,NV);doc.text(R.key+'  '+A(R.style),L+116,y+80);doc.setFont('helvetica','normal');para(optTxt(R),y+86,8,MU,60,L+116);fit(th[Math.max(0,P.options.indexOf(R))],L+116,y+104,60,34);
+  y+=Math.max(hr,140)+8;y=hd('Why this design was selected',y);y=para(P.why,y);y=hd('What makes it harmonious',y+2);y=bullets([R.morphology_why,R.proportion_why,R.shade_why].filter(Boolean),y);y=para('This is an aesthetic planning suggestion. Dr. Tejas Pradhan makes the final decision after examining you.',y+2,8.4,MU);
+  // 6 clinical consultation
+  y=page('Your clinical consultation');y=hd("Dentist's assessment",y);for(var i2=0;i2<5;i2++){doc.setDrawColor(200,190,178);doc.line(L,y+4+i2*8,194,y+4+i2*8)}y+=46;
+  y=hd('Additional records needed',y);y=bullets(P.records.length?P.records:['Retracted intraoral photographs','Profile photograph','Shade photograph with a shade guide','Digital scan or impressions'],y);
+  y=hd('To be checked by the dentist',y+2);y=bullets(['Restorative: condition of existing teeth and fillings, space for veneers or crowns','Periodontal: gum health, gum levels and whether gum contouring is needed','Functional: bite, jaw movements, wear and grinding'].concat(P.options.map(function(q){return q.key+' '+q.style+': '+q.clinical}).filter(function(t){return t.length>20})),y);
+  y=hd('Possible treatment pathways (only if clinically suitable)',y+2);y=para('Whitening, tooth-coloured bonding, porcelain veneers, crowns, aligners or braces, gum contouring, or a combination, confirmed only after examination and records.',y);
+  // 7 patient selection
+  y=page('Your smile selection');y=para('Tick the design you prefer. You can ask for changes; the final design is approved by the dentist.',y,9.3,IN);y+=2;
+  P.options.forEach(function(op){doc.setDrawColor.apply(doc,NV);doc.rect(L,y-4,5,5);doc.setFont('helvetica','bold');doc.setFontSize(10);doc.setTextColor.apply(doc,NV);doc.text('Option '+op.key+': '+A(op.style)+(op.key==P.recommended?'  (AI recommended)':''),L+9,y);doc.setFont('helvetica','normal');y+=9});
+  [["Requested changes",4],["Dentist's final approval (signature and date)",2],["Patient acknowledgement (signature and date)",2]].forEach(function(q){y=hd(q[0],y+3);for(var k=0;k<q[1];k++){doc.setDrawColor(200,190,178);doc.line(L,y+4+k*9,194,y+4+k*9)}y+=q[1]*9+4});
+  y=para('I understand that the simulations are illustrations and not a guarantee of the final result, and that the final design, shade and treatment are confirmed after a clinical examination.',y+2,8.4,MU);
+  doc.save('smile-design-report-'+(name.replace(/[^A-Za-z0-9]+/g,'-').toLowerCase()||'patient')+'.pdf');b.disabled=false;m.textContent='Your report has been downloaded.'
+ }).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='Could not make the PDF ('+((e&&e.message)||e)+').'})}
+
+/* ---------- UI ---------- */
+function fixTeeth(a){if(!a._upper||!a._lower||!a._comm)return;var W=S.W,H=S.H;
+ function P(q){return[q[1]*W/1000,q[0]*H/1000]}function srt(v){return v.map(P).sort(function(p,q){return p[0]-q[0]})}
+ var up=srt(a._upper),lo=srt(a._lower);function yAt(v,x){if(x<=v[0][0])return v[0][1];for(var i=1;i<v.length;i++)if(x<=v[i][0]){var f=(x-v[i-1][0])/Math.max(1e-6,v[i][0]-v[i-1][0]);return v[i-1][1]+f*(v[i][1]-v[i-1][1])}return v[v.length-1][1]}
+ var c1=P(a._comm[0]),c2=P(a._comm[1]),xl=Math.min(c1[0],c2[0]),xr=Math.max(c1[0],c2[0]),Wm=xr-xl;if(Wm<20)return;
+ var mc=(xl+xr)/2,fm=a.facial_midline_x!=null?a.facial_midline_x*W/1000:mc;if(Math.abs(fm-mc)>0.12*Wm)fm=mc;
+ var T={},bad=[],ord=['UR4','UR3','UR2','UR1','UL1','UL2','UL3','UL4'];
+ for(var id in (a.teeth||{})){var b=a.teeth[id].box;if(b)T[id]={y0:b[0]*H/1000,x0:b[1]*W/1000,y1:b[2]*H/1000,x1:b[3]*W/1000}}
+ if(!T.UR1||!T.UL1)bad.push('centrals');else{var cw=(T.UR1.x1-T.UR1.x0+T.UL1.x1-T.UL1.x0)/2;if(cw<0.07*Wm||cw>0.2*Wm)bad.push('size');if(Math.abs((T.UR1.x1+T.UL1.x0)/2-fm)>0.09*Wm)bad.push('midline')}
+ var prev=-1e9,nu=0;ord.forEach(function(id){var t=T[id];if(!t)return;nu++;var cx=(t.x0+t.x1)/2,cy=(t.y0+t.y1)/2,m=0.04*Wm;if(cx<prev)bad.push('order');prev=cx;if(cy<yAt(up,cx)-m||cy>yAt(lo,cx)+m)bad.push(id)});
+ if(nu<4)bad.push('few');if(!bad.length)return;a._synth=bad;
+ var fr=[0.13,0.09,0.07,0.058],hr=[0.95,0.8,0.88,0.72],lw=[0.062,0.068,0.074],teeth={},inc={};
+ ['R','L'].forEach(function(sd){var dir=sd=='L'?1:-1,x=fm;for(var i=0;i<4;i++){var w=fr[i]*Wm,x0=dir>0?x:x-w,x1=dir>0?x+w:x;x+=dir*w;var cx=(x0+x1)/2,yu=yAt(up,cx),yl=yAt(lo,cx),h=hr[i]*fr[0]*Wm;
+  var y0=yu-0.012*Wm,y1=Math.min(yu+h,yl-0.006*Wm);if(y1-y0<0.03*Wm)continue;teeth['U'+sd+(i+1)]={box:[y0*1000/H,x0*1000/W,y1*1000/H,x1*1000/W]};inc[sd+(i+1)]=y1}
+  x=fm;for(var i=0;i<3;i++){var w=lw[i]*Wm,x0=dir>0?x:x-w,x1=dir>0?x+w:x;x+=dir*w;var cx=(x0+x1)/2,top=(inc[sd+(i+1)]||yAt(up,cx))-0.012*Wm,yl=yAt(lo,cx);if(yl-top>0.03*Wm)teeth['L'+sd+(i+1)]={box:[top*1000/H,x0*1000/W,(yl+0.008*Wm)*1000/H,x1*1000/W]}}});
+ if(teeth.UR1&&teeth.UL1){a.teeth=teeth;a.dental_midline_x=fm*1000/W;a.lower_lip_y_at_center=yAt(lo,fm)*1000/H;a.lower_lip_y_at_canines=(yAt(lo,fm-0.3*Wm)+yAt(lo,fm+0.3*Wm))/2*1000/H}}
+/* ---------- shade lock: CIELAB shift of the AI teeth to the chosen VITA shade (or to a real shade tab sampled in the photo) ---------- */
+// approximate CIELAB (D65) of VITA classical tabs; a real tab in the photo overrides these
+var VLAB={BL1:[88,-0.8,4],BL2:[86.5,-0.6,6],BL3:[85,-0.4,8],BL4:[83.5,-0.2,9.5],B1:[80.5,-0.5,11],A1:[79,0.3,14],B2:[78,0,17.5],D2:[75.5,0.8,13.5],A2:[76.5,1.4,18],C1:[74.5,0.5,14.5],C2:[71.5,1.2,17.5],D3:[72.5,1.4,16],A3:[73.5,2.2,21.5],D4:[71,1.6,18.5],B3:[74,1.6,24],'A3.5':[70.5,3.2,23.5],B4:[72.5,2,25.5],C3:[67.5,1.8,19.5],A4:[66,3.8,24.5],C4:[62.5,3.2,21.5]};
+function s2l(v){v/=255;return v<=0.04045?v/12.92:Math.pow((v+0.055)/1.055,2.4)}
+function l2s(v){v=v<=0.0031308?12.92*v:1.055*Math.pow(v,1/2.4)-0.055;return clamp(Math.round(v*255),0,255)}
+function fLab(t){return t>0.008856?Math.cbrt(t):7.787*t+16/116}
+function iLab(t){var t3=t*t*t;return t3>0.008856?t3:(t-16/116)/7.787}
+function rgb2lab(r,g,b){r=s2l(r);g=s2l(g);b=s2l(b);
+ var x=(r*0.4124+g*0.3576+b*0.1805)/0.95047,y=r*0.2126+g*0.7152+b*0.0722,z=(r*0.0193+g*0.1192+b*0.9505)/1.08883;
+ var fx=fLab(x),fy=fLab(y),fz=fLab(z);return[116*fy-16,500*(fx-fy),200*(fy-fz)]}
+function lab2rgb(L,a,b){var fy=(L+16)/116,fx=fy+a/500,fz=fy-b/200,x=iLab(fx)*0.95047,y=iLab(fy),z=iLab(fz)*1.08883;
+ return[l2s(x*3.2406-y*1.5372-z*0.4986),l2s(-x*0.9689+y*1.8758+z*0.0415),l2s(x*0.0557-y*0.2040+z*1.0570)]}
+function shadeLock(g,M,W,H,shade){try{
+ var md=M.getContext('2d').getImageData(0,0,W,H).data,im=g.getImageData(0,0,W,H),d=im.data,n=W*H,wt=new Float32Array(n),LL=new Float32Array(n),AA=new Float32Array(n),BB=new Float32Array(n),sL=0,sA=0,sB=0,sw=0;
+ for(var j=0,i=0;j<n;j++,i+=4){var mk=md[i+3]/255;if(mk<0.05)continue;var r=d[i],gg=d[i+1],b=d[i+2],mx=Math.max(r,gg,b),mn=Math.min(r,gg,b),lum=(0.299*r+0.587*gg+0.114*b)/255,sat=mx?(mx-mn)/mx:0,red=(r-gg)/255;
+  var w=mk*clamp((0.16-red)/0.08,0,1)*clamp((lum-0.3)/0.15,0,1)*clamp((0.5-sat)/0.15,0,1);if(w<=0)continue;
+  var lab=rgb2lab(r,gg,b);wt[j]=w;LL[j]=lab[0];AA[j]=lab[1];BB[j]=lab[2];if(w>0.5){sL+=lab[0]*w;sA+=lab[1]*w;sB+=lab[2]*w;sw+=w}}
+ if(sw<30)return;var mL=sL/sw,mA=sA/sw,mB=sB/sw,t;
+ if(S.tabLab&&S.tabShade==shade)t=S.tabLab; // real shade tab photographed in the same light: exact match
+ else{var v=VLAB[shade]||VLAB.A1;t=[clamp(Math.max(mL*0.4+v[0]*0.6,v[0]-2)+3,62,90),v[1]*0.8,v[2]*0.72];t[0]=clamp(Math.max(t[0],mL+6),62,92);t[2]=Math.min(t[2],Math.max(4,mB*0.7));t[1]=Math.min(t[1],Math.max(mA,0.2))} // no tab: exact hue/chroma, lightness kept close to the photo's exposure
+ var dL=t[0]-mL,dA=t[1]-mA,dB=t[2]-mB;
+ for(var j2=0,i2=0;j2<n;j2++,i2+=4){var w2=wt[j2];if(!w2)continue;var o=lab2rgb(LL[j2]+dL*w2,AA[j2]+dA*w2,BB[j2]+dB*w2);d[i2]=o[0];d[i2+1]=o[1];d[i2+2]=o[2]}
+ g.putImageData(im,0,0);S.lockInfo={from:[mL,mA,mB],to:t}}catch(e){}}
+function aiFor(op){return post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},withOpt(op,aiOpts))).then(function(x){
+ if(!x.ok||!x.j.after)throw new Error((x.j&&x.j.error)||'AI photo failed');
+ return new Promise(function(res){aiBlend(S.a,x.j.after,function(u){PLAN.ai[op.key]=u;try{thumbs()}catch(e){}res(u)},op.shade)})})}
+// staff: tap a real VITA tab on the Before side to lock the exact shade under this photo's light
+document.addEventListener('click',function(e){var t=e.target;if(t&&t.id=='tabb'){S.tabPick=true;var m=document.getElementById('tabm');if(m)m.textContent='Now tap the middle of the shade tab on the Before side of the photo.';return}
+ if(!S.tabPick)return;var ba=t&&t.closest&&t.closest('#cmp .ba');if(!ba)return;var im=ba.querySelector('img');if(!im)return;var R=ba.getBoundingClientRect(),fx=(e.clientX-R.left)/R.width,fy=(e.clientY-R.top)/R.height;S.tabPick=false;
+ loadImg(im.src).then(function(I){var c=document.createElement('canvas');c.width=I.width;c.height=I.height;var g=c.getContext('2d');g.drawImage(I,0,0);var x=Math.round(fx*I.width),y=Math.round(fy*I.height),r=Math.max(3,Math.round(I.width/250));
+  var p=g.getImageData(clamp(x-r,0,I.width-1),clamp(y-r,0,I.height-1),2*r+1,2*r+1).data,L=0,A=0,B=0,k=0;for(var i=0;i<p.length;i+=4){var lab=rgb2lab(p[i],p[i+1],p[i+2]);L+=lab[0];A+=lab[1];B+=lab[2];k++}
+  S.tabLab=[L/k,A/k,B/k];S.tabShade=S.shade;var m=document.getElementById('tabm');if(m)m.textContent='Shade tab locked for VITA '+S.shade+' (L '+S.tabLab[0].toFixed(0)+', a '+S.tabLab[1].toFixed(1)+', b '+S.tabLab[2].toFixed(1)+'). Tap "Redo AI photo" to apply it.'})},true);
+
+/* ---------- Animate photo (clinic staff): AI clips of the Before and the AI After, side by side ---------- */
+function animHTML(){if(!isStaff())return'';
+ return '<div class="note" style="background:#fff" id="anim"><b>Clinic staff: animate before and after</b><br><span class="muted">Turns the Before photo and the AI After photo into two 8-second videos of the patient, side by side. Each clip uses AI credit (about 0.4 USD), so a pair is about 0.8 USD. Limit: 10 clips a day.</span><div class="ctl"><label>Animation<select id="anty"><option value="smile">Smile (person smiles naturally)</option><option value="talk">Talk (person appears to speak)</option></select></label></div><button type="button" class="btn" id="ango">Animate before and after</button><p class="muted" id="anm"></p><div id="ano"></div></div>'}
+function animWire(){var b=document.getElementById('ango');if(b)b.addEventListener('click',animGo)}
+function veoFrame(u){return loadImg(u).then(function(I){var W=720,H=1280,c=document.createElement('canvas');c.width=W;c.height=H;var g=c.getContext('2d');g.fillStyle='#000';g.fillRect(0,0,W,H);
+ var k=Math.max(W/I.width,H/I.height),w=I.width*k,h=I.height*k;g.imageSmoothingQuality='high';g.drawImage(I,(W-w)/2,(H-h)*0.25,w,h);return c.toDataURL('image/jpeg',0.86)})}
+function veoPost(b){return fetch(API.replace('smile-design','reel-ai'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json()})}
+function veoClip(u,style,tick){return veoPost({mode:'start',phone:f.phone.value,image:u,style:style}).then(function(j){if(!j.op)throw new Error(j.error||'The clip could not start.');
+ return new Promise(function(res,rej){var n=0;(function poll(){setTimeout(function(){veoPost({mode:'status',phone:f.phone.value,op:j.op}).then(function(s){
+  if(s.done){if(s.error||!s.url)throw new Error(s.error||'No clip was returned.');return res(s.url)}
+  if(s.error)throw new Error(s.error);if(++n>70)throw new Error('The clip took too long. Please try again.');if(tick)tick(n);poll()}).catch(rej)},5000)})()})})}
+function animGo(){var b=document.getElementById('ango'),m=document.getElementById('anm'),out=document.getElementById('ano'),st=document.getElementById('anty').value;if(!PLAN)return;var R=recOpt();
+ b.disabled=true;out.innerHTML='';m.className='muted';m.textContent='Preparing the photos…';
+ var pre=(PLAN.ai&&PLAN.ai[R.key])?Promise.resolve():(m.textContent='Making the realistic AI After photo first (about 30 seconds)…',aiFor(R));
+ pre.then(function(){var c0=S.clin,f0=S.face,bu;S.clin=false;S.face=true;try{bu=beforeShown()}finally{S.clin=c0;S.face=f0}return Promise.all([veoFrame(bu),fullFaceAI(R).then(veoFrame)])})
+ .then(function(fr){var n=0;m.textContent='Animating both clips… this takes about 1 to 2 minutes.';return Promise.all([veoClip(fr[0],st,function(){m.textContent='Animating both clips… '+(++n*5)+' seconds so far'}),veoClip(fr[1],st)])})
+ .then(function(u){b.disabled=false;m.className='muted';m.textContent='Done. Only post a patient’s face with their written consent.';
+  function vid(url,l){return'<figure style="margin:0"><video src="'+url+'" controls playsinline loop muted preload="auto" style="width:100%;display:block;background:#000"></video><figcaption class="muted" style="text-align:center">'+l+'</figcaption></figure>'}
+  out.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:520px;margin-top:8px">'+vid(u[0],'Before')+vid(u[1],'After')+'</div><div class="cta"><button type="button" class="btn" id="anp">Play both</button><a class="btn o2" href="'+u[0]+'" target="_blank" rel="noopener">Open Before</a><a class="btn o2" href="'+u[1]+'" target="_blank" rel="noopener">Open After</a></div><p class="muted">The links work for about an hour. Open a clip, then press and hold or use Download to save it.</p>';
+  document.getElementById('anp').addEventListener('click',function(){var vs=out.querySelectorAll('video');[].forEach.call(vs,function(v){v.currentTime=0;v.play().catch(function(){})})})})
+ .catch(function(e){b.disabled=false;m.className='muted err';m.textContent=(e&&e.message)||'The clips could not be made.'})}
+var AIC=null;
+function aiBlend(a,after,cb,shade){AIC=null;if(!after||!beforeURL){cb(after);return}
+ var P=(LIPS&&LIPS.inner)||(a&&a.mouth_polygon);if(!P||P.length<6){cb(after);return}
+ Promise.all([loadImg(beforeURL),loadImg(after)]).then(function(im){var B=im[0],A=im[1],W=B.width,H=B.height;
+  var c=document.createElement('canvas');c.width=W;c.height=H;var g=c.getContext('2d');g.imageSmoothingQuality='high';g.drawImage(B,0,0,W,H);
+  var ra=A.width/A.height,rb=W/H,L=document.createElement('canvas');L.width=W;L.height=H;var lg=L.getContext('2d');lg.imageSmoothingQuality='high';
+  if(Math.abs(ra/rb-1)<0.04)lg.drawImage(A,0,0,W,H);else{var ka=Math.max(W/A.width,H/A.height),aw=A.width*ka,ah=A.height*ka;lg.drawImage(A,(W-aw)/2,(H-ah)/2,aw,ah)}
+  var M=document.createElement('canvas');M.width=W;M.height=H;var mg=M.getContext('2d');mg.filter='blur('+Math.max(1.5,W*0.003)+'px)';mg.fillStyle='#fff';mg.beginPath();
+  P.forEach(function(q,i){var x=q[1]*W/1000,y=q[0]*H/1000;if(i)mg.lineTo(x,y);else mg.moveTo(x,y)});mg.closePath();mg.fill();
+  lg.globalCompositeOperation='destination-in';lg.drawImage(M,0,0);g.drawImage(L,0,0);shadeLock(g,M,W,H,shade||S.shade);AIC=c;cb(c.toDataURL('image/jpeg',0.92))
+ }).catch(function(){cb(after)})}
+function show(a,after){if(LIPS&&a){a.mouth_polygon=LIPS.inner;a._lower=LIPS.lower;a._ipl=LIPS.ipl;a._comm=LIPS.comm;a._upper=LIPS.upper}S.a=a;S.after=after;S.cache={};var h='<div class="res"><h2>Your smile design</h2>';
+ if(!a.photo_ok){h+='<p>'+esc(a.photo_note||'The photo was not clear enough.')+'</p><p>Please retake a front-facing photo with a natural full smile, upper teeth clearly visible, in good daylight, phone at mouth level.</p></div>';out.innerHTML=h;return}
+ var im=new Image();im.onload=function(){S.img=im;S.W=im.width;S.H=im.height;try{fixTeeth(S.a)}catch(e){}build()};im.src=beforeURL}
+function build(){var a=S.a,D=design();
+ var views=[['mockup','Smile mock-up'],['braces','Braces preview'],['dsd','DSD lines'],['design','Ideal design'],['white','Whitening only'],['analysis','Analysis']];if(S.after)views.unshift(['ai','AI photo']);
+ if(S.after&&S.view=='mockup')S.view='ai';
+ var h='<div class="res"><h2>Your smile design</h2><div class="seg" id="vw">'+views.map(function(v){return'<button type="button" data-v="'+v[0]+'"'+(v[0]==S.view?' class="on"':'')+'>'+v[1]+'</button>'}).join('')+'</div>';
+ h+='<div class="seg sm" id="bt" style="display:none">'+Object.keys(BR).map(function(k){return'<button type="button" data-b="'+k+'"'+(k==S.brace?' class="on"':'')+'>'+BR[k].n+'</button>'}).join('')+'</div>';
+ h+='<div id="cmp"></div><p class="muted" id="cap"></p><div id="bx"></div>';
+ h+='<div class="ctl"><label>Proportion<select id="rt"><option value="red70">Natural (RED 70%)</option><option value="red75">Soft (RED 75%)</option><option value="red80">Wide (RED 80%)</option><option value="golden">Golden proportion (62%)</option></select></label>';
+ h+='<label>Tooth shape<select id="fm">'+Object.keys(FORMS).map(function(k){return'<option value="'+k+'">'+FORMS[k].n+'</option>'}).join('')+'</select></label>';
+ h+='<label>Central width : length<select id="wh"><option value="0.75">75% (longer)</option><option value="0.78">78% (classic)</option><option value="0.8">80%</option><option value="0.85">85% (shorter)</option></select></label>';
+ h+='<div class="vita"><b>Shade (VITA classical)</b><input type="hidden" id="sh"><div class="vg">'+SHADE_ORDER.map(function(k){var c=SHADE_RGB[k];return'<button type="button" class="vs" data-s="'+k+'" title="VITA '+k+'"><i style="background:linear-gradient(180deg,rgb('+Math.round(c[0]*0.93)+','+Math.round(c[1]*0.9)+','+Math.round(c[2]*0.85)+') 0%,rgb('+c+') 45%,rgb('+Math.min(255,c[0]+6)+','+Math.min(255,c[1]+8)+','+Math.min(255,c[2]+14)+') 100%)"></i>'+k+'</button>'}).join('')+'</div><p class="muted">Lightest on the left. BL = bleach shades. Screen colours are approximate; the clinic matches your shade with a real VITA guide.</p></div>';
+ h+='<label>Teeth<select id="arc"><option value="upper">Upper only</option><option value="both">Upper and lower</option></select></label>';
+ h+='<label>Background<select id="bgs"><option value="black">Black studio</option><option value="grey">Grey studio</option><option value="white">White studio</option><option value="photo">Original photo</option></select></label>';
+ h+='<label>Hide eyes (privacy)<select id="ey"><option value="off">Show</option><option value="bar">Black bar</option><option value="blur">Blur</option></select></label>';
+ h+='<label class="ck2"><input type="checkbox" id="cl"> Clinical photo style (black background)</label><label class="ck2"><input type="checkbox" id="fc"'+(S.face?' checked':'')+'> Show full face</label><label class="ck2"><input type="checkbox" id="ol"'+(S.outline?' checked':'')+'> Show midline</label><button type="button" class="btn o2" id="dl">Download image</button></div>';
+ h+='<p class="muted"><b>Simulation only.</b> These pictures are drawn by the computer from your photo to explain ideal proportions. They are not a promise of results. Your plan depends on your teeth, gums and bite, and is decided after an examination.</p>';
+ h+='<div id="rpt" class="rpt"></div>';h+='<div id="reel" class="note" style="background:#fff"></div>';
+ h+='<h3>Your measurements</h3><div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Measure</th><th>Yours</th><th>Ideal</th><th></th></tr></thead><tbody>'+metrics(D).map(function(r){return'<tr><td>'+r[0]+'</td><td>'+(r[1]==null?'–':r[1])+'</td><td>'+r[2]+'</td><td>'+(r[1]==null?'':(r[3]?'<span class="ok">Within range</span>':'<span class="wn">Outside range</span>'))+'</td></tr>'}).join('')+'</tbody></table></div>';
+ h+='<h3>Tooth widths: now and in the design</h3><div class="cmpw"><table class="cmp" style="min-width:0"><thead><tr><th>Tooth</th><th>Yours (est.)</th><th>Design</th></tr></thead><tbody id="tt">'+toothTable(D)+'</tbody></table></div>';
+ h+='<p class="muted">Millimetres are estimated from your photo by assuming an average central incisor width of 8.5 mm, so treat them as approximate.</p>';
+ if(a.findings&&a.findings.length){h+='<h3>What the AI noticed</h3><ul class="b">'+a.findings.map(function(o){return'<li>'+esc(o)+'</li>'}).join('')+'</ul>'}
+ h+='<p>Options that can achieve a design like this include <a href="teeth-whitening.html">whitening</a>, <a href="fillings.html">tooth-coloured bonding</a>, veneers, <a href="crowns-bridges.html">crowns</a> and <a href="clear-aligners.html">aligners</a>. Dr. Tejas Pradhan has received your photo and can discuss what suits you.</p>';
+ h+='<div class="cta"><a class="btn" href="'+WA+'">Book a smile design consultation</a></div></div>';
+ out.innerHTML=h;
+ document.getElementById('rt').value=S.ratio;document.getElementById('fm').value=S.form;document.getElementById('wh').value=String(S.wh);
+ document.getElementById('fm').addEventListener('change',function(){S.form=this.value;document.getElementById('tt').innerHTML=toothTable(design());paint()});
+ document.getElementById('wh').addEventListener('change',function(){S.wh=parseFloat(this.value);paint()});document.getElementById('sh').value=S.shade;
+ document.querySelectorAll('.vs').forEach(function(b){if(b.dataset.s==S.shade)b.classList.add('on');b.addEventListener('click',function(){document.querySelectorAll('.vs').forEach(function(x){x.classList.remove('on')});b.classList.add('on');S.shade=b.dataset.s;paint()})});
+ document.getElementById('vw').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.view=b.getAttribute('data-v');[].forEach.call(this.children,function(x){x.className=x==b?'on':''});paint()});
+ document.getElementById('bt').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;S.brace=b.getAttribute('data-b');[].forEach.call(this.children,function(x){x.className=x==b?'on':''});paint()});
+ document.getElementById('rt').addEventListener('change',function(){S.ratio=this.value;document.getElementById('tt').innerHTML=toothTable(design());paint()});
+
+ document.getElementById('ol').addEventListener('change',function(){S.outline=this.checked;paint()});
+ document.getElementById('fc').addEventListener('change',function(){S.face=this.checked;paint()});
+ document.getElementById('cl').addEventListener('change',function(){S.clin=this.checked;paint()});
+ document.getElementById('arc').value=S.arch;document.getElementById('arc').addEventListener('change',function(){S.arch=this.value;paint()});
+ document.getElementById('bgs').value=S.bg;document.getElementById('bgs').addEventListener('change',function(){S.bg=this.value;paint()});
+ document.getElementById('ey').value=S.eyes;document.getElementById('ey').addEventListener('change',function(){S.eyes=this.value;paint()});if(!FULL||!FULL.eyes)document.getElementById('ey').parentNode.style.display='none';if(!FULL)document.getElementById('fc').parentNode.style.display='none';
+ document.getElementById('dl').addEventListener('click',function(){var a2=document.createElement('a');a2.href=render(S.view);a2.download='smile-design-'+S.view+'.jpg';document.body.appendChild(a2);a2.click();a2.remove()});
+ paint();reelUI();rptUI();segmentFull();out.scrollIntoView({behavior:'smooth'})}
+var CAP={dsd:'DSD lines: the classic smile-design template on your photo. Blue: face midline. Yellow: horizontal reference parallel to your eyes. Orange dots: gum zeniths. Purple: contact points. Gold: biting-edge curve, which should follow the green lower lip. Percentages: central width ÷ length, and each tooth’s width compared with the tooth in front of it.',mockup:'Smile mock-up: your photo with ideal-proportion teeth drawn in, plus whitening. Drag the slider to compare with your current smile.',design:'Ideal design: the planned tooth outlines drawn on your own photo, with the gum curve and biting-edge curve, the face midline and the biting-edge reference (gold dotted). Drag the slider to compare.',white:'Whitening only: your own teeth at the chosen shade, without changing their shape.',analysis:'Analysis: yellow boxes mark your 8 front teeth (1 central, 2 lateral, 3 canine, 4 premolar). Blue: face midline. Red: teeth midline. Green: lower lip line that the tooth edges should follow.',ai:'AI photo: a realistic AI-generated preview of your smile after treatment.',braces:'Braces preview: how each type of braces or aligners would look on your current teeth (upper teeth shown). Pick a type above and drag the slider.'};
+function paint(){var cmp=document.getElementById('cmp');if(!cmp)return;var u=render(S.view);
+ document.getElementById('cap').textContent=CAP[S.view]||'';document.getElementById('bt').style.display=S.view=='braces'?'flex':'none';
+ var bx=document.getElementById('bx');bx.innerHTML='';
+ if(S.view=='ai'){bx.innerHTML='<div class="note"><b>The AI photo uses the choices below when it is made.</b> After changing shade, tooth shape, proportion, width : length or upper/lower teeth, tap the button to make a new AI photo (about 30 seconds).<br><button type="button" class="btn" id="rg" style="margin-top:8px">Redo AI photo with my choices</button><p class="muted" id="rgm"></p>'+(isStaff()?'<p style="margin-top:10px"><button type="button" class="btn o2" id="tabb">Lock exact shade from a real VITA tab</button></p><p class="muted" id="tabm">For an exact match: photograph the patient holding the chosen VITA tab beside the teeth. Drag the slider fully right, tap this button, then tap the tab.</p>':'')+'</div>';
+  document.getElementById('rg').addEventListener('click',function(){var b=this,m=document.getElementById('rgm');b.disabled=true;m.className='muted';m.textContent='Making your AI photo with shade '+S.shade+'... about 30 seconds.';
+   post(Object.assign({mode:'regen',name:f.name.value,phone:f.phone.value,consent:f.consent.checked,image:beforeURL,analysis:{facial_midline_x:S.a.facial_midline_x,findings:S.a.findings}},aiOpts())).then(function(x){
+    if(!x.ok||!x.j.after){b.disabled=false;m.className='muted err';m.textContent=(x.j&&x.j.error)||'Could not make the AI photo. Please try again.';return}
+    aiBlend(S.a,x.j.after,function(u){S.after=u;S.cache={};paint()})}).catch(function(e){b.disabled=false;m.className='muted err';m.textContent='Could not make the AI photo ('+((e&&e.message)||e)+').'})})}
+ if(S.view=='braces'){var D=design(),cur=S.brace;bx.innerHTML='<div class="note"><b>'+BR[cur].n+':</b> '+BR[cur].t+'</div><h3>All options on your smile</h3><div class="bg" id="bg"></div><p><a href="braces-comparison.html">Compare braces and aligners in detail</a></p>';
+  var grid=document.getElementById('bg'),fc=S.face,cl0=S.clin;S.face=false;S.clin=false;Object.keys(BR).forEach(function(k){S.brace=k;var uu=render('braces');var fig=document.createElement('figure');fig.innerHTML='<img alt="'+BR[k].n+' preview"><figcaption>'+BR[k].n+'</figcaption>';grid.appendChild(fig);cropURL(uu,D,function(cu){fig.querySelector('img').src=cu});fig.addEventListener('click',function(){S.brace=k;[].forEach.call(document.getElementById('bt').children,function(x){x.className=x.getAttribute('data-b')==k?'on':''});paint()})});S.face=fc;S.clin=cl0;S.brace=cur;u=render('braces')}
+ if(S.view=='analysis'){cmp.innerHTML='<div class="ba"><img src="'+u+'" alt="'+esc(S.view)+' view"></div>';return}
+ cmp.innerHTML='<div class="ba"><img src="'+beforeShown()+'" alt="Before"><div class="af"><img src="'+u+'" alt="After simulation"></div><span class="tg l">Before</span><span class="tg r">'+(S.view=='braces'?BR[S.brace].n:(S.view=='white'?'Whitened':'Design'))+'</span><div class="hd"></div><input type="range" min="0" max="100" value="50" aria-label="Compare before and after"></div>';
+ var ba=cmp.querySelector('.ba'),rg=ba.querySelector('input'),af=ba.querySelector('.af');var hd=ba.querySelector('.hd');function up(){af.style.clipPath='inset(0 0 0 '+rg.value+'%)';hd.style.left=rg.value+'%'}rg.addEventListener('input',up);up()}
+window.__camGuide=function(c,ok){var g=c.getContext('2d'),G=geom(c.width,c.height);drawGuide(g,c.width,c.height,G,ok,null)};
+window.__plan=function(p){PLAN=p;PLAN.ai=PLAN.ai||{};showPlan()};window.__pdf=function(){makePDF()};window.__staff=function(){return isStaff()};window.__dsdTest=function(a,after,url,lips){beforeURL=url;LIPS=lips||null;show(a,after)};window.__render=function(v){return render(v)};window.__ai=function(a,after,url,lips,cb){beforeURL=url;LIPS=lips||null;aiBlend(a,after,function(u){show(a,u);cb(u)})};window.__set=function(k,v){S[k]=v};window.__reel=function(b,a,t,cb){makeReel(b,a,t,'Smile makeover preview',cb,'snap')};window.__full=function(im,cr,ey,mk){FULL={img:im,crop:cr,eyes:ey,mask:mk||null};FACEB=null};
+})();
+</script>
+</div></section>
+<section class="sec alt"><div class="wrap narrow faq"><h2>Questions</h2><h3>What is digital smile design?</h3><p>Digital smile design (DSD) uses photos and measurements of your face and teeth to plan a smile makeover, so you can preview the result before treatment.</p><h3>Is the AI after picture what I will actually get?</h3><p>No. It is an AI simulation for ideas only. Your real result depends on your teeth, gums, bite and the treatment chosen after an examination.</p><h3>What are the ideal dimensions of front teeth?</h3><p>On average, an upper central incisor is about 8.5–9 mm wide and 10.5–11 mm long, a width-to-height ratio of about 75–80%. Laterals are about 6.5 mm wide and canines about 7.5 mm.</p><h3>Which treatments can change my smile?</h3><p>Depending on your teeth: whitening, tooth-coloured bonding, veneers, crowns, aligners or braces, and sometimes gum contouring. The dentist advises after examining you.</p></div></section>
+<section class="sec"><div class="wrap narrow">
+<h2>Visit the clinic</h2>
+<p>Shop No. A-19, Aareshwar Society, Opp. Dheeraj Darshan, Kokan Nagar Road, Near Kokan Hospital, Jogeshwari East, Mumbai, Maharashtra 400060</p>
+<p>Monday to Saturday, 12 – 2 pm and 6 – 9:30 pm. Sundays by appointment. Call or WhatsApp +91 83691 87806 or +91 91675 11565.</p>
+<p class="muted">General information only. Follow the instructions your own dentist gives you, and treatment is decided after an examination.</p>
+</div></section>
+<section class="sec alt"><div class="wrap"><p class="kick">More</p><h2>Treatments</h2><div class="tl"><a href="root-canal.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.3 5 .6 2 .7 4.3 1.2 6 .3 1 1 1.8 1.8 1.8 1.3 0 1.4-2.2 2-4 .3-1 .8-1.5 1.7-1.5s1.4.5 1.7 1.5c.6 1.8.7 4 2 4 .8 0 1.5-.8 1.8-1.8.5-1.7.6-4 1.2-6 .5-1.6 1.3-3 1.3-5C21 4.8 19.2 3 17 3c-1.7 0-2.6.8-5 .8S8.7 3 7 3z"/><path d="M10 12v5M14 12v5"/></svg><div><span class="nm">Root canal treatment</span><small>Save a painful or infected tooth instead of extracting it.</small></div><span class="ar">→</span></a><a href="clear-aligners.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 15c0-5 4-9 9-9s9 4 9 9v2H3z"/><path d="M6.5 15c0-3 2.4-5.5 5.5-5.5s5.5 2.5 5.5 5.5"/></svg><div><span class="nm">Clear aligners</span><small>Nearly invisible, removable trays to straighten teeth.</small></div><span class="ar">→</span></a><a href="braces.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="5" height="10" rx="1.5"/><rect x="9.5" y="7" width="5" height="10" rx="1.5"/><rect x="16" y="7" width="5" height="10" rx="1.5"/><path d="M2 12h20"/></svg><div><span class="nm">Braces</span><small>Brackets and wires to straighten teeth and correct the bite.</small></div><span class="ar">→</span></a><a href="dental-implants.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v5H6z"/><path d="M9 8v11l3 2.5 3-2.5V8"/><path d="M9 11.5h6M9 14.5h6M9 17.5h6"/></svg><div><span class="nm">Dental implants</span><small>A titanium post that replaces a missing tooth root.</small></div><span class="ar">→</span></a><a href="implant-overdenture.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6c0-2 4-3 9-3s9 1 9 3v3c0 1.5-1 2.5-2 2.5H5c-1 0-2-1-2-2.5z"/><path d="M7 11.5V21M12 11.5V21M17 11.5V21"/></svg><div><span class="nm">Implant-supported overdenture</span><small>A removable denture that snaps onto implants and stays firm.</small></div><span class="ar">→</span></a><a href="all-on-4-implants.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5c0-1.5 4-2.500 9-2.500s9 1 9 2.500v3H3z"/><path d="M6 8v12M10 8v12M14 8v12M18 8v12"/></svg><div><span class="nm">All-on-4 full-arch implants</span><small>A fixed full arch of teeth on four implants.</small></div><span class="ar">→</span></a><a href="tooth-extraction.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.3 5 .6 2 .7 4.3 1.2 6 .3 1 1 1.8 1.8 1.8 1.3 0 1.4-2.2 2-4 .3-1 .8-1.5 1.7-1.5s1.4.5 1.7 1.5c.6 1.8.7 4 2 4 .8 0 1.5-.8 1.8-1.8.5-1.7.6-4 1.2-6 .5-1.6 1.3-3 1.3-5C21 4.8 19.2 3 17 3c-1.7 0-2.6.8-5 .8S8.7 3 7 3z"/><path d="M12 12V6M9.5 8.5 12 6l2.5 2.5"/></svg><div><span class="nm">Tooth extraction and wisdom teeth</span><small>Routine and wisdom tooth removal under local anaesthesia.</small></div><span class="ar">→</span></a><a href="scaling-cleaning.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 15v5M16.5 17.5h5"/></svg><div><span class="nm">Scaling and teeth cleaning</span><small>Remove tartar, plaque and stains that brushing cannot.</small></div><span class="ar">→</span></a><a href="crowns-bridges.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18 3 8l5 4 4-7 4 7 5-4-1 10z"/><path d="M4 21h16"/></svg><div><span class="nm">Crowns and bridges</span><small>Caps and bridges that protect or replace teeth.</small></div><span class="ar">→</span></a><a href="dentures.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8c0-3 4-5 9-5s9 2 9 5v2c0 2-1 3-2 3H5c-1 0-2-1-2-3z"/><path d="M8 13v4M12 13v5M16 13v4"/></svg><div><span class="nm">Dentures</span><small>Removable replacements for missing teeth.</small></div><span class="ar">→</span></a><a href="teeth-whitening.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.3 5 .6 2 .7 4.3 1.2 6 .3 1 1 1.8 1.8 1.8 1.3 0 1.4-2.2 2-4 .3-1 .8-1.5 1.7-1.5s1.4.5 1.7 1.5c.6 1.8.7 4 2 4 .8 0 1.5-.8 1.8-1.8.5-1.7.6-4 1.2-6 .5-1.6 1.3-3 1.3-5C21 4.8 19.2 3 17 3c-1.7 0-2.6.8-5 .8S8.7 3 7 3z"/><path d="M19 1v4M17 3h4"/></svg><div><span class="nm">Teeth whitening</span><small>Lighten the natural colour of your teeth, supervised by a dentist.</small></div><span class="ar">→</span></a><a href="fillings.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3C4.8 3 3 4.8 3 7.2c0 2 .8 3.4 1.3 5 .6 2 .7 4.3 1.2 6 .3 1 1 1.8 1.8 1.8 1.3 0 1.4-2.2 2-4 .3-1 .8-1.5 1.7-1.5s1.4.5 1.7 1.5c.6 1.8.7 4 2 4 .8 0 1.5-.8 1.8-1.8.5-1.7.6-4 1.2-6 .5-1.6 1.3-3 1.3-5C21 4.8 19.2 3 17 3c-1.7 0-2.6.8-5 .8S8.7 3 7 3z"/><circle cx="12" cy="8.5" r="1.8" fill="currentColor"/></svg><div><span class="nm">Tooth-coloured fillings</span><small>Tooth-coloured fillings for cavities and small chips.</small></div><span class="ar">→</span></a><a href="childrens-dentistry.html"><svg class="ic" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14c1 1.5 2.2 2.2 3.5 2.2s2.5-.7 3.5-2.2"/><circle cx="9" cy="10" r=".8" fill="currentColor"/><circle cx="15" cy="10" r=".8" fill="currentColor"/></svg><div><span class="nm">Children&#x27;s dentistry</span><small>Check-ups, fillings and preventive care for children.</small></div><span class="ar">→</span></a></div></div></section>
+<footer><div class="wrap">© Dr Tejas Pradhan&#x27;s Dental Clinic, Jogeshwari East, Mumbai · Dr. Tejas Pradhan, Maharashtra State Dental Council Reg. No. A-20222.<br>General information only; treatment is decided after an examination.</div></footer>
+<div class="bar"><a href="https://wa.me/918369187806">WhatsApp</a><a href="tel:+918369187806">Call</a><a class="dir" href="https://www.google.com/maps/search/?api=1&query=Dr+Tejas+Pradhan's+Dental+Clinic+Kokan+Nagar+Jogeshwari+East+Mumbai">Directions</a></div>
+<script>document.querySelectorAll('.menu a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('mn').checked=false})})</script>
+</body>
+</html>
